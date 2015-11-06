@@ -7,7 +7,9 @@ language: cpp
 
 os:
   - linux
-  - osx
+#  - osx
+# Note: not sure why, but the Qt5 recipe doesn't contain DBus, which we need,
+#       so disabling OS X for now...
 
 env:
   - CONFIG=Release
@@ -31,10 +33,6 @@ install:
       && brew install cmake
       && brew install qt5
       && chmod -R 755 /usr/local/opt/qt5/*
-      && /usr/local/opt/qt5/bin/qmake --version
-      && cd /usr/local/opt/qt5/lib
-      && du
-      && cd -
       ;
     fi
 
