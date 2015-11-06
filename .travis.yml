@@ -32,7 +32,7 @@ install:
       && brew install qt5
       && chmod -R 755 /usr/local/opt/qt5/*
       && /usr/local/opt/qt5/bin/qmake --version
-      && cd /usr/local/opt/lib
+      && cd /usr/local/opt/qt5/lib
       && du
       ;
     fi
