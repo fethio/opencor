@@ -34,6 +34,7 @@ install:
       && /usr/local/opt/qt5/bin/qmake --version
       && cd /usr/local/opt/qt5/lib
       && du
+      && cd -
       ;
     fi
 
