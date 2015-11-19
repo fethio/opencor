@@ -1,5 +1,5 @@
 var jsonData = { "versions": [
-                   { "anchor": "latest", "description": "Latest snapshot", "day": 27, "month": 9, "year": 2015,
+                   { "anchor": "latest", "description": "Latest snapshot", "day": 15, "month": 11, "year": 2015,
                      "categories": [
                        { "name": "General",
                          "entries": [
@@ -29,6 +29,11 @@ var jsonData = { "versions": [
                            { "type": "subCategory", "name": "CellML Annotation view",
                              "entries": [
                                { "type": "Improved", "description": "<a href=\"http://en.wikipedia.org/wiki/Graphical_user_interface\">GUI</a> rendering." }
+                             ]
+                           },
+                           { "type": "subCategory", "name": "Raw CellML view",
+                             "entries": [
+                               { "type": "Fixed", "description": "Reformatting unescaping HTML entities." }
                              ]
                            },
                            { "type": "subCategory", "name": "CellML Text view",
