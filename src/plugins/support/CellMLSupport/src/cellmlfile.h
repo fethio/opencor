@@ -42,8 +42,9 @@ namespace CellMLSupport {
 
 //==============================================================================
 
-static const auto Cellml_1_0 = QStringLiteral("1.0");
-static const auto Cellml_1_1 = QStringLiteral("1.1");
+static const auto Cellml_1_0    = QStringLiteral("1.0");
+static const auto Cellml_1_1    = QStringLiteral("1.1");
+static const auto Cellml_Latest = Cellml_1_1;
 
 //==============================================================================
 
@@ -151,7 +152,7 @@ private:
 
     QStringList mUsedCmetaIds;
 
-    void reset();
+    virtual void reset();
 
     void retrieveImports(const QString &pXmlBase,
                          iface::cellml_api::Model *pModel,
