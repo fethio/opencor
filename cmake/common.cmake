@@ -328,7 +328,7 @@ MACRO(KEEP_TRACK_OF_FILE FILE_NAME)
     # Note: indeed, some files (e.g. versiondate.txt) are 'manually' generated
     #       and then used to build other files. Now, the 'problem' is that
     #       Ninja needs to know about those files (see CMake policy CMP0058),
-    #       which we do through the below...
+    #       which we ensure it does through the below...
 
     ADD_CUSTOM_COMMAND(OUTPUT ${FILE_NAME}
                        COMMAND ${CMAKE_COMMAND} -E sleep 0)
@@ -399,9 +399,11 @@ MACRO(ADD_PLUGIN PLUGIN_NAME)
             #       /W1 and generate a warning...
 
             IF(WIN32)
-                STRING(REPLACE "/W3 /WX" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+                STRING(REPLACE "/W3 /WX" ""
+                       CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
             ELSE()
-                STRING(REPLACE "-Wall -W -Werror" "-w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+                STRING(REPLACE "-Wall -W -Werror" "-w"
+                       CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
             ENDIF()
 
             # Add a definition in case of compilation from within Qt Creator
@@ -468,14 +470,24 @@ MACRO(ADD_PLUGIN PLUGIN_NAME)
 
     INCLUDE_DIRECTORIES(${INCLUDE_DIRS})
 
-    # Resource file, if any
+    # Resource files, if any
 
-    SET(QRC_FILE res/${PLUGIN_NAME}.qrc)
+    SET(RESOURCES)
+    SET(I18N_QRC_IN_FILENAME ${PROJECT_SOURCE_DIR}/res/i18n.qrc.in)
+    SET(UI_QRC_FILENAME ${PROJECT_SOURCE_DIR}/res/ui.qrc)
 
-    IF(EXISTS ${PROJECT_SOURCE_DIR}/${QRC_FILE})
-        SET(RESOURCES ${QRC_FILE})
-    ELSE()
-        SET(RESOURCES)
+    IF(EXISTS ${I18N_QRC_IN_FILENAME})
+        STRING(REPLACE "${CMAKE_SOURCE_DIR}" "${PROJECT_BUILD_DIR}"
+               I18N_QRC_FILENAME "${PROJECT_SOURCE_DIR}/res/i18n.qrc")
+
+        CONFIGURE_FILE(${I18N_QRC_IN_FILENAME}
+                       ${I18N_QRC_FILENAME})
+
+        LIST(APPEND RESOURCES ${I18N_QRC_FILENAME})
+    ENDIF()
+
+    IF(EXISTS ${UI_QRC_FILENAME})
+        LIST(APPEND RESOURCES ${UI_QRC_FILENAME})
     ENDIF()
 
     # Update the translation (.ts) files and generate the language (.qm) files,
@@ -588,7 +600,8 @@ MACRO(ADD_PLUGIN PLUGIN_NAME)
                 # On Windows, we need to replace the extension of the external
                 # library
 
-                STRING(REPLACE "${CMAKE_IMPORT_LIBRARY_SUFFIX}" "${CMAKE_SHARED_LIBRARY_SUFFIX}" REAL_EXTERNAL_BINARY "${REAL_EXTERNAL_BINARY}")
+                STRING(REPLACE "${CMAKE_IMPORT_LIBRARY_SUFFIX}" "${CMAKE_SHARED_LIBRARY_SUFFIX}"
+                       REAL_EXTERNAL_BINARY "${REAL_EXTERNAL_BINARY}")
 
                 COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${EXTERNAL_BINARIES_DIR} . ${REAL_EXTERNAL_BINARY})
             ENDIF()
@@ -614,7 +627,9 @@ MACRO(ADD_PLUGIN PLUGIN_NAME)
     IF(XCODE)
         SET(PLUGIN_BUILD_DIR ${PROJECT_BUILD_DIR})
     ELSE()
-        STRING(REPLACE "${${CMAKE_PROJECT_NAME}_SOURCE_DIR}/" "" PLUGIN_BUILD_DIR "${PROJECT_SOURCE_DIR}")
+        STRING(REPLACE "${${CMAKE_PROJECT_NAME}_SOURCE_DIR}/" ""
+               PLUGIN_BUILD_DIR "${PROJECT_SOURCE_DIR}")
+
         SET(PLUGIN_BUILD_DIR ${CMAKE_BINARY_DIR}/${PLUGIN_BUILD_DIR})
 
         IF(NOT "${CMAKE_CFG_INTDIR}" STREQUAL ".")
@@ -701,6 +716,8 @@ MACRO(ADD_PLUGIN PLUGIN_NAME)
                     ${TEST_HEADER_MOC}
                 )
 
+                QT5_ADD_RESOURCES(TEST_SOURCES_RCS ${TESTS_QRC_FILENAME})
+
                 ADD_EXECUTABLE(${TEST_NAME}
                     ../../../tests/src/testsutils.cpp
 
@@ -711,6 +728,7 @@ MACRO(ADD_PLUGIN PLUGIN_NAME)
 
                     ${TEST_SOURCE}
                     ${TEST_SOURCES_MOC}
+                    ${TEST_SOURCES_RCS}
                 )
 
                 SET_TARGET_PROPERTIES(${TEST_NAME} PROPERTIES
@@ -874,12 +892,13 @@ ENDMACRO()
 
 MACRO(RETRIEVE_CONFIG_FILES)
     FOREACH(CONFIG_FILE ${ARGN})
-        STRING(REPLACE "PLATFORM_DIR/" "${PLATFORM_DIR}/" CONFIG_FILE_ORIG "${CONFIG_FILE}")
-        STRING(REPLACE "PLATFORM_DIR/" "" CONFIG_FILE_DEST "${CONFIG_FILE}")
+        STRING(REPLACE "PLATFORM_DIR/" "${PLATFORM_DIR}/"
+               CONFIG_FILE_ORIG "${CONFIG_FILE}")
+        STRING(REPLACE "PLATFORM_DIR/" ""
+               CONFIG_FILE_DEST "${CONFIG_FILE}")
 
-        CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/${CONFIG_FILE_ORIG}
-                       ${PROJECT_SOURCE_DIR}/${CONFIG_FILE_DEST}
-                       COPYONLY)
+        EXECUTE_PROCESS(COMMAND ${CMAKE_COMMAND} -E copy ${PROJECT_SOURCE_DIR}/${CONFIG_FILE_ORIG}
+                                                         ${PROJECT_SOURCE_DIR}/${CONFIG_FILE_DEST})
     ENDFOREACH()
 ENDMACRO()
 
@@ -1004,7 +1023,7 @@ MACRO(LINUX_DEPLOY_QT_LIBRARY DIRNAME ORIG_FILENAME DEST_FILENAME)
 
     # Deploy the Qt library
 
-    INSTALL(FILES build/lib/${DEST_FILENAME}
+    INSTALL(FILES ${PROJECT_BUILD_DIR}/lib/${DEST_FILENAME}
             DESTINATION lib)
 ENDMACRO()
 
@@ -1029,7 +1048,7 @@ MACRO(LINUX_DEPLOY_QT_PLUGIN PLUGIN_CATEGORY)
 
         # Deploy the Qt plugin
 
-        INSTALL(FILES build/${PLUGIN_DEST_DIRNAME}/${PLUGIN_FILENAME}
+        INSTALL(FILES ${PROJECT_BUILD_DIR}/${PLUGIN_DEST_DIRNAME}/${PLUGIN_FILENAME}
                 DESTINATION ${PLUGIN_DEST_DIRNAME})
     ENDFOREACH()
 ENDMACRO()
@@ -1163,10 +1182,11 @@ ENDMACRO()
 
 #===============================================================================
 
-MACRO(RETRIEVE_BINARY_FILE DIRNAME FILENAME SHA1_VALUE)
+MACRO(RETRIEVE_BINARY_FILE_FROM LOCATION DIRNAME FILENAME SHA1_VALUE)
     # Create the destination folder, if needed
 
-    STRING(REPLACE "${PLATFORM_DIR}" "bin" REAL_DIRNAME "${CMAKE_SOURCE_DIR}/${DIRNAME}")
+    STRING(REPLACE "${PLATFORM_DIR}" "bin"
+           REAL_DIRNAME "${CMAKE_SOURCE_DIR}/${DIRNAME}")
 
     IF(NOT EXISTS ${REAL_DIRNAME})
         FILE(MAKE_DIRECTORY ${REAL_DIRNAME})
@@ -1204,7 +1224,7 @@ MACRO(RETRIEVE_BINARY_FILE DIRNAME FILENAME SHA1_VALUE)
         SET(COMPRESSED_FILENAME ${FILENAME}.tar.gz)
         SET(REAL_COMPRESSED_FILENAME ${REAL_DIRNAME}/${COMPRESSED_FILENAME})
 
-        FILE(DOWNLOAD "http://www.opencor.ws/binaries/${DIRNAME}/${COMPRESSED_FILENAME}" ${REAL_COMPRESSED_FILENAME}
+        FILE(DOWNLOAD "${LOCATION}/${DIRNAME}/${COMPRESSED_FILENAME}" ${REAL_COMPRESSED_FILENAME}
              SHOW_PROGRESS STATUS STATUS)
 
         # Uncompress the compressed version of the file, should we have managed
@@ -1241,4 +1261,10 @@ MACRO(RETRIEVE_BINARY_FILE DIRNAME FILENAME SHA1_VALUE)
             MESSAGE(FATAL_ERROR "${FILENAME} could not be uncompressed...")
         ENDIF()
     ENDIF()
+ENDMACRO()
+
+#===============================================================================
+
+MACRO(RETRIEVE_BINARY_FILE DIRNAME FILENAME SHA1_VALUE)
+    RETRIEVE_BINARY_FILE_FROM("http://www.opencor.ws/binaries" ${DIRNAME} ${FILENAME} ${SHA1_VALUE})
 ENDMACRO()
