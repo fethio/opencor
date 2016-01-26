@@ -579,6 +579,10 @@ void SingleCellViewSimulationWidget::initialize(const bool &pReloadingView)
     disconnect(simulationWidget, SIGNAL(propertyChanged(Core::Property *)),
                this, SLOT(simulationPropertyChanged(Core::Property *)));
 
+    // Reset our progress
+
+    mProgress = -1;
+
     // Update our simulation object, if needed
 
     CellMLSupport::CellmlFile *cellmlFile = CellMLSupport::CellmlFileManager::instance()->cellmlFile(mFileName);
@@ -587,11 +591,9 @@ void SingleCellViewSimulationWidget::initialize(const bool &pReloadingView)
     if (pReloadingView)
         mSimulation->update(cellmlFileRuntime);
 
-    // Determine whether the CellML file has a valid runtime
+    // Retrieve our variable of integration, if possible
 
     bool validCellmlFileRuntime = cellmlFileRuntime && cellmlFileRuntime->isValid();
-
-    // Retrieve our variable of integration, if possible
 
     CellMLSupport::CellmlFileRuntimeParameter *variableOfIntegration = validCellmlFileRuntime?cellmlFileRuntime->variableOfIntegration():0;
 
@@ -823,10 +825,6 @@ void SingleCellViewSimulationWidget::initialize(const bool &pReloadingView)
 
 void SingleCellViewSimulationWidget::finalize()
 {
-    // Remove various information associated with the given file name
-
-    mProgress = -1;
-
     // Finalize/backup a few things in our GUI's solvers, graphs, parameters and
     // graph panels widgets
 
