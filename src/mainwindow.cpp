@@ -66,10 +66,6 @@ specific language governing permissions and limitations under the License.
 
 //==============================================================================
 
-#include <QtSingleApplication>
-
-//==============================================================================
-
 namespace OpenCOR {
 
 //==============================================================================
@@ -105,6 +101,10 @@ MainWindow::MainWindow(const QString &pApplicationDate) :
                      this, SLOT(fileOpenRequest(const QString &)));
     QObject::connect(qApp, SIGNAL(messageReceived(const QString &, QObject *)),
                      this, SLOT(messageReceived(const QString &, QObject *)));
+
+    // Handle OpenCOR URLs
+
+    QDesktopServices::setUrlHandler("gui", this, "handleAction");
 
     // Create our settings object
 
@@ -969,7 +969,7 @@ void MainWindow::handleAction(const QUrl &pUrl)
         // OpenCOR
         // Note: the file name is contained in the path of the URL minus the
         //       leading forward slash. Indeed, an open file request will look
-        //       like gui://openFiles//home/user/file...
+        //       like gui://openFile//home/user/file...
 
         handleArguments(pUrl.path().remove(0, 1));
     } else if (!actionName.compare("openFiles", Qt::CaseInsensitive)) {
@@ -1008,29 +1008,14 @@ void MainWindow::messageReceived(const QString &pMessage, QObject *pSocket)
 {
     Q_UNUSED(pSocket);
 
-    // We have just received a message, which can be one of two things:
-    //  1) The user tried to run another instance of OpenCOR, which sent a
-    //     message to this instance, asking it to bring itself to the foreground
-    //     and handling all the arguments passed in the message; or
-    //  2) A GUI action was sent to us, so we need to handle it.
+    // We have just received a message, which means that the user tried to run
+    // another instance of OpenCOR, which sent a message to this instance,
+    // asking it to bring itself to the foreground and handling all the
+    // arguments passed in the given message
 
-    // Check whether the passed message corresponds to a GUI action
+    showSelf();
 
-    QUrl url = pMessage;
-
-    if (!url.scheme().compare("gui")) {
-        // We are dealing with a GUI COR action, so handle it
-
-        handleAction(url);
-    } else {
-        // It's not a GUI action, so bring ourselves to the foreground
-
-        showSelf();
-
-        // Now, we must handle the arguments that were passed to us
-
-        handleArguments(pMessage);
-    }
+    handleArguments(pMessage);
 }
 
 //==============================================================================
