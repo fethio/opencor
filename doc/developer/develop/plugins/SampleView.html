@@ -31,7 +31,7 @@
         <pre><a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/i18n">i18n</a>
  &#9492;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/i18n/SampleView_fr.ts">SampleView_fr.ts</a>
 <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/res">res</a>
- &#9492;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/res/SampleView.qrc">SampleView.qrc</a>
+ &#9492;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/res/SampleView_i18n.qrc.in">SampleView_i18n.qrc.in</a>
 <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/src">src</a>
  &#9500;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/src/sampleviewplugin.cpp">sampleviewplugin.cpp</a>
  &#9500;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleView/src/sampleviewplugin.h">sampleviewplugin.h</a>
@@ -380,7 +380,7 @@ void SampleViewPlugin::saveSettings(QSettings *pSettings) const
 
 //==============================================================================
 
-void SampleViewPlugin::handleAction(const QUrl &pUrl)
+void SampleViewPlugin::handleUrl(const QUrl &pUrl)
 {
     Q_UNUSED(pUrl);
 
@@ -390,7 +390,7 @@ void SampleViewPlugin::handleAction(const QUrl &pUrl)
 //==============================================================================</pre>
 
         <p>
-            The only method of interest to our plugin is <code>initializePlugin()</code> (lines 162-172), which is where we initialise <code>mViewWidget</code>, our view. All the other methods (<code>finalizePlugin()</code>, <code>pluginsInitialized()</code>, <code>loadSettings()</code>, <code>saveSettings()</code> and <code>handleAction()</code>) are left empty.
+            The only method of interest to our plugin is <code>initializePlugin()</code> (lines 162-172), which is where we initialise <code>mViewWidget</code>, our view. All the other methods (<code>finalizePlugin()</code>, <code>pluginsInitialized()</code>, <code>loadSettings()</code>, <code>saveSettings()</code> and <code>handleUrl()</code>) are left empty.
         </p>
 
         <p>

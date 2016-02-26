@@ -39,7 +39,7 @@
         <pre><a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/i18n">i18n</a>
  &#9492;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/i18n/SampleWindow_fr.ts">SampleWindow_fr.ts</a>
 <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/res">res</a>
- &#9492;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/res/SampleWindow.qrc">SampleWindow.qrc</a>
+ &#9492;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/res/SampleWindow_i18n.qrc.in">SampleWindow_i18n.qrc.in</a>
 <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/src">src</a>
  &#9500;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/src/samplewindowplugin.cpp">samplewindowplugin.cpp</a>
  &#9500;&#9472; <a href="https://github.com/opencor/opencor/tree/master/src/plugins/sample/SampleWindow/src/samplewindowplugin.h">samplewindowplugin.h</a>
@@ -282,7 +282,7 @@ void SampleWindowPlugin::saveSettings(QSettings *pSettings) const
 
 //==============================================================================
 
-void SampleWindowPlugin::handleAction(const QUrl &pUrl)
+void SampleWindowPlugin::handleUrl(const QUrl &pUrl)
 {
     Q_UNUSED(pUrl);
 
@@ -292,7 +292,7 @@ void SampleWindowPlugin::handleAction(const QUrl &pUrl)
 //==============================================================================</pre>
 
         <p>
-            The only method of interest to our plugin is <code>initializePlugin()</code> (lines 66-75), which is where we initialise both <code>mSampleWindowAction</code> and <code>mSampleWindowWindow </code>. All the other methods (<code>finalizePlugin()</code>, <code>pluginsInitialized()</code>, <code>loadSettings()</code>, <code>saveSettings()</code> and <code>handleAction()</code>) are left empty.
+            The only method of interest to our plugin is <code>initializePlugin()</code> (lines 66-75), which is where we initialise both <code>mSampleWindowAction</code> and <code>mSampleWindowWindow </code>. All the other methods (<code>finalizePlugin()</code>, <code>pluginsInitialized()</code>, <code>loadSettings()</code>, <code>saveSettings()</code> and <code>handleUrl()</code>) are left empty.
         </p>
 
         <p>
