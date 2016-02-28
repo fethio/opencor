@@ -34,8 +34,6 @@ specific language governing permissions and limitations under the License.
 #include <QMenu>
 #include <QPaintEvent>
 #include <QRegularExpression>
-#include <QWebElement>
-#include <QWebFrame>
 
 //==============================================================================
 
@@ -127,7 +125,9 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
 
     // Some connections to handle the clicking and hovering of a link
 
+/*---ISSUE908---
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+*/
 
     connect(page(), SIGNAL(linkClicked(const QUrl &)),
             this, SLOT(linkClicked()));
@@ -157,6 +157,7 @@ PhysiomeModelRepositoryWindowWidget::~PhysiomeModelRepositoryWindowWidget()
 
 void PhysiomeModelRepositoryWindowWidget::retranslateUi()
 {
+/*---ISSUE908---
     // Retranslate our message
 
     QWebElement messageElement = page()->mainFrame()->documentElement().findFirst("p[id=message]");
@@ -178,6 +179,7 @@ void PhysiomeModelRepositoryWindowWidget::retranslateUi()
                                                                                           Core::noInternetConnectionAvailableMessage(),
                                                                                       true, true));
     }
+*/
 }
 
 //==============================================================================
@@ -197,7 +199,7 @@ void PhysiomeModelRepositoryWindowWidget::paintEvent(QPaintEvent *pEvent)
 {
     // Default handling of the event
 
-    QWebView::paintEvent(pEvent);
+    QWebEngineView::paintEvent(pEvent);
 
     // Draw a border
 
@@ -231,6 +233,7 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
 
     // Initialise our list of exposures
 
+/*---ISSUE908---
     QWebElement tbodyElement = page()->mainFrame()->documentElement().findFirst("tbody[id=exposures]");
 
     tbodyElement.removeAllChildren();
@@ -269,6 +272,7 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
         mExposureDisplayed << true;
         mExposureUrlId.insert(exposureUrl, i);
     }
+*/
 }
 
 //==============================================================================
@@ -292,6 +296,7 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
     //       consuming, hence we rely on mExposureDisplayed to determine when we
     //       should change the display property of our elements...
 
+/*---ISSUE908---
     QWebElement trElement = page()->mainFrame()->documentElement().findFirst(QString("tbody[id=exposures]")).firstChild();
     QWebElement ulElement;
 
@@ -311,6 +316,7 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
 
         trElement = trElement.nextSibling();
     }
+*/
 }
 
 //==============================================================================
@@ -320,7 +326,8 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 {
     // Add the given exposure files to the exposure
 
-    static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
+//    static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
+/*---ISSUE908---
 
     QWebElement ulElement = page()->mainFrame()->documentElement().findFirst(QString("ul[id=exposureFiles_%1]").arg(mExposureUrlId.value(pUrl)));
 
@@ -329,6 +336,7 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
                                        "    <a href=\"%1\">%2</a>"
                                        "</li>").arg(exposureFile, QString(exposureFile).remove(FilePathRegEx)));
     }
+*/
 }
 
 //==============================================================================
@@ -336,6 +344,7 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
                                                             const bool &pShow)
 {
+/*---ISSUE908---
     // Show the exposure files for the given exposure
 
     int id = mExposureUrlId.value(pUrl);
@@ -356,6 +365,7 @@ void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
         ulElement.removeClass("visible");
         ulElement.setStyleProperty("display", "none");
     }
+*/
 }
 
 //==============================================================================
@@ -371,6 +381,7 @@ void PhysiomeModelRepositoryWindowWidget::on_actionCopy_triggered()
 
 void PhysiomeModelRepositoryWindowWidget::linkClicked()
 {
+/*---ISSUE908---
     // Retrieve some information about the link
 
     QString link;
@@ -413,12 +424,14 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked()
         else
             QDesktopServices::openUrl(link);
     }
+*/
 }
 
 //==============================================================================
 
 void PhysiomeModelRepositoryWindowWidget::linkHovered()
 {
+/*---ISSUE908---
     // Retrieve some information about the link
 
     QString link;
@@ -451,12 +464,14 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered()
     }
 
     setLinkToolTip(linkToolTip);
+*/
 }
 
 //==============================================================================
 
 void PhysiomeModelRepositoryWindowWidget::showCustomContextMenu()
 {
+/*---ISSUE908---
     // Retrieve some information about the link, if any
 
     QString textContent;
@@ -469,6 +484,7 @@ void PhysiomeModelRepositoryWindowWidget::showCustomContextMenu()
 
     if (!mExposureUrl.isEmpty() && !textContent.isEmpty())
         mContextMenu->exec(QCursor::pos());
+*/
 }
 
 //==============================================================================

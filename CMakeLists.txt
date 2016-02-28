@@ -345,9 +345,9 @@ SET(PLUGINS
 
     miscellaneous/HelpWindow
 
-#    organisation/FileBrowserWindow
-#    organisation/FileOrganiserWindow
-#    organisation/PhysiomeModelRepositoryWindow
+    organisation/FileBrowserWindow
+    organisation/FileOrganiserWindow
+    organisation/PhysiomeModelRepositoryWindow
 
 #    simulation/SingleCellView
 
