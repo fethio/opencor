@@ -62,15 +62,8 @@ MACRO(INITIALISE_PROJECT)
 
     # Required packages
 
-    IF(WIN32)
-        SET(WEBKIT WebKit)
-    ELSE()
-        SET(WEBKIT)
-    ENDIF()
-
     SET(REQUIRED_QT_MODULES
         Network
-        ${WEBKIT}
         Widgets
     )
 
@@ -125,8 +118,6 @@ MACRO(INITIALISE_PROJECT)
             QtSvg
             ${QT_TEST}
             QtWebChannel
-            QtWebKit
-            QtWebKitWidgets
             QtWidgets
             QtXml
             QtXmlPatterns

@@ -12,6 +12,7 @@ INCLUDE(${CMAKE_SOURCE_DIR}/cmake/common.cmake)
 
 OPTION(ENABLE_SAMPLES "Enable the sample plugins to be built" OFF)
 OPTION(ENABLE_TESTS "Enable the tests to be built" OFF)
+SET(ENABLE_SAMPLES ON)
 
 OPTION(USE_PREBUILT_LIBGIT2_PLUGIN "Use the pre-built version of the libgit2 plugin" ON)
 OPTION(USE_PREBUILT_LLVM_PLUGIN "Use the pre-built version of the LLVM plugin" ON)
@@ -284,85 +285,85 @@ ENDIF()
 SET(PLUGINS
     # Plugins that have no dependencies
 
-    api/BioSignalMLAPI
-    api/CellMLAPI
-    api/SBMLAPI
-    api/SEDMLAPI
+#    api/BioSignalMLAPI
+#    api/CellMLAPI
+#    api/SBMLAPI
+#    api/SEDMLAPI
 
-    miscellaneous/Core
+#    miscellaneous/Core
 
-    support/StandardSupport
+#    support/StandardSupport
 
-    thirdParty/libgit2
-    thirdParty/LLVM
-    thirdParty/QScintilla
-    thirdParty/Qwt
-    thirdParty/SUNDIALS
-    thirdParty/zlib
+#    thirdParty/libgit2
+#    thirdParty/LLVM
+#    thirdParty/QScintilla
+#    thirdParty/Qwt
+#    thirdParty/SUNDIALS
+#    thirdParty/zlib
 
     # Plugins that build on top of some third-party libraries
 
-    miscellaneous/Compiler
+#    miscellaneous/Compiler
 
     # Plugins that provide support for some third-party libraries
 
-    support/CellMLSupport
-    support/QScintillaSupport
-    support/SEDMLSupport
-    support/ZIPSupport
+#    support/CellMLSupport
+#    support/QScintillaSupport
+#    support/SEDMLSupport
+#    support/ZIPSupport
 
     # Plugins that provide support for some third-party libraries that have
     # dependencies on others
 
-    support/COMBINESupport
+#    support/COMBINESupport
 
     # Plugins that extend some libraries (incl. third-party ones)
 
-    widget/Editor
-    widget/EditorList
-    widget/Viewer
+#    widget/Editor
+#    widget/EditorList
+#    widget/Viewer
 
     # Plugins that provide some generic features
 
-    editing/CoreEditing
+#    editing/CoreEditing
 
     # Plugins that have dependencies on others
 
-    editing/CoreCellMLEditing
-    editing/CoreSEDMLEditing
+#    editing/CoreCellMLEditing
+#    editing/CoreSEDMLEditing
 
     # Selectable plugins
 
-    dataStore/BioSignalMLDataStore
-    dataStore/CSVDataStore
+#    dataStore/BioSignalMLDataStore
+#    dataStore/CSVDataStore
 
-    editing/CellMLAnnotationView
-    editing/CellMLTextView
-    editing/RawCellMLView
-    editing/RawSEDMLView
-    editing/RawTextView
+#    editing/CellMLAnnotationView
+#    editing/CellMLTextView
+#    editing/RawCellMLView
+#    editing/RawSEDMLView
+#    editing/RawTextView
 
-    miscellaneous/HelpWindow
+#    miscellaneous/HelpWindow
 
-    organisation/FileBrowserWindow
-    organisation/FileOrganiserWindow
-    organisation/PhysiomeModelRepositoryWindow
+#    organisation/FileBrowserWindow
+#    organisation/FileOrganiserWindow
+#    organisation/PhysiomeModelRepositoryWindow
 
-    simulation/SingleCellView
+#    simulation/SingleCellView
 
-    solver/CVODESolver
-    solver/ForwardEulerSolver
-    solver/FourthOrderRungeKuttaSolver
-    solver/HeunSolver
-    solver/IDASolver
-    solver/KINSOLSolver
-    solver/SecondOrderRungeKuttaSolver
+#    solver/CVODESolver
+#    solver/ForwardEulerSolver
+#    solver/FourthOrderRungeKuttaSolver
+#    solver/HeunSolver
+#    solver/IDASolver
+#    solver/KINSOLSolver
+#    solver/SecondOrderRungeKuttaSolver
 
-    tool/CellMLTools
+#    tool/CellMLTools
 
     # Sample plugins
 
-    ${SAMPLE_PLUGINS}
+#    ${SAMPLE_PLUGINS}
 )
 
 FOREACH(PLUGIN ${PLUGINS})
@@ -577,7 +578,7 @@ ELSE()
     # We are building OpenCOR locally or on OS X on Travis CI, so use Qt's
     # version of the ICU libraries
 
-    MATH(EXPR ICU_MINOR_VERSION "${Qt5Widgets_VERSION_MINOR}-1")
+    MATH(EXPR ICU_MINOR_VERSION "${Qt5Widgets_VERSION_MINOR}-2")
 
     IF(WIN32)
         SET(ICU_VERSION "${Qt5Widgets_VERSION_MAJOR}${ICU_MINOR_VERSION}")
@@ -624,7 +625,7 @@ IF(WIN32)
 
     # Qt libraries required by OpenCOR
 
-    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5CLucene Qt5Core Qt5Gui Qt5Help Qt5Multimedia Qt5MultimediaWidgets Qt5Network Qt5OpenGL Qt5Positioning Qt5PrintSupport Qt5Qml Qt5Quick Qt5Sensors Qt5Sql Qt5Svg Qt5WebChannel Qt5WebKit Qt5WebKitWidgets Qt5Widgets Qt5Xml Qt5XmlPatterns)
+    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5CLucene Qt5Core Qt5Gui Qt5Help Qt5Multimedia Qt5MultimediaWidgets Qt5Network Qt5OpenGL Qt5Positioning Qt5PrintSupport Qt5Qml Qt5Quick Qt5Sensors Qt5Sql Qt5Svg Qt5WebChannel Qt5Widgets Qt5Xml Qt5XmlPatterns)
     WINDOWS_DEPLOY_QT_LIBRARIES(icudt${ICU_VERSION} icuin${ICU_VERSION} icuuc${ICU_VERSION})
 
     IF(ENABLE_TESTS)
@@ -722,7 +723,7 @@ ELSE()
         SET(TEST)
     ENDIF()
 
-    FOREACH(QT_LIBRARY CLucene Core DBus Gui Help Multimedia MultimediaWidgets Network OpenGL Positioning PrintSupport Qml Quick Sensors Sql Svg ${TEST} WebChannel WebKit WebKitWidgets Widgets XcbQpa Xml XmlPatterns)
+    FOREACH(QT_LIBRARY CLucene Core DBus Gui Help Multimedia MultimediaWidgets Network OpenGL Positioning PrintSupport Qml Quick Sensors Sql Svg ${TEST} WebChannel Widgets XcbQpa Xml XmlPatterns)
         LINUX_DEPLOY_QT_LIBRARY(${QT_LIBRARY_DIR}
                                 ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}
                                 ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR})

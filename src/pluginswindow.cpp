@@ -701,7 +701,7 @@ void PluginsWindow::newPluginCategory(const QString &pCategory,
 
     QStandardItem *categoryItem = new QStandardItem(pName);
 
-    categoryItem->setTristate(true);
+    categoryItem->setAutoTristate(true);
 
     mModel->invisibleRootItem()->appendRow(categoryItem);
 
