@@ -349,21 +349,21 @@ SET(PLUGINS
     organisation/FileOrganiserWindow
     organisation/PhysiomeModelRepositoryWindow
 
-#    simulation/SingleCellView
+    simulation/SingleCellView
 
-#    solver/CVODESolver
-#    solver/ForwardEulerSolver
-#    solver/FourthOrderRungeKuttaSolver
-#    solver/HeunSolver
-#    solver/IDASolver
-#    solver/KINSOLSolver
-#    solver/SecondOrderRungeKuttaSolver
+    solver/CVODESolver
+    solver/ForwardEulerSolver
+    solver/FourthOrderRungeKuttaSolver
+    solver/HeunSolver
+    solver/IDASolver
+    solver/KINSOLSolver
+    solver/SecondOrderRungeKuttaSolver
 
-#    tool/CellMLTools
+    tool/CellMLTools
 
     # Sample plugins
 
-#    ${SAMPLE_PLUGINS}
+    ${SAMPLE_PLUGINS}
 )
 
 FOREACH(PLUGIN ${PLUGINS})
