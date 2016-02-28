@@ -31,7 +31,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 class QSplitter;
-class QWebView;
+class QWebEngineView;
 
 //==============================================================================
 
@@ -91,11 +91,11 @@ private:
 
     Core::BorderedWidget *mBorderedMetadataEditDetails;
     Core::BorderedWidget *mBorderedMetadataViewDetails;
-    Core::BorderedWidget *mBorderedWebView;
+    Core::BorderedWidget *mBorderedWebEngineView;
 
     CellmlAnnotationViewMetadataEditDetailsWidget *mMetadataEditDetails;
     CellmlAnnotationViewMetadataViewDetailsWidget *mMetadataViewDetails;
-    QWebView *mWebView;
+    QWebEngineView *mWebEngineView;
 
     CellMLSupport::CellmlFile *mCellmlFile;
 
@@ -107,11 +107,12 @@ Q_SIGNALS:
     void splitterMoved(const QIntList &pSizes);
 
 
-    void qualifierDetailsRequested(QWebView *pWebView,
+    void qualifierDetailsRequested(QWebEngineView *pWebEngineView,
                                    const QString &pQualifier);
-    void resourceDetailsRequested(QWebView *pWebView, const QString &pResource);
-    void idDetailsRequested(QWebView *pWebView, const QString &pResource,
-                            const QString &pId);
+    void resourceDetailsRequested(QWebEngineView *pWebEngineView,
+                                  const QString &pResource);
+    void idDetailsRequested(QWebEngineView *pWebEngineView,
+                            const QString &pResource, const QString &pId);
 
 public Q_SLOTS:
     void updateGui(iface::cellml_api::CellMLElement *pElement);

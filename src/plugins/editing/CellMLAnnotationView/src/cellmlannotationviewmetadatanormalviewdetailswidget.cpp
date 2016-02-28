@@ -45,9 +45,6 @@ specific language governing permissions and limitations under the License.
 #include <QScrollArea>
 #include <QString>
 #include <QTimer>
-#include <QWebElement>
-#include <QWebFrame>
-#include <QWebPage>
 
 //==============================================================================
 
@@ -124,7 +121,9 @@ CellmlAnnotationViewMetadataNormalViewDetailsWidget::CellmlAnnotationViewMetadat
     connect(mOutputOntologicalTerms, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showCustomContextMenu()));
 
+/*---ISSUE908---
     mOutputOntologicalTerms->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+*/
 
     connect(mOutputOntologicalTerms->page(), SIGNAL(linkClicked(const QUrl &)),
             this, SLOT(linkClicked()));
@@ -172,6 +171,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::retranslateUi()
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateOutputHeaders()
 {
+/*---ISSUE908---
     // Update our output headers
 
     QWebElement documentElement = mOutputOntologicalTerms->page()->mainFrame()->documentElement();
@@ -186,6 +186,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateOutputHeaders()
         countElement.setInnerXml(tr("(1 term)"));
     else
         countElement.setInnerXml(tr("(%1 terms)").arg(QLocale().toString(mItemsCount)));
+*/
 }
 
 //==============================================================================
@@ -324,10 +325,12 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellMLSup
                               "    </td>\n"
                               "</tr>\n";
 
+/*---ISSUE908---
     if (mItemsCount == 1)
         mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst("tbody").appendInside(ontologicalTerm);
     else
         mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst(QString("tr[id=item_%1]").arg(mRdfTripleInformationSha1s.last())).appendOutside(ontologicalTerm);
+*/
 
     // Keep track of some information
 
@@ -375,6 +378,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::genericLookUp(const QS
 
     // (Un)highlight/(un)select our various RDF triple information
 
+/*---ISSUE908---
     static const QString Highlighted = "highlighted";
     static const QString Selected = "selected";
 
@@ -420,12 +424,14 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::genericLookUp(const QS
             documentElement.findFirst(QString("td[id=id_%1]").arg(rdfTripleInformationSha1)).addClass(Selected);
         }
     }
+*/
 
     mInformationType = pInformationType;
 
     // Check whether we have something to look up
     // Note: there is nothing nothing do for Any...
 
+/*---ISSUE908---
     if (mLookUpRdfTripleInformation == First)
         mOutputOntologicalTerms->page()->triggerAction(QWebPage::MoveToStartOfDocument);
     else if (mLookUpRdfTripleInformation == Last)
@@ -441,6 +447,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::genericLookUp(const QS
         QTimer::singleShot(1, this, SLOT(showLastRdfTriple()));
     else if (mLookUpRdfTripleInformation == No)
         return;
+*/
 
     // Let people know that we want to look something up
 
@@ -483,15 +490,18 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::showLastRdfTriple()
 {
     // Show our last RDF triple by scrolling to the end of the page
 
+/*---ISSUE908---
     QWebFrame *outputFrame = mOutputOntologicalTerms->page()->mainFrame();
 
     outputFrame->setScrollBarValue(Qt::Vertical, outputFrame->scrollBarMaximum(Qt::Vertical));
+*/
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkClicked()
 {
+/*---ISSUE908---
     // Retrieve some information about the link
 
     mOutputOntologicalTerms->retrieveLinkInformation(mLink, mTextContent);
@@ -589,12 +599,14 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkClicked()
                               Resource:
                               Id);
     }
+*/
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkHovered()
 {
+/*---ISSUE908---
     // Retrieve some information about the link
 
     QString link;
@@ -623,12 +635,14 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkHovered()
     }
 
     mOutputOntologicalTerms->setLinkToolTip(linkToolTip);
+*/
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::showCustomContextMenu()
 {
+/*---ISSUE908---
     // Retrieve some information about the link
 
     mOutputOntologicalTerms->retrieveLinkInformation(mLink, mTextContent);
@@ -639,6 +653,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::showCustomContextMenu(
 
     if (!mLink.isEmpty() && !mTextContent.isEmpty())
         mContextMenu->exec(QCursor::pos());
+*/
 }
 
 //==============================================================================
@@ -661,6 +676,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::on_actionCopy_triggere
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::filePermissionsChanged()
 {
+/*---ISSUE908---
     // Enable or disable the remove buttons for our RDF triples, depending on
     // whether the file is un/locked
 
@@ -671,6 +687,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::filePermissionsChanged
         documentElement.findFirst(QString("td[id=button_%1]").arg(rdfTripleInformationSha1)).setStyleProperty("display", fileReadableAndWritable?"table-cell":"none");
         documentElement.findFirst(QString("td[id=disabledButton_%1]").arg(rdfTripleInformationSha1)).setStyleProperty("display", !fileReadableAndWritable?"table-cell":"none");
     }
+*/
 }
 
 //==============================================================================

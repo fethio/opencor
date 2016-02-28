@@ -292,56 +292,56 @@ SET(PLUGINS
 
     miscellaneous/Core
 
-#    support/StandardSupport
+    support/StandardSupport
 
-#    thirdParty/libgit2
-#    thirdParty/LLVM
-#    thirdParty/QScintilla
-#    thirdParty/Qwt
-#    thirdParty/SUNDIALS
-#    thirdParty/zlib
+    thirdParty/libgit2
+    thirdParty/LLVM
+    thirdParty/QScintilla
+    thirdParty/Qwt
+    thirdParty/SUNDIALS
+    thirdParty/zlib
 
     # Plugins that build on top of some third-party libraries
 
-#    miscellaneous/Compiler
+    miscellaneous/Compiler
 
     # Plugins that provide support for some third-party libraries
 
-#    support/CellMLSupport
-#    support/QScintillaSupport
-#    support/SEDMLSupport
-#    support/ZIPSupport
+    support/CellMLSupport
+    support/QScintillaSupport
+    support/SEDMLSupport
+    support/ZIPSupport
 
     # Plugins that provide support for some third-party libraries that have
     # dependencies on others
 
-#    support/COMBINESupport
+    support/COMBINESupport
 
     # Plugins that extend some libraries (incl. third-party ones)
 
-#    widget/Editor
-#    widget/EditorList
-#    widget/Viewer
+    widget/Editor
+    widget/EditorList
+    widget/Viewer
 
     # Plugins that provide some generic features
 
-#    editing/CoreEditing
+    editing/CoreEditing
 
     # Plugins that have dependencies on others
 
-#    editing/CoreCellMLEditing
-#    editing/CoreSEDMLEditing
+    editing/CoreCellMLEditing
+    editing/CoreSEDMLEditing
 
     # Selectable plugins
 
-#    dataStore/BioSignalMLDataStore
-#    dataStore/CSVDataStore
+    dataStore/BioSignalMLDataStore
+    dataStore/CSVDataStore
 
-#    editing/CellMLAnnotationView
-#    editing/CellMLTextView
-#    editing/RawCellMLView
-#    editing/RawSEDMLView
-#    editing/RawTextView
+    editing/CellMLAnnotationView
+    editing/CellMLTextView
+    editing/RawCellMLView
+    editing/RawSEDMLView
+    editing/RawTextView
 
 #    miscellaneous/HelpWindow
 

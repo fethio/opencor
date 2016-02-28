@@ -66,9 +66,6 @@ specific language governing permissions and limitations under the License.
 #include <QTimer>
 #include <QVariant>
 #include <QVBoxLayout>
-#include <QWebElement>
-#include <QWebFrame>
-#include <QWebPage>
 
 //==============================================================================
 
@@ -354,7 +351,9 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
     connect(mOutputOntologicalTerms, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showCustomContextMenu()));
 
+/*---ISSUE908---
     mOutputOntologicalTerms->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
+*/
 
     connect(mOutputOntologicalTerms->page(), SIGNAL(linkClicked(const QUrl &)),
             this, SLOT(linkClicked()));
@@ -471,6 +470,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateGui(iface::cellml_api:
     // whether the file is un/locked and whether they are already associated
     // with the CellML element
 
+/*---ISSUE908---
     QWebElement documentElement = mOutputOntologicalTerms->page()->mainFrame()->documentElement();
 
     foreach (const QString &itemInformationSha1, mItemInformationSha1s) {
@@ -496,6 +496,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateGui(iface::cellml_api:
             documentElement.findFirst(QString("td[id=disabledButton_%1]").arg(itemInformationSha1)).setStyleProperty("display", !enabledButton?"table-cell":"none");
         }
     }
+*/
 }
 
 //==============================================================================
@@ -550,6 +551,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::upudateOutputMessage(const b
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::updateOutputHeaders()
 {
+/*---ISSUE908---
     // Update our output headers
 
     QWebElement documentElement = mOutputOntologicalTerms->page()->mainFrame()->documentElement();
@@ -564,6 +566,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateOutputHeaders()
         countElement.setInnerXml(tr("(1 term)"));
     else
         countElement.setInnerXml(tr("(%1 terms)").arg(QLocale().toString(mItemsCount)));
+*/
 }
 
 //==============================================================================
@@ -644,7 +647,9 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
                                 "</tr>\n";
         }
 
+/*---ISSUE908---
         mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst("tbody").appendInside(ontologicalTerms);
+*/
 
         updateOutputHeaders();
     } else {
@@ -716,6 +721,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::genericLookUp(const QString 
 
     // (Un)highlight/(un)select our various items
 
+/*---ISSUE908---
     static const QString Highlighted = "highlighted";
     static const QString Selected = "selected";
 
@@ -751,6 +757,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::genericLookUp(const QString 
             documentElement.findFirst(QString("td[id=id_%1]").arg(itemInformationSha1)).addClass(Selected);
         }
     }
+*/
 
     mInformationType = pInformationType;
 
@@ -840,6 +847,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::lookUpQualifier()
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked()
 {
+/*---ISSUE908---
     // Retrieve some information about the link
 
     mOutputOntologicalTerms->retrieveLinkInformation(mLink, mTextContent);
@@ -891,12 +899,14 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked()
                           Resource:
                           Id);
     }
+*/
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered()
 {
+/*---ISSUE908---
     // Retrieve some information about the link
 
     QString link;
@@ -918,6 +928,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered()
     }
 
     mOutputOntologicalTerms->setLinkToolTip(linkToolTip);
+*/
 }
 
 //==============================================================================
@@ -1121,6 +1132,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::addTerm()
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::showCustomContextMenu()
 {
+/*---ISSUE908---
     // Retrieve some information about the link, if any
 
     mOutputOntologicalTerms->retrieveLinkInformation(mLink, mTextContent);
@@ -1131,6 +1143,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::showCustomContextMenu()
 
     if (!mLink.isEmpty() && !mTextContent.isEmpty())
         mContextMenu->exec(QCursor::pos());
+*/
 }
 
 //==============================================================================

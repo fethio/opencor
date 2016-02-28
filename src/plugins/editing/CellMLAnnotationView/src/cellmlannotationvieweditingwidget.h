@@ -38,7 +38,7 @@ class QComboBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
-class QWebView;
+class QWebEngineView;
 
 //==============================================================================
 
@@ -100,13 +100,13 @@ Q_SIGNALS:
 private Q_SLOTS:
     void emitSplitterMoved();
 
-    void updateWebViewerWithQualifierDetails(QWebView *pWebView,
-                                             const QString &pQualifier);
-    void updateWebViewerWithResourceDetails(QWebView *pWebView,
-                                            const QString &pResource);
-    void updateWebViewerWithIdDetails(QWebView *pWebView,
-                                      const QString &pResource,
-                                      const QString &pId);
+    void updateWebEngineViewerWithQualifierDetails(QWebEngineView *pWebEngineView,
+                                                   const QString &pQualifier);
+    void updateWebEngineViewerWithResourceDetails(QWebEngineView *pWebEngineView,
+                                                  const QString &pResource);
+    void updateWebEngineViewerWithIdDetails(QWebEngineView *pWebEngineView,
+                                            const QString &pResource,
+                                            const QString &pId);
 };
 
 //==============================================================================

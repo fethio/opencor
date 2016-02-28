@@ -29,10 +29,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QString>
-
-//==============================================================================
-
-#include <QtWebEngineWidgets/QWebEngineView>
+#include <QWebEngineView>
 
 //==============================================================================
 
