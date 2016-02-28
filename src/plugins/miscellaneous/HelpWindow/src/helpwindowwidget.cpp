@@ -35,7 +35,6 @@ specific language governing permissions and limitations under the License.
 #include <QMouseEvent>
 #include <QSettings>
 #include <QTimer>
-#include <QWebPage>
 
 //==============================================================================
 
@@ -149,20 +148,22 @@ QNetworkReply * HelpWindowNetworkAccessManager::createRequest(Operation pOperati
 //==============================================================================
 
 HelpWindowPage::HelpWindowPage(QObject *pParent) :
-    QWebPage(pParent)
+    QWebEnginePage(pParent)
 {
 }
 
 //==============================================================================
 
-bool HelpWindowPage::acceptNavigationRequest(QWebFrame*,
-                                             const QNetworkRequest &pRequest,
-                                             QWebPage::NavigationType)
+bool HelpWindowPage::acceptNavigationRequest(const QUrl &pUrl,
+                                             NavigationType pType,
+                                             bool pIsMainFrame)
 {
+    Q_UNUSED(pType);
+    Q_UNUSED(pIsMainFrame);
+
     // Requested URL
 
-    QUrl url = pRequest.url();
-    QString urlScheme = url.scheme();
+    QString urlScheme = pUrl.scheme();
 
     // Determine whether the URL refers to an OpenCOR document or an external
     // resource of sorts
@@ -174,7 +175,7 @@ bool HelpWindowPage::acceptNavigationRequest(QWebFrame*,
         // to execute (i.e. something of the form opencor://...), or an external
         // resource of sorts, so just open the URL the default way
 
-        QDesktopServices::openUrl(url);
+        QDesktopServices::openUrl(pUrl);
 
         return false;
     }
@@ -191,7 +192,7 @@ enum {
 
 HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
                                    const QUrl &pHomePage, QWidget *pParent) :
-    QWebView(pParent),
+    QWebEngineView(pParent),
     Core::CommonWidget(pParent),
     mHelpEngine(pHelpEngine),
     mHomePage(pHomePage),
@@ -202,7 +203,9 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
 
     setPage(new HelpWindowPage(this));
 
+/*---ISSUE908---
     page()->setNetworkAccessManager(new HelpWindowNetworkAccessManager(pHelpEngine, this));
+*/
 
     // Prevent objects from being dropped on us
     // Note: by default, QWebView allows for objects to be dropped on itself,
@@ -228,9 +231,9 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
     connect(page(), SIGNAL(selectionChanged()),
             this, SLOT(selectionChanged()));
 
-    connect(pageAction(QWebPage::Back), SIGNAL(changed()),
+    connect(pageAction(QWebEnginePage::Back), SIGNAL(changed()),
             this, SLOT(documentChanged()));
-    connect(pageAction(QWebPage::Forward), SIGNAL(changed()),
+    connect(pageAction(QWebEnginePage::Forward), SIGNAL(changed()),
             this, SLOT(documentChanged()));
 
     // Go to the home page
@@ -374,7 +377,7 @@ void HelpWindowWidget::mouseReleaseEvent(QMouseEvent *pEvent)
         // Special mouse button #1 which is used to go to the previous help
         // document
 
-        triggerPageAction(QWebPage::Back);
+        triggerPageAction(QWebEnginePage::Back);
 
         // Accept the event
 
@@ -382,7 +385,7 @@ void HelpWindowWidget::mouseReleaseEvent(QMouseEvent *pEvent)
     } else if (pEvent->button() == Qt::XButton2) {
         // Special mouse button #2 which is used to go to the next help document
 
-        triggerPageAction(QWebPage::Forward);
+        triggerPageAction(QWebEnginePage::Forward);
 
         // Accept the event
 
@@ -390,7 +393,7 @@ void HelpWindowWidget::mouseReleaseEvent(QMouseEvent *pEvent)
     } else {
         // Something else, so use the default handling of the event
 
-        QWebView::mouseReleaseEvent(pEvent);
+        QWebEngineView::mouseReleaseEvent(pEvent);
     }
 }
 
@@ -414,7 +417,7 @@ void HelpWindowWidget::wheelEvent(QWheelEvent *pEvent)
         // Not the modifier we were expecting, so call the default handling of
         // the event
 
-        QWebView::wheelEvent(pEvent);
+        QWebEngineView::wheelEvent(pEvent);
     }
 }
 
@@ -424,7 +427,7 @@ void HelpWindowWidget::paintEvent(QPaintEvent *pEvent)
 {
     // Default handling of the event
 
-    QWebView::paintEvent(pEvent);
+    QWebEngineView::paintEvent(pEvent);
 
     // Draw a border
 
@@ -468,9 +471,9 @@ void HelpWindowWidget::documentChanged()
 
     QAction *action = qobject_cast<QAction *>(sender());
 
-    if (action == pageAction(QWebPage::Back))
+    if (action == pageAction(QWebEnginePage::Back))
         emit backEnabled(action->isEnabled());
-    else if (action == pageAction(QWebPage::Forward))
+    else if (action == pageAction(QWebEnginePage::Forward))
         emit forwardEnabled(action->isEnabled());
 }
 

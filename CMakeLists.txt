@@ -343,7 +343,7 @@ SET(PLUGINS
     editing/RawSEDMLView
     editing/RawTextView
 
-#    miscellaneous/HelpWindow
+    miscellaneous/HelpWindow
 
 #    organisation/FileBrowserWindow
 #    organisation/FileOrganiserWindow

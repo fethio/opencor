@@ -98,13 +98,13 @@ HelpWindowWindow::HelpWindowWindow(QWidget *pParent) :
 
     mGui->layout->addWidget(toolBarWidget);
 
-    // Create and add the help widget
+    // Create and add the help window widget
 
-    mHelpWidget = new HelpWindowWidget(mHelpEngine, OpencorHelpWindowHomepageUrl, this);
+    mHelpWindowWidget = new HelpWindowWidget(mHelpEngine, OpencorHelpWindowHomepageUrl, this);
 
-    mHelpWidget->setObjectName("HelpWindowWidget");
+    mHelpWindowWidget->setObjectName("HelpWindowWidget");
 
-    mGui->layout->addWidget(mHelpWidget);
+    mGui->layout->addWidget(mHelpWindowWidget);
 
     // Create and populate our context menu
 
@@ -124,31 +124,31 @@ HelpWindowWindow::HelpWindowWindow(QWidget *pParent) :
     mContextMenu->addSeparator();
     mContextMenu->addAction(mGui->actionPrint);
 
-    // We want our own context menu for the help widget (indeed, we don't want
-    // the default one, which has the reload menu item and not the other actions
-    // that we have in our tool bar widget)
+    // We want our own context menu for the help window widget (indeed, we don't
+    // want the default one, which has the reload menu item and not the other
+    // actions that we have in our tool bar widget)
 
-    mHelpWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    mHelpWindowWidget->setContextMenuPolicy(Qt::CustomContextMenu);
 
-    connect(mHelpWidget, SIGNAL(customContextMenuRequested(const QPoint &)),
+    connect(mHelpWindowWidget, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showCustomContextMenu()));
 
     // Some connections to update the enabled state of our various actions
 
-    connect(mHelpWidget, SIGNAL(notHomePage(const bool &)),
+    connect(mHelpWindowWidget, SIGNAL(notHomePage(const bool &)),
             mGui->actionHome, SLOT(setEnabled(bool)));
 
-    connect(mHelpWidget, SIGNAL(backEnabled(const bool &)),
+    connect(mHelpWindowWidget, SIGNAL(backEnabled(const bool &)),
             mGui->actionBack, SLOT(setEnabled(bool)));
-    connect(mHelpWidget, SIGNAL(forwardEnabled(const bool &)),
+    connect(mHelpWindowWidget, SIGNAL(forwardEnabled(const bool &)),
             mGui->actionForward, SLOT(setEnabled(bool)));
 
-    connect(mHelpWidget, SIGNAL(notDefaultZoomLevel(const bool &)),
+    connect(mHelpWindowWidget, SIGNAL(notDefaultZoomLevel(const bool &)),
             mGui->actionNormalSize, SLOT(setEnabled(bool)));
-    connect(mHelpWidget, SIGNAL(zoomOutEnabled(const bool &)),
+    connect(mHelpWindowWidget, SIGNAL(zoomOutEnabled(const bool &)),
             mGui->actionZoomOut, SLOT(setEnabled(bool)));
 
-    connect(mHelpWidget, SIGNAL(copyTextEnabled(const bool &)),
+    connect(mHelpWindowWidget, SIGNAL(copyTextEnabled(const bool &)),
             mGui->actionCopy, SLOT(setEnabled(bool)));
 
     // En/disable the printing action, depending on whether printers are
@@ -183,19 +183,19 @@ void HelpWindowWindow::retranslateUi()
 
     mGui->retranslateUi(this);
 
-    // Retranslate the help widget
+    // Retranslate the help window widget
 
-    mHelpWidget->retranslateUi();
+    mHelpWindowWidget->retranslateUi();
 }
 
 //==============================================================================
 
 void HelpWindowWindow::loadSettings(QSettings *pSettings)
 {
-    // Retrieve the settings of the help widget
+    // Retrieve the settings of the help window widget
 
-    pSettings->beginGroup(mHelpWidget->objectName());
-        mHelpWidget->loadSettings(pSettings);
+    pSettings->beginGroup(mHelpWindowWidget->objectName());
+        mHelpWindowWidget->loadSettings(pSettings);
     pSettings->endGroup();
 }
 
@@ -203,10 +203,10 @@ void HelpWindowWindow::loadSettings(QSettings *pSettings)
 
 void HelpWindowWindow::saveSettings(QSettings *pSettings) const
 {
-    // Keep track of the settings of the help widget
+    // Keep track of the settings of the help window widget
 
-    pSettings->beginGroup(mHelpWidget->objectName());
-        mHelpWidget->saveSettings(pSettings);
+    pSettings->beginGroup(mHelpWindowWidget->objectName());
+        mHelpWindowWidget->saveSettings(pSettings);
     pSettings->endGroup();
 }
 
@@ -216,7 +216,7 @@ void HelpWindowWindow::on_actionHome_triggered()
 {
     // Go to the home page
 
-    mHelpWidget->goToHomePage();
+    mHelpWindowWidget->goToHomePage();
 }
 
 //==============================================================================
@@ -225,7 +225,7 @@ void HelpWindowWindow::on_actionBack_triggered()
 {
     // Go to the previous help page
 
-    mHelpWidget->back();
+    mHelpWindowWidget->back();
 }
 
 //==============================================================================
@@ -234,7 +234,7 @@ void HelpWindowWindow::on_actionForward_triggered()
 {
     // Go to the next help page
 
-    mHelpWidget->forward();
+    mHelpWindowWidget->forward();
 }
 
 //==============================================================================
@@ -243,7 +243,7 @@ void HelpWindowWindow::on_actionCopy_triggered()
 {
     // Copy the current slection to the clipboard
 
-    QApplication::clipboard()->setText(mHelpWidget->selectedText());
+    QApplication::clipboard()->setText(mHelpWindowWidget->selectedText());
 }
 
 //==============================================================================
@@ -252,7 +252,7 @@ void HelpWindowWindow::on_actionNormalSize_triggered()
 {
     // Reset the zoom level of the help page contents
 
-    mHelpWidget->resetZoom();
+    mHelpWindowWidget->resetZoom();
 }
 
 //==============================================================================
@@ -261,7 +261,7 @@ void HelpWindowWindow::on_actionZoomIn_triggered()
 {
     // Zoom in the help page contents
 
-    mHelpWidget->zoomIn();
+    mHelpWindowWidget->zoomIn();
 }
 
 //==============================================================================
@@ -270,13 +270,14 @@ void HelpWindowWindow::on_actionZoomOut_triggered()
 {
     // Zoom out the help page contents
 
-    mHelpWidget->zoomOut();
+    mHelpWindowWidget->zoomOut();
 }
 
 //==============================================================================
 
 void HelpWindowWindow::on_actionPrint_triggered()
 {
+/*---ISSUE908---
     // Retrieve the printer with which the user wants to print the help page
     // and print it, should s/he still want to go ahead with the printing
 
@@ -284,7 +285,8 @@ void HelpWindowWindow::on_actionPrint_triggered()
     QPrintDialog printDialog(&printer);
 
     if (printDialog.exec() == QDialog::Accepted)
-          mHelpWidget->print(&printer);
+          mHelpWindowWidget->print(&printer);
+*/
 }
 
 //==============================================================================

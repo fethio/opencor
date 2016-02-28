@@ -29,7 +29,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QNetworkReply>
-#include <QWebView>
+#include <QWebEngineView>
 
 //==============================================================================
 
@@ -87,15 +87,14 @@ private:
 
 //==============================================================================
 
-class HelpWindowPage : public QWebPage
+class HelpWindowPage : public QWebEnginePage
 {
 public:
     explicit HelpWindowPage(QObject *pParent);
 
 protected:
-    virtual bool acceptNavigationRequest(QWebFrame*,
-                                         const QNetworkRequest &pRequest,
-                                         QWebPage::NavigationType);
+    virtual bool acceptNavigationRequest(const QUrl &pUrl, NavigationType pType,
+                                         bool pIsMainFrame);
 
 private:
     QMap<QString, QString> mFileNames;
@@ -103,7 +102,7 @@ private:
 
 //==============================================================================
 
-class HelpWindowWidget : public QWebView, public Core::CommonWidget
+class HelpWindowWidget : public QWebEngineView, public Core::CommonWidget
 {
     Q_OBJECT
 
