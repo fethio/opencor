@@ -27,8 +27,6 @@ specific language governing permissions and limitations under the License.
 #include <QEvent>
 #include <QHelpEvent>
 #include <QToolTip>
-#include <QWebElement>
-#include <QWebHitTestResult>
 
 //==============================================================================
 
@@ -38,7 +36,7 @@ namespace Core {
 //==============================================================================
 
 WebViewWidget::WebViewWidget(QWidget *pParent) :
-    QWebView(pParent),
+    QWebEngineView(pParent),
     mResettingCursor(false),
     mLinkToolTip(QString())
 {
@@ -89,12 +87,13 @@ bool WebViewWidget::event(QEvent *pEvent)
 
         return true;
     } else {
-        return QWebView::event(pEvent);
+        return QWebEngineView::event(pEvent);
     }
 }
 
 //==============================================================================
 
+/*---ISSUE908---
 QWebElement WebViewWidget::retrieveLinkInformation(QString &pLink,
                                                    QString &pTextContent)
 {
@@ -124,6 +123,7 @@ QWebElement WebViewWidget::retrieveLinkInformation(QString &pLink,
 
     return res;
 }
+*/
 
 //==============================================================================
 

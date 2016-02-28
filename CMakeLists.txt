@@ -285,12 +285,12 @@ ENDIF()
 SET(PLUGINS
     # Plugins that have no dependencies
 
-#    api/BioSignalMLAPI
-#    api/CellMLAPI
-#    api/SBMLAPI
-#    api/SEDMLAPI
+    api/BioSignalMLAPI
+    api/CellMLAPI
+    api/SBMLAPI
+    api/SEDMLAPI
 
-#    miscellaneous/Core
+    miscellaneous/Core
 
 #    support/StandardSupport
 
@@ -625,7 +625,7 @@ IF(WIN32)
 
     # Qt libraries required by OpenCOR
 
-    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5CLucene Qt5Core Qt5Gui Qt5Help Qt5Multimedia Qt5MultimediaWidgets Qt5Network Qt5OpenGL Qt5Positioning Qt5PrintSupport Qt5Qml Qt5Quick Qt5Sensors Qt5Sql Qt5Svg Qt5WebChannel Qt5Widgets Qt5Xml Qt5XmlPatterns)
+    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5CLucene Qt5Core Qt5Gui Qt5Help Qt5Multimedia Qt5MultimediaWidgets Qt5Network Qt5OpenGL Qt5Positioning Qt5PrintSupport Qt5Qml Qt5Quick Qt5Sensors Qt5Sql Qt5Svg Qt5WebChannel Qt5WebEngineCore Qt5WebEngineWidgets Qt5Widgets Qt5Xml Qt5XmlPatterns)
     WINDOWS_DEPLOY_QT_LIBRARIES(icudt${ICU_VERSION} icuin${ICU_VERSION} icuuc${ICU_VERSION})
 
     IF(ENABLE_TESTS)
@@ -723,7 +723,7 @@ ELSE()
         SET(TEST)
     ENDIF()
 
-    FOREACH(QT_LIBRARY CLucene Core DBus Gui Help Multimedia MultimediaWidgets Network OpenGL Positioning PrintSupport Qml Quick Sensors Sql Svg ${TEST} WebChannel Widgets XcbQpa Xml XmlPatterns)
+    FOREACH(QT_LIBRARY CLucene Core DBus Gui Help Multimedia MultimediaWidgets Network OpenGL Positioning PrintSupport Qml Quick Sensors Sql Svg ${TEST} WebChannel WebEngineCore WebEngineWidgets Widgets XcbQpa Xml XmlPatterns)
         LINUX_DEPLOY_QT_LIBRARY(${QT_LIBRARY_DIR}
                                 ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH}
                                 ${CMAKE_SHARED_LIBRARY_PREFIX}Qt${QT_VERSION_MAJOR}${QT_LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX}.${QT_VERSION_MAJOR})

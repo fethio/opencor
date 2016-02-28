@@ -118,6 +118,8 @@ MACRO(INITIALISE_PROJECT)
             QtSvg
             ${QT_TEST}
             QtWebChannel
+            QtWebEngineCore
+            QtWebEngineWidgets
             QtWidgets
             QtXml
             QtXmlPatterns

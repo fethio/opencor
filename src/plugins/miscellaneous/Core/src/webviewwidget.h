@@ -29,7 +29,10 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QString>
-#include <QWebView>
+
+//==============================================================================
+
+#include <QtWebEngineWidgets/QWebEngineView>
 
 //==============================================================================
 
@@ -38,14 +41,16 @@ namespace Core {
 
 //==============================================================================
 
-class CORE_EXPORT WebViewWidget : public QWebView
+class CORE_EXPORT WebViewWidget : public QWebEngineView
 {
     Q_OBJECT
 
 public:
     explicit WebViewWidget(QWidget *pParent);
 
+/*---ISSUE908---
     QWebElement retrieveLinkInformation(QString &pLink, QString &pTextContent);
+*/
 
     void setLinkToolTip(const QString &pLinkToolTip);
 

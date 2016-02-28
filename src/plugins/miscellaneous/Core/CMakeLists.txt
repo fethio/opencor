@@ -70,7 +70,7 @@ ADD_PLUGIN(Core
         src
     QT_MODULES
         Network
-        WebKitWidgets
+        WebEngineWidgets
         Widgets
         Xml
         XmlPatterns
