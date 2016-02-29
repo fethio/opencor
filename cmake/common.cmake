@@ -1000,6 +1000,12 @@ ENDMACRO()
 
 #===============================================================================
 
+MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
+#---ISSUE908--- TO BE DONE...
+ENDMACRO()
+
+#===============================================================================
+
 MACRO(WINDOWS_DEPLOY_LIBRARY DIRNAME FILENAME)
     # Deploy the library file
 
@@ -1054,6 +1060,12 @@ MACRO(LINUX_DEPLOY_QT_PLUGIN PLUGIN_CATEGORY)
         INSTALL(FILES ${PROJECT_BUILD_DIR}/${PLUGIN_DEST_DIRNAME}/${PLUGIN_FILENAME}
                 DESTINATION ${PLUGIN_DEST_DIRNAME})
     ENDFOREACH()
+ENDMACRO()
+
+#===============================================================================
+
+MACRO(LINUX_DEPLOY_QT_WEB_ENGINE_PROCESS)
+#---ISSUE908--- TO BE DONE...
 ENDMACRO()
 
 #===============================================================================
@@ -1155,6 +1167,42 @@ MACRO(OS_X_DEPLOY_QT_PLUGIN PLUGIN_CATEGORY)
         OS_X_DEPLOY_QT_FILE(${QT_PLUGINS_DIR}/${PLUGIN_CATEGORY}
                             ${PROJECT_BUILD_DIR}/${CMAKE_PROJECT_NAME}.app/Contents/PlugIns/${PLUGIN_CATEGORY}
                             ${CMAKE_SHARED_LIBRARY_PREFIX}${PLUGIN_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    ENDFOREACH()
+ENDMACRO()
+
+#===============================================================================
+
+MACRO(OS_X_DEPLOY_QT_WEB_ENGINE_PROCESS)
+    # Retrieve the Helpers and Resources folders from the original
+    # QtWebEngineCore framework and create a symbolic link for them
+
+    SET(VERSION_DIR Versions/${QT_VERSION_MAJOR})
+    SET(QT_WEB_ENGINE_CORE_DIR QtWebEngineCore.framework)
+    SET(QT_WEB_ENGINE_CORE_VERSION_DIR ${QT_WEB_ENGINE_CORE_DIR}/${VERSION_DIR})
+    SET(LOCAL_FRAMEWORKS_DIR ${PROJECT_BUILD_DIR}/${CMAKE_PROJECT_NAME}.app/Contents/Frameworks)
+    SET(LOCAL_QT_WEB_ENGINE_CORE_DIR ${LOCAL_FRAMEWORKS_DIR}/${QT_WEB_ENGINE_CORE_DIR})
+    SET(LOCAL_QT_WEB_ENGINE_CORE_VERSION_DIR ${LOCAL_FRAMEWORKS_DIR}/${QT_WEB_ENGINE_CORE_VERSION_DIR})
+
+    FOREACH(DIRNAME Helpers Resources)
+        ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
+                           COMMAND ${CMAKE_COMMAND} -E copy_directory ${QT_LIBRARY_DIR}/${QT_WEB_ENGINE_CORE_VERSION_DIR}/${DIRNAME}
+                                                                      ${LOCAL_QT_WEB_ENGINE_CORE_VERSION_DIR}/${DIRNAME})
+
+        ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+                           COMMAND ${CMAKE_COMMAND} -E create_symlink ${VERSION_DIR}/${DIRNAME}
+                                                                      ${DIRNAME}
+                           WORKING_DIRECTORY ${LOCAL_QT_WEB_ENGINE_CORE_DIR})
+    ENDFOREACH()
+
+    # Update the RPATH information for QtWebEngineProcess
+
+    SET(QT_WEB_ENGINE_PROCESS_FILENAME ${LOCAL_QT_WEB_ENGINE_CORE_VERSION_DIR}/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess)
+
+    FOREACH(DEPENDENCY_NAME Core Gui Network Qml Quick WebChannel)
+        ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
+                           COMMAND install_name_tool -change @executable_path/../../../../../../../Qt${DEPENDENCY_NAME}.framework/Qt${DEPENDENCY_NAME}
+                                                             @executable_path/../../../../../../../Qt${DEPENDENCY_NAME}.framework/${VERSION_DIR}/Qt${DEPENDENCY_NAME}
+                                                             ${QT_WEB_ENGINE_PROCESS_FILENAME})
     ENDFOREACH()
 ENDMACRO()
 

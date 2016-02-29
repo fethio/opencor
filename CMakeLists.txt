@@ -484,6 +484,10 @@ IF(APPLE)
     OS_X_DEPLOY_QT_PLUGIN(platforms qcocoa)
     OS_X_DEPLOY_QT_PLUGIN(printsupport cocoaprintersupport)
     OS_X_DEPLOY_QT_PLUGIN(sqldrivers qsqlite)
+
+    # Deploy QtWebEngineProcess
+
+    OS_X_DEPLOY_QT_WEB_ENGINE_PROCESS()
 ELSE()
     # Copy the GUI version of the OpenCOR executable to the build/bin folder
 
@@ -638,6 +642,10 @@ IF(WIN32)
     WINDOWS_DEPLOY_QT_PLUGIN(printsupport windowsprintersupport)
     WINDOWS_DEPLOY_QT_PLUGIN(sqldrivers qsqlite)
 
+    # Deploy QtWebEngineProcess
+
+    WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS()
+
     # Batch and VBScript files to run OpenCOR (useful when downloading a ZIPped
     # version of OpenCOR)
 
@@ -740,6 +748,10 @@ ELSE()
     LINUX_DEPLOY_QT_PLUGIN(platforms qxcb)
     LINUX_DEPLOY_QT_PLUGIN(printsupport cupsprintersupport)
     LINUX_DEPLOY_QT_PLUGIN(sqldrivers qsqlite)
+
+    # Deploy QtWebEngineProcess
+
+    LINUX_DEPLOY_QT_WEB_ENGINE_PROCESS()
 
     # Shell script to run OpenCOR
 
