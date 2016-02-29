@@ -28,6 +28,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QDir>
+#include <QFileOpenEvent>
 #include <QLocale>
 #include <QProcess>
 #include <QSettings>
@@ -36,6 +37,37 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QtSingleApplication>
+
+//==============================================================================
+
+class GuiApplication : public SharedTools::QtSingleApplication
+{
+public:
+    GuiApplication(const QString &pId, int &pArgC, char **pArgV) :
+        SharedTools::QtSingleApplication(pId, pArgC, pArgV)
+    {
+    }
+
+protected:
+    virtual bool event(QEvent *pEvent)
+    {
+        // Check whether we are asked to open a file or handle an OpenCOR URL
+
+        if (pEvent->type() == QEvent::FileOpen) {
+            QFileOpenEvent *fileOpenEvent = static_cast<QFileOpenEvent*>(pEvent);
+            QString fileNameOrOpencorUrl = fileOpenEvent->file();
+
+            if (fileNameOrOpencorUrl.isEmpty())
+                fileNameOrOpencorUrl = fileOpenEvent->url().toString();
+
+            emit fileOpenRequest(fileNameOrOpencorUrl);
+
+            return true;
+        } else {
+            return QApplication::event(pEvent);
+        }
+    }
+};
 
 //==============================================================================
 
@@ -135,15 +167,15 @@ int main(int pArgC, char *pArgV[])
 
     // Create the GUI version of OpenCOR
 
-    SharedTools::QtSingleApplication *guiApp = new SharedTools::QtSingleApplication(QFileInfo(pArgV[0]).baseName(),
-                                                                                    pArgC, pArgV);
+    GuiApplication *guiApp = new GuiApplication(QFileInfo(pArgV[0]).baseName(),
+                                                pArgC, pArgV);
 
     // Send a message (containing the arguments that were passed to this
     // instance of OpenCOR minus the first one since it corresponds to the full
     // path to our executable, which we are not interested in) to our 'official'
-    // instance of OpenCOR, should there be one. If there is none, then just
+    // instance of OpenCOR, should there be one (if there is none, then just
     // carry on as normal, otherwise exit since we want only one instance of
-    // OpenCOR at any given time
+    // OpenCOR at any given time)
 
     QStringList appArguments = guiApp->arguments();
 
@@ -239,7 +271,7 @@ int main(int pArgC, char *pArgV[])
 
     // Handle our arguments
 
-    win->handleArguments(arguments);
+    win->handleArguments(appArguments);
 
     // Show our main window
 
