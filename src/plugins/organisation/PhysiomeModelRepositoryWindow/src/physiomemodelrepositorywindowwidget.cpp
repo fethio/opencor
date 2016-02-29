@@ -31,6 +31,7 @@ specific language governing permissions and limitations under the License.
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QIODevice>
+#include <QLayout>
 #include <QMenu>
 #include <QPaintEvent>
 #include <QRegularExpression>
@@ -94,6 +95,11 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     // Set up the GUI
 
     mGui->setupUi(this);
+
+    // Customise our layout
+
+    layout()->setMargin(0);
+    layout()->setSpacing(0);
 
     // Add a small margin ourselves, so that no visual trace of the border drawn
     // by drawBorder() in paintEvent() is left when scrolling (on Windows and
