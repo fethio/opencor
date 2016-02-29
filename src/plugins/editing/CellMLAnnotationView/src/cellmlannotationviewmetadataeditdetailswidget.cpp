@@ -32,7 +32,7 @@ specific language governing permissions and limitations under the License.
 #include "filemanager.h"
 #include "treeviewwidget.h"
 #include "usermessagewidget.h"
-#include "webviewwidget.h"
+#include "webengineviewwidget.h"
 
 //==============================================================================
 
@@ -344,7 +344,7 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
 
     mOutputOntologicalTermsTemplate = fileContents;
 
-    mOutputOntologicalTerms = new Core::WebViewWidget(mOutput);
+    mOutputOntologicalTerms = new Core::WebEngineViewWidget(mOutput);
 
     mOutputOntologicalTerms->setContextMenuPolicy(Qt::CustomContextMenu);
 

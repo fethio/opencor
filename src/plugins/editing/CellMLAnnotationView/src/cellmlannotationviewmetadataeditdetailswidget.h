@@ -61,7 +61,7 @@ namespace OpenCOR {
 
 namespace Core {
     class UserMessageWidget;
-    class WebViewWidget;
+    class WebEngineViewWidget;
 }   // namespace Core
 
 //==============================================================================
@@ -71,7 +71,7 @@ namespace CellMLAnnotationView {
 //==============================================================================
 
 class CellmlAnnotationViewEditingWidget;
-class CellmlAnnotationViewMetadataWebViewWidget;
+class CellmlAnnotationViewMetadataWebEngineViewWidget;
 class CellmlAnnotationViewWidget;
 
 //==============================================================================
@@ -154,7 +154,7 @@ private:
     Core::UserMessageWidget *mOutputMessage;
 
     QString mOutputOntologicalTermsTemplate;
-    Core::WebViewWidget *mOutputOntologicalTerms;
+    Core::WebEngineViewWidget *mOutputOntologicalTerms;
 
     InformationType mInformationType;
 

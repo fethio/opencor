@@ -80,7 +80,7 @@ QString PhysiomeModelRepositoryWindowExposure::name() const
 //==============================================================================
 
 PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget *pParent) :
-    Core::WebViewWidget(pParent),
+    Core::WebEngineViewWidget(pParent),
     Core::CommonWidget(pParent),
     mGui(new Ui::PhysiomeModelRepositoryWindowWidget),
     mExposureNames(QStringList()),
@@ -102,7 +102,8 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     //       margin, no margin actually exists, but it addresses the issue with
     //       the border drawn by drawBorder()...
 
-    setStyleSheet("QWebView {"
+//---ISSUE908--- MAKE SURE THE BELOW WORKS...
+    setStyleSheet("QWebEngineView {"
                   "    margin: 1px;"
                   "}");
 

@@ -19,8 +19,8 @@ specific language governing permissions and limitations under the License.
 // Web view widget
 //==============================================================================
 
-#ifndef WEBVIEWWIDGET_H
-#define WEBVIEWWIDGET_H
+#ifndef WEBENGINEVIEWWIDGET_H
+#define WEBENGINEVIEWWIDGET_H
 
 //==============================================================================
 
@@ -38,12 +38,12 @@ namespace Core {
 
 //==============================================================================
 
-class CORE_EXPORT WebViewWidget : public QWebEngineView
+class CORE_EXPORT WebEngineViewWidget : public QWebEngineView
 {
     Q_OBJECT
 
 public:
-    explicit WebViewWidget(QWidget *pParent);
+    explicit WebEngineViewWidget(QWidget *pParent);
 
 /*---ISSUE908---
     QWebElement retrieveLinkInformation(QString &pLink, QString &pTextContent);

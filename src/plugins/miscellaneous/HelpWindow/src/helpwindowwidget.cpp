@@ -208,8 +208,8 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
 */
 
     // Prevent objects from being dropped on us
-    // Note: by default, QWebView allows for objects to be dropped on itself,
-    //       while we don't want that...
+    // Note: by default, QWebEngineView allows for objects to be dropped on
+    //       itself, while we don't want that...
 
     setAcceptDrops(false);
 

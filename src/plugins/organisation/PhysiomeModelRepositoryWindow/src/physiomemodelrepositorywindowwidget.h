@@ -26,7 +26,7 @@ specific language governing permissions and limitations under the License.
 
 #include "commonwidget.h"
 #include "corecliutils.h"
-#include "webviewwidget.h"
+#include "webengineviewwidget.h"
 
 //==============================================================================
 
@@ -67,7 +67,7 @@ typedef QList<PhysiomeModelRepositoryWindowExposure> PhysiomeModelRepositoryWind
 
 //==============================================================================
 
-class PhysiomeModelRepositoryWindowWidget : public Core::WebViewWidget,
+class PhysiomeModelRepositoryWindowWidget : public Core::WebEngineViewWidget,
                                             public Core::CommonWidget
 {
     Q_OBJECT

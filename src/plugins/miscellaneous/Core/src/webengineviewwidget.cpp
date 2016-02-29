@@ -19,7 +19,7 @@ specific language governing permissions and limitations under the License.
 // Web view widget
 //==============================================================================
 
-#include "webviewwidget.h"
+#include "webengineviewwidget.h"
 
 //==============================================================================
 
@@ -35,7 +35,7 @@ namespace Core {
 
 //==============================================================================
 
-WebViewWidget::WebViewWidget(QWidget *pParent) :
+WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
     QWebEngineView(pParent),
     mResettingCursor(false),
     mLinkToolTip(QString())
@@ -49,7 +49,7 @@ WebViewWidget::WebViewWidget(QWidget *pParent) :
 
 //==============================================================================
 
-void WebViewWidget::setLinkToolTip(const QString &pLinkToolTip)
+void WebEngineViewWidget::setLinkToolTip(const QString &pLinkToolTip)
 {
     // Set our link tool tip
 
@@ -58,7 +58,7 @@ void WebViewWidget::setLinkToolTip(const QString &pLinkToolTip)
 
 //==============================================================================
 
-bool WebViewWidget::event(QEvent *pEvent)
+bool WebEngineViewWidget::event(QEvent *pEvent)
 {
     // Override the change of the cursor and tool tip when hovering a link
 
@@ -94,8 +94,8 @@ bool WebViewWidget::event(QEvent *pEvent)
 //==============================================================================
 
 /*---ISSUE908---
-QWebElement WebViewWidget::retrieveLinkInformation(QString &pLink,
-                                                   QString &pTextContent)
+QWebElement WebEngineViewWidget::retrieveLinkInformation(QString &pLink,
+                                                         QString &pTextContent)
 {
     // Retrieve the link and text content values for the link, if any, below our
     // mouse pointer
