@@ -233,6 +233,7 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
 
     // Initialise our list of exposures
 
+Q_UNUSED(pExposures);
 /*---ISSUE908---
     QWebElement tbodyElement = page()->mainFrame()->documentElement().findFirst("tbody[id=exposures]");
 
@@ -326,6 +327,8 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 {
     // Add the given exposure files to the exposure
 
+Q_UNUSED(pUrl);
+Q_UNUSED(pExposureFiles);
 //    static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
 /*---ISSUE908---
 
@@ -344,6 +347,8 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
                                                             const bool &pShow)
 {
+Q_UNUSED(pUrl);
+Q_UNUSED(pShow);
 /*---ISSUE908---
     // Show the exposure files for the given exposure
 
