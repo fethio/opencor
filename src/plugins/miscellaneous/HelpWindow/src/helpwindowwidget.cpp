@@ -73,6 +73,7 @@ void HelpWindowUrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *pReques
     // Retrieve, if possible, the requested document
 
     QUrl url = pRequest->requestUrl();
+
     mBufferData = mHelpEngine->findFile(url).isValid()?
                       mHelpEngine->fileData(url):
                       mErrorMessageTemplate.arg(tr("Error"),
