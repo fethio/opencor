@@ -32,6 +32,7 @@ specific language governing permissions and limitations under the License.
 #include <QDesktopServices>
 #include <QHelpEngine>
 #include <QIODevice>
+#include <QMimeDatabase>
 #include <QMouseEvent>
 #include <QSettings>
 #include <QTimer>
@@ -58,9 +59,11 @@ HelpWindowUrlSchemeHandler::HelpWindowUrlSchemeHandler(QHelpEngine *pHelpEngine,
 
     mErrorMessageTemplate = fileContents;
 
-    // Initialise our buffer
+    // Customise and open our buffer
 
     mBuffer.setBuffer(&mBufferData);
+
+    mBuffer.open(QIODevice::ReadOnly);
 }
 
 //==============================================================================
@@ -79,7 +82,7 @@ void HelpWindowUrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *pReques
 
     // Let the request know about our reply
 
-    pRequest->reply("text/html", &mBuffer);
+    pRequest->reply(QMimeDatabase().mimeTypeForUrl(url).name().toUtf8(), &mBuffer);
 }
 
 //==============================================================================
