@@ -29,7 +29,6 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QBuffer>
-#include <QNetworkReply>
 #include <QWebEngineUrlSchemeHandler>
 #include <QWebEngineView>
 
@@ -41,30 +40,6 @@ class QHelpEngine;
 
 namespace OpenCOR {
 namespace HelpWindow {
-
-//==============================================================================
-
-class HelpWindowWidget;
-
-//==============================================================================
-
-class HelpWindowNetworkReply : public QNetworkReply
-{
-public:
-    explicit HelpWindowNetworkReply(const QNetworkRequest &pRequest,
-                                    const QByteArray &pData,
-                                    const QString &pMimeType);
-
-    virtual void abort();
-    virtual qint64 bytesAvailable() const;
-
-protected:
-    virtual qint64 readData(char *pData, qint64 pMaxlen);
-
-private:
-    QByteArray mData;
-    qint64 mOrigLen;
-};
 
 //==============================================================================
 

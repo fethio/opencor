@@ -45,70 +45,6 @@ namespace HelpWindow {
 
 //==============================================================================
 
-HelpWindowNetworkReply::HelpWindowNetworkReply(const QNetworkRequest &pRequest,
-                                               const QByteArray &pData,
-                                               const QString &pMimeType) :
-    mData(pData),
-    mOrigLen(pData.length())
-{
-    // Set a few things for the network reply
-
-    setRequest(pRequest);
-    setOpenMode(QIODevice::ReadOnly);
-    setHeader(QNetworkRequest::ContentTypeHeader, pMimeType);
-    setHeader(QNetworkRequest::ContentLengthHeader,
-              QByteArray::number(mOrigLen));
-
-    // Let ourselves know immediately that data is available for reading
-
-    QTimer::singleShot(0, this, SIGNAL(readyRead()));
-}
-
-//==============================================================================
-
-void HelpWindowNetworkReply::abort()
-{
-    // Do nothing on purpose...
-}
-
-//==============================================================================
-
-qint64 HelpWindowNetworkReply::bytesAvailable() const
-{
-    // Return the size of the data which is available for reading
-
-    return mData.length()+QNetworkReply::bytesAvailable();
-}
-
-//==============================================================================
-
-qint64 HelpWindowNetworkReply::readData(char *pBuffer, qint64 pMaxlen)
-{
-    // Determine the lenght of the data to be read
-
-    qint64 len = qMin(qint64(mData.length()), pMaxlen);
-
-    // Read the data, should there be some to read
-
-    if (len) {
-        memcpy(pBuffer, mData.constData(), len);
-
-        mData.remove(0, len);
-    }
-
-    // Should there be no data left to read, then let ourselves know immediately
-    // that we are done
-
-    if (!mData.length())
-        QTimer::singleShot(0, this, SIGNAL(finished()));
-
-    // Return the size of the data which was read
-
-    return len;
-}
-
-//==============================================================================
-
 HelpWindowUrlSchemeHandler::HelpWindowUrlSchemeHandler(QHelpEngine *pHelpEngine,
                                                        QObject *pParent) :
     QWebEngineUrlSchemeHandler(pParent),
@@ -162,20 +98,15 @@ bool HelpWindowPage::acceptNavigationRequest(const QUrl &pUrl,
     Q_UNUSED(pType);
     Q_UNUSED(pIsMainFrame);
 
-    // Requested URL
+    // Determine whether the URL refers to an OpenCOR document (qthelp://...) or
+    // an external resource of sorts (e.g. http[s]://... and opencor://...), and
+    // if it is the latter then just open the URL the default way
 
     QString urlScheme = pUrl.scheme();
-
-    // Determine whether the URL refers to an OpenCOR document or an external
-    // resource of sorts
 
     if (!urlScheme.compare("qthelp")) {
         return true;
     } else {
-        // This is either an action, which we want OpenCOR or one of its plugins
-        // to execute (i.e. something of the form opencor://...), or an external
-        // resource of sorts, so just open the URL the default way
-
         QDesktopServices::openUrl(pUrl);
 
         return false;
