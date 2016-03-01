@@ -28,7 +28,9 @@ specific language governing permissions and limitations under the License.
 
 //==============================================================================
 
+#include <QBuffer>
 #include <QNetworkReply>
+#include <QWebEngineUrlSchemeHandler>
 #include <QWebEngineView>
 
 //==============================================================================
@@ -66,23 +68,25 @@ private:
 
 //==============================================================================
 
-class HelpWindowNetworkAccessManager : public QNetworkAccessManager
+class HelpWindowUrlSchemeHandler : public QWebEngineUrlSchemeHandler
 {
     Q_OBJECT
 
 public:
-    explicit HelpWindowNetworkAccessManager(QHelpEngine *pHelpEngine,
-                                            QObject *pParent);
+    explicit HelpWindowUrlSchemeHandler(QHelpEngine *pHelpEngine,
+                                        QObject *pParent);
 
 protected:
-    virtual QNetworkReply * createRequest(Operation pOperation,
-                                          const QNetworkRequest &pRequest,
-                                          QIODevice *pOutgoingData = 0);
+    virtual void requestStarted(QWebEngineUrlRequestJob *pRequest);
 
 private:
     QHelpEngine *mHelpEngine;
 
     QString mErrorMessageTemplate;
+
+    QBuffer mBuffer;
+    QByteArray mBufferData;
+
 };
 
 //==============================================================================

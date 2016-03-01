@@ -35,6 +35,8 @@ specific language governing permissions and limitations under the License.
 #include <QMouseEvent>
 #include <QSettings>
 #include <QTimer>
+#include <QWebEngineProfile>
+#include <QWebEngineUrlRequestJob>
 
 //==============================================================================
 
@@ -107,9 +109,9 @@ qint64 HelpWindowNetworkReply::readData(char *pBuffer, qint64 pMaxlen)
 
 //==============================================================================
 
-HelpWindowNetworkAccessManager::HelpWindowNetworkAccessManager(QHelpEngine *pHelpEngine,
-                                                               QObject *pParent) :
-    QNetworkAccessManager(pParent),
+HelpWindowUrlSchemeHandler::HelpWindowUrlSchemeHandler(QHelpEngine *pHelpEngine,
+                                                       QObject *pParent) :
+    QWebEngineUrlSchemeHandler(pParent),
     mHelpEngine(pHelpEngine)
 {
     // Retrieve the error message template
@@ -119,30 +121,29 @@ HelpWindowNetworkAccessManager::HelpWindowNetworkAccessManager(QHelpEngine *pHel
     Core::readFileContentsFromFile(":/helpWindowWidgetError.html", fileContents);
 
     mErrorMessageTemplate = fileContents;
+
+    // Initialise our buffer
+
+    mBuffer.setBuffer(&mBufferData);
 }
 
 //==============================================================================
 
-QNetworkReply * HelpWindowNetworkAccessManager::createRequest(Operation pOperation,
-                                                              const QNetworkRequest &pRequest,
-                                                              QIODevice *pOutgoingData)
+void HelpWindowUrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *pRequest)
 {
-    Q_UNUSED(pOperation);
-    Q_UNUSED(pOutgoingData);
-
     // Retrieve, if possible, the requested document
 
-    QUrl url = pRequest.url();
-    QByteArray data = mHelpEngine->findFile(url).isValid()?
-                          mHelpEngine->fileData(url):
-                          mErrorMessageTemplate.arg(tr("Error"),
-                                                    tr("The following help file could not be found:")+" <strong>"+url.toString()+"</strong>.",
-                                                    tr("Please <a href=\"contactUs.html\">contact us</a> about this error."),
-                                                    Core::copyright()).toUtf8();
+    QUrl url = pRequest->requestUrl();
+    mBufferData = mHelpEngine->findFile(url).isValid()?
+                      mHelpEngine->fileData(url):
+                      mErrorMessageTemplate.arg(tr("Error"),
+                                                tr("The following help file could not be found:")+" <strong>"+url.toString()+"</strong>.",
+                                                tr("Please <a href=\"contactUs.html\">contact us</a> about this error."),
+                                                Core::copyright()).toUtf8();
 
-    // Return the requested document or an error message
+    // Let the request know about our reply
 
-    return new HelpWindowNetworkReply(pRequest, data, "text/html");
+    pRequest->reply("text/html", &mBuffer);
 }
 
 //==============================================================================
@@ -199,13 +200,11 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
     mZoomLevel(-1)   // This will ensure that mZoomLevel gets initialised by our
                      // first call to setZoomLevel
 {
-    // Use our own help page and help network access manager classes
+    // Use our own help page and URL scheme handler
 
     setPage(new HelpWindowPage(this));
 
-/*---ISSUE908---
-    page()->setNetworkAccessManager(new HelpWindowNetworkAccessManager(pHelpEngine, this));
-*/
+    page()->profile()->installUrlSchemeHandler("qthelp", new HelpWindowUrlSchemeHandler(pHelpEngine, this));
 
     // Prevent objects from being dropped on us
     // Note: by default, QWebEngineView allows for objects to be dropped on
