@@ -154,7 +154,13 @@ HelpWindowWindow::HelpWindowWindow(QWidget *pParent) :
     // En/disable the printing action, depending on whether printers are
     // available
 
+//---GRY--- TEMPORARY DISABLED UNTIL PRINTING IS PROPERLY SUPPORTED BY
+//          QWebEngineView (SEE https://bugreports.qt.io/browse/QTBUG-46064 AND
+//          https://github.com/opencor/opencor/issues/912)
+mGui->actionPrint->setEnabled(false);
+/*
     mGui->actionPrint->setEnabled(QPrinterInfo::availablePrinterNames().count());
+*/
 }
 
 //==============================================================================
@@ -277,7 +283,10 @@ void HelpWindowWindow::on_actionZoomOut_triggered()
 
 void HelpWindowWindow::on_actionPrint_triggered()
 {
-/*---ISSUE908---
+//---GRY--- TEMPORARY DISABLED UNTIL PRINTING IS PROPERLY SUPPORTED BY
+//          QWebEngineView (SEE https://bugreports.qt.io/browse/QTBUG-46064 AND
+//          https://github.com/opencor/opencor/issues/912)
+/*
     // Retrieve the printer with which the user wants to print the help page
     // and print it, should s/he still want to go ahead with the printing
 
