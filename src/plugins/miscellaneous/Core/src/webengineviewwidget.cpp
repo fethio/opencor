@@ -25,6 +25,7 @@ specific language governing permissions and limitations under the License.
 
 #include <QCursor>
 #include <QEvent>
+#include <QEventLoop>
 #include <QHelpEvent>
 #include <QToolTip>
 
@@ -53,6 +54,26 @@ void WebEngineViewWidget::setLinkToolTip(const QString &pLinkToolTip)
     // Set our link tool tip
 
     mLinkToolTip = pLinkToolTip;
+}
+
+//==============================================================================
+
+void WebEngineViewWidget::setHtmlSynchronously(const QString &pHtml,
+                                               const QUrl &pBaseUrl)
+{
+    // Set the given HTML code synchronously
+
+    setHtml(pHtml, pBaseUrl);
+
+    QEventLoop eventLoop;
+
+    connect(this, SIGNAL(loadFinished(bool)),
+            &eventLoop, SLOT(quit()));
+
+    eventLoop.exec();
+
+    disconnect(this, SIGNAL(loadFinished(bool)),
+               &eventLoop, SLOT(quit()));
 }
 
 //==============================================================================
