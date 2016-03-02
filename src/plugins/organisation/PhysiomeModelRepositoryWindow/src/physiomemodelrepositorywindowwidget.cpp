@@ -181,7 +181,6 @@ void PhysiomeModelRepositoryWindowWidget::retranslateUi()
                                                                                          Core::noInternetConnectionAvailableMessage(),
                                                                                      true, true));
     }
-page()->toHtml([](const QString &pContents) { qDebug("---\n%s\n---", qPrintable(pContents)); });
 }
 
 //==============================================================================
