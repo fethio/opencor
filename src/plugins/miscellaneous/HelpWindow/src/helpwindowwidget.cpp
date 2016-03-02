@@ -194,12 +194,6 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
 
     page()->profile()->installUrlSchemeHandler("qthelp", new HelpWindowUrlSchemeHandler(pHelpEngine, this));
 
-    // Prevent objects from being dropped on us
-    // Note: by default, QWebEngineView allows for objects to be dropped on
-    //       itself, while we don't want that...
-
-    setAcceptDrops(false);
-
     // Prevent the widget from taking over the scrolling of other widgets
 
     setFocusPolicy(Qt::NoFocus);

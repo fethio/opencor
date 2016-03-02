@@ -42,7 +42,6 @@ WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
 {
     // Customise ourselves
 
-    setAcceptDrops(false);
     setFocusPolicy(Qt::NoFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }

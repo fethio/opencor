@@ -126,10 +126,6 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     connect(this, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showCustomContextMenu()));
 
-    // Prevent objects from being dropped on us
-
-    setAcceptDrops(false);
-
     // Some connections to handle the clicking and hovering of a link
 
 /*---ISSUE908---
