@@ -285,7 +285,7 @@ void HelpWindowWindow::on_actionPrint_triggered()
     QPrintDialog printDialog(&printer);
 
     if (printDialog.exec() == QDialog::Accepted)
-          mHelpWindowWidget->print(&printer);
+        mHelpWindowWidget->print(&printer);
 */
 }
 
