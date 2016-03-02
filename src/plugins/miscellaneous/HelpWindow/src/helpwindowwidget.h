@@ -28,7 +28,6 @@ specific language governing permissions and limitations under the License.
 
 //==============================================================================
 
-#include <QBuffer>
 #include <QWebEngineUrlSchemeHandler>
 #include <QWebEngineView>
 
@@ -40,6 +39,26 @@ class QHelpEngine;
 
 namespace OpenCOR {
 namespace HelpWindow {
+
+//==============================================================================
+
+class HelpWindowReply : public QIODevice
+{
+public:
+    HelpWindowReply(const QByteArray &pData);
+
+    virtual qint64 bytesAvailable() const;
+
+    virtual void close();
+
+protected:
+    virtual qint64 readData(char *pData, qint64 pMaxLength);
+    virtual qint64 writeData(const char *pData, qint64 pLength);
+
+private:
+    QByteArray mData;
+    int mLength;
+};
 
 //==============================================================================
 
@@ -58,9 +77,6 @@ private:
     QHelpEngine *mHelpEngine;
 
     QString mErrorMessageTemplate;
-
-    QBuffer mBuffer;
-    QByteArray mBufferData;
 };
 
 //==============================================================================

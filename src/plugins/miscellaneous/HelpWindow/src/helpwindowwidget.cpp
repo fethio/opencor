@@ -46,6 +46,67 @@ namespace HelpWindow {
 
 //==============================================================================
 
+HelpWindowReply::HelpWindowReply(const QByteArray &pData) :
+    mData(pData),
+    mLength(pData.length())
+{
+    setOpenMode(QIODevice::ReadOnly);
+
+    QTimer::singleShot(0, this, &QIODevice::readyRead);
+    QTimer::singleShot(0, this, &QIODevice::readChannelFinished);
+}
+
+//==============================================================================
+
+qint64 HelpWindowReply::bytesAvailable() const
+{
+    // Return the amount of bytes available
+
+    return mData.length()+QIODevice::bytesAvailable();
+}
+
+//==============================================================================
+
+void HelpWindowReply::close()
+{
+    // Close ourselves
+
+    QIODevice::close();
+
+    deleteLater();
+}
+
+//==============================================================================
+
+qint64 HelpWindowReply::readData(char *pData, qint64 pMaxLength)
+{
+    // Read the amount of data requested, if possible
+
+    qint64 length = qMin(qint64(mData.length()), pMaxLength);
+
+    if (length) {
+        memcpy(pData, mData.constData(), length);
+
+        mData.remove(0, length);
+    }
+
+    return length;
+}
+
+//==============================================================================
+
+qint64 HelpWindowReply::writeData(const char *pData, qint64 pLength)
+{
+    Q_UNUSED(pData);
+    Q_UNUSED(pLength);
+
+    // No data can be written
+
+    return 0;
+}
+
+//==============================================================================
+
 HelpWindowUrlSchemeHandler::HelpWindowUrlSchemeHandler(QHelpEngine *pHelpEngine,
                                                        QObject *pParent) :
     QWebEngineUrlSchemeHandler(pParent),
@@ -58,32 +119,24 @@ HelpWindowUrlSchemeHandler::HelpWindowUrlSchemeHandler(QHelpEngine *pHelpEngine,
     Core::readFileContentsFromFile(":/helpWindowWidgetError.html", fileContents);
 
     mErrorMessageTemplate = fileContents;
-
-    // Customise and open our buffer
-
-    mBuffer.setBuffer(&mBufferData);
-
-    mBuffer.open(QIODevice::ReadOnly);
 }
 
 //==============================================================================
 
 void HelpWindowUrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *pRequest)
 {
-    // Retrieve, if possible, the requested document
+    // Retrieve, if possible, the requested document and let the request know
+    // about it
 
     QUrl url = pRequest->requestUrl();
 
-    mBufferData = mHelpEngine->findFile(url).isValid()?
-                      mHelpEngine->fileData(url):
-                      mErrorMessageTemplate.arg(tr("Error"),
-                                                tr("The following help file could not be found:")+" <strong>"+url.toString()+"</strong>.",
-                                                tr("Please <a href=\"contactUs.html\">contact us</a> about this error."),
-                                                Core::copyright()).toUtf8();
-
-    // Let the request know about our reply
-
-    pRequest->reply(QMimeDatabase().mimeTypeForUrl(url).name().toUtf8(), &mBuffer);
+    pRequest->reply(QMimeDatabase().mimeTypeForUrl(url).name().toUtf8(),
+                    new HelpWindowReply(mHelpEngine->findFile(url).isValid()?
+                                            mHelpEngine->fileData(url):
+                                            mErrorMessageTemplate.arg(tr("Error"),
+                                                                      tr("The following help file could not be found:")+" <strong>"+url.toString()+"</strong>.",
+                                                                      tr("Please <a href=\"contactUs.html\">contact us</a> about this error."),
+                                                                      Core::copyright()).toUtf8()));
 }
 
 //==============================================================================
