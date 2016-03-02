@@ -54,6 +54,9 @@ public:
     void setHtmlSynchronously(const QString &pHtml,
                               const QUrl &pBaseUrl = QUrl());
 
+    void clearElement(const QString &pElementId);
+    void setElementHtml(const QString &pElementId, const QString &pHtml);
+
 protected:
     virtual bool event(QEvent *pEvent);
 

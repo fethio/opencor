@@ -160,29 +160,28 @@ PhysiomeModelRepositoryWindowWidget::~PhysiomeModelRepositoryWindowWidget()
 
 void PhysiomeModelRepositoryWindowWidget::retranslateUi()
 {
-/*---ISSUE908---
     // Retranslate our message
 
-    QWebElement messageElement = page()->mainFrame()->documentElement().findFirst("p[id=message]");
+    static const QString MessageId = "message";
 
     if (mInternetConnectionAvailable && mErrorMessage.isEmpty()) {
         if (!mNumberOfFilteredExposures) {
             if (mExposureNames.isEmpty())
-                messageElement.removeAllChildren();
+                clearElement(MessageId);
             else
-                messageElement.setInnerXml(tr("No exposure matches your criteria."));
+                setElementHtml(MessageId, tr("No exposure matches your criteria."));
         } else if (mNumberOfFilteredExposures == 1) {
-            messageElement.setInnerXml(tr("<strong>1</strong> exposure was found:"));
+            setElementHtml(MessageId, tr("<strong>1</strong> exposure was found:"));
         } else {
-            messageElement.setInnerXml(tr("<strong>%1</strong> exposures were found:").arg(mNumberOfFilteredExposures));
+            setElementHtml(MessageId, tr("<strong>%1</strong> exposures were found:").arg(mNumberOfFilteredExposures));
         }
     } else {
-        messageElement.setInnerXml(tr("<strong>Error:</strong> ")+Core::formatMessage(mInternetConnectionAvailable?
-                                                                                          mErrorMessage:
-                                                                                          Core::noInternetConnectionAvailableMessage(),
-                                                                                      true, true));
+        setElementHtml(MessageId, tr("<strong>Error:</strong> ")+Core::formatMessage(mInternetConnectionAvailable?
+                                                                                         mErrorMessage:
+                                                                                         Core::noInternetConnectionAvailableMessage(),
+                                                                                     true, true));
     }
-*/
+page()->toHtml([](const QString &pContents) { qDebug("---\n%s\n---", qPrintable(pContents)); });
 }
 
 //==============================================================================
