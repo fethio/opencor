@@ -162,25 +162,25 @@ void PhysiomeModelRepositoryWindowWidget::retranslateUi()
 {
     // Retranslate our message
 
-    static const QString MessageId = "message";
+    QString message = QString();
 
     if (mInternetConnectionAvailable && mErrorMessage.isEmpty()) {
         if (!mNumberOfFilteredExposures) {
-            if (mExposureNames.isEmpty())
-                clearElement(MessageId);
-            else
-                setElementHtml(MessageId, tr("No exposure matches your criteria."));
+            if (!mExposureNames.isEmpty())
+                message = tr("No exposure matches your criteria.");
         } else if (mNumberOfFilteredExposures == 1) {
-            setElementHtml(MessageId, tr("<strong>1</strong> exposure was found:"));
+            message = tr("<strong>1</strong> exposure was found:");
         } else {
-            setElementHtml(MessageId, tr("<strong>%1</strong> exposures were found:").arg(mNumberOfFilteredExposures));
+            message = tr("<strong>%1</strong> exposures were found:").arg(mNumberOfFilteredExposures);
         }
     } else {
-        setElementHtml(MessageId, tr("<strong>Error:</strong> ")+Core::formatMessage(mInternetConnectionAvailable?
-                                                                                         mErrorMessage:
-                                                                                         Core::noInternetConnectionAvailableMessage(),
-                                                                                     true, true));
+        message = tr("<strong>Error:</strong> ")+Core::formatMessage(mInternetConnectionAvailable?
+                                                                         mErrorMessage:
+                                                                         Core::noInternetConnectionAvailableMessage(),
+                                                                     true, true);
     }
+
+    page()->runJavaScript(QString("setMessage(\"%1\");").arg(message));
 }
 
 //==============================================================================
