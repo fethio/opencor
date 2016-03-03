@@ -25,11 +25,11 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include "commonwidget.h"
+#include "webengineviewwidget.h"
 
 //==============================================================================
 
 #include <QWebEngineUrlSchemeHandler>
-#include <QWebEngineView>
 
 //==============================================================================
 
@@ -96,7 +96,8 @@ private:
 
 //==============================================================================
 
-class HelpWindowWidget : public QWebEngineView, public Core::CommonWidget
+class HelpWindowWidget : public Core::WebEngineViewWidget,
+                         public Core::CommonWidget
 {
     Q_OBJECT
 
@@ -109,7 +110,7 @@ public:
     virtual void loadSettings(QSettings *pSettings);
     virtual void saveSettings(QSettings *pSettings) const;
 
-    void goToHomePage();
+    void goToHomePage(const bool &pSynchronously = false);
 
     void resetZoom();
 

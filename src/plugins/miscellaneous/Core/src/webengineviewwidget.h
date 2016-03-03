@@ -51,6 +51,7 @@ public:
 
     void setLinkToolTip(const QString &pLinkToolTip);
 
+    void setUrlSynchronously(const QUrl &pUrl);
     void setHtmlSynchronously(const QString &pHtml,
                               const QUrl &pBaseUrl = QUrl());
 

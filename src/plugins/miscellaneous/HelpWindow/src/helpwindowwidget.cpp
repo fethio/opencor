@@ -181,7 +181,7 @@ enum {
 
 HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
                                    const QUrl &pHomePage, QWidget *pParent) :
-    QWebEngineView(pParent),
+    Core::WebEngineViewWidget(pParent),
     Core::CommonWidget(pParent),
     mHelpEngine(pHelpEngine),
     mHomePage(pHomePage),
@@ -217,9 +217,9 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
     connect(pageAction(QWebEnginePage::Forward), SIGNAL(changed()),
             this, SLOT(documentChanged()));
 
-    // Go to the home page
+    // Go to the home page (synchronously)
 
-    goToHomePage();
+    goToHomePage(true);
 }
 
 //==============================================================================
@@ -271,14 +271,17 @@ void HelpWindowWidget::saveSettings(QSettings *pSettings) const
 
 //==============================================================================
 
-void HelpWindowWidget::goToHomePage()
+void HelpWindowWidget::goToHomePage(const bool &pSynchronously)
 {
     // Go to the home page
     // Note: we use setUrl() rather than load() since the former will ensure
     //       that url() becomes valid straightaway (which is important for
-    //       retranslateUi()) and that the document gets loaded immediately...
+    //       retranslateUi())...
 
-    setUrl(mHomePage);
+    if (pSynchronously)
+        setUrlSynchronously(mHomePage);
+    else
+        setUrl(mHomePage);
 }
 
 //==============================================================================

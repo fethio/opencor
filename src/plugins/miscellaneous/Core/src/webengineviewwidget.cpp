@@ -58,6 +58,25 @@ void WebEngineViewWidget::setLinkToolTip(const QString &pLinkToolTip)
 
 //==============================================================================
 
+void WebEngineViewWidget::setUrlSynchronously(const QUrl &pUrl)
+{
+    // Set the given URL synchronously
+
+    setUrl(pUrl);
+
+    QEventLoop eventLoop;
+
+    connect(this, SIGNAL(loadFinished(bool)),
+            &eventLoop, SLOT(quit()));
+
+    eventLoop.exec();
+
+    disconnect(this, SIGNAL(loadFinished(bool)),
+               &eventLoop, SLOT(quit()));
+}
+
+//==============================================================================
+
 void WebEngineViewWidget::setHtmlSynchronously(const QString &pHtml,
                                                const QUrl &pBaseUrl)
 {
