@@ -234,47 +234,48 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
 
     // Initialise our list of exposures
 
-Q_UNUSED(pExposures);
-/*---ISSUE908---
-    QWebElement tbodyElement = page()->mainFrame()->documentElement().findFirst("tbody[id=exposures]");
+    static const QString ExposuresId = "exposures";
 
-    tbodyElement.removeAllChildren();
+    clearElement(ExposuresId);
+
+    QString exposures = QString();
 
     for (int i = 0, iMax = pExposures.count(); i < iMax; ++i) {
         QString exposureUrl = pExposures[i].url();
         QString exposureName = pExposures[i].name();
 
-        tbodyElement.appendInside("<tr id=\"exposure_"+QString::number(i)+"\">\n"
-                                  "    <td class=\"exposure\">\n"
-                                  "        <table class=\"fullWidth\">\n"
-                                  "            <tbody>\n"
-                                  "                <tr>\n"
-                                  "                    <td class=\"fullWidth\">\n"
-                                  "                        <ul>\n"
-                                  "                            <li class=\"exposure\">\n"
-                                  "                                <a href=\""+exposureUrl+"\">"+exposureName+"</a>\n"
-                                  "                            </li>\n"
-                                  "                        </ul>\n"
-                                  "                    </td>\n"
-                                  "                    <td class=\"button\">\n"
-                                  "                        <a class=\"noHover\" href=\"cloneWorkspace|"+exposureUrl+"|"+exposureName+"\"><img class=\"button clone\"/></a>\n"
-                                  "                    </td>\n"
-                                  "                    <td class=\"button\">\n"
-                                  "                        <a class=\"noHover\" href=\"showExposureFiles|"+exposureUrl+"|"+exposureName+"\"><img id=\"exposure_"+QString::number(i)+"\" class=\"button open\"/></a>\n"
-                                  "                    </td>\n"
-                                  "                </tr>\n"
-                                  "            </tbody>\n"
-                                  "        </table>\n"
-                                  "        <ul id=\"exposureFiles_"+QString::number(i)+"\" style=\"display: none;\">\n"
-                                  "        </ul>\n"
-                                  "    </td>\n"
-                                  "</tr>\n");
+        exposures += "<tr id=\"exposure_"+QString::number(i)+"\">\n"
+                     "    <td class=\"exposure\">\n"
+                     "        <table class=\"fullWidth\">\n"
+                     "            <tbody>\n"
+                     "                <tr>\n"
+                     "                    <td class=\"fullWidth\">\n"
+                     "                        <ul>\n"
+                     "                            <li class=\"exposure\">\n"
+                     "                                <a href=\""+exposureUrl+"\">"+exposureName+"</a>\n"
+                     "                            </li>\n"
+                     "                        </ul>\n"
+                     "                    </td>\n"
+                     "                    <td class=\"button\">\n"
+                     "                        <a class=\"noHover\" href=\"cloneWorkspace|"+exposureUrl+"|"+exposureName+"\"><img class=\"button clone\"/></a>\n"
+                     "                    </td>\n"
+                     "                    <td class=\"button\">\n"
+                     "                        <a class=\"noHover\" href=\"showExposureFiles|"+exposureUrl+"|"+exposureName+"\"><img id=\"exposure_"+QString::number(i)+"\" class=\"button open\"/></a>\n"
+                     "                    </td>\n"
+                     "                </tr>\n"
+                     "            </tbody>\n"
+                     "        </table>\n"
+                     "        <ul id=\"exposureFiles_"+QString::number(i)+"\" style=\"display: none;\">\n"
+                     "        </ul>\n"
+                     "    </td>\n"
+                     "</tr>\n";
 
         mExposureNames << exposureName;
         mExposureDisplayed << true;
         mExposureUrlId.insert(exposureUrl, i);
     }
-*/
+
+    setElementHtml(ExposuresId, exposures);
 }
 
 //==============================================================================
