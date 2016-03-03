@@ -1002,6 +1002,19 @@ ENDMACRO()
 
 MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
 #---ISSUE908--- TO BE DONE...
+    # Copy the the Qt WebEngine process to both the build and build/bin folders,
+    # so we can test things both from within Qt Creator and without first having
+    # to deploy OpenCOR
+
+    SET(QT_WEB_ENGINE_PROCESS_FILENAME QtWebEngineProcess.exe)
+
+    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${QT_WEB_ENGINE_PROCESS_FILENAME})
+    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} bin ${QT_WEB_ENGINE_PROCESS_FILENAME})
+
+    # Deploy the Qt WebEngine process
+
+    INSTALL(FILES ${QT_BINARY_DIR}/${QT_WEB_ENGINE_PROCESS_FILENAME}
+            DESTINATION bin)
 ENDMACRO()
 
 #===============================================================================
