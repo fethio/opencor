@@ -265,9 +265,8 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
 
 void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
 {
-    // Filter our list of exposures, remove any duplicates (they will be
-    // reintroduced in the next step) and update our message (by retranslating
-    // ourselves)
+    // Filter our list of exposures and remove any duplicates (they will be
+    // 'reintroduced' in the next step)
 
     QStringList filteredExposureNames = mExposureNames.filter(QRegularExpression(pFilter, QRegularExpression::CaseInsensitiveOption));
 
@@ -275,34 +274,22 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
 
     filteredExposureNames.removeDuplicates();
 
-    page()->runJavaScript(QString("setMessage(\"%1\");").arg(message()));
+    // Update our message and show/hide the relevant exposures
 
-    // Show/hide the relevant exposures
-    // Note: to call QWebElement::setStyleProperty() many times is time
-    //       consuming, hence we rely on mExposureDisplayed to determine when we
-    //       should change the display property of our elements...
-
-/*---ISSUE908---
-    QWebElement trElement = page()->mainFrame()->documentElement().findFirst(QString("tbody[id=exposures]")).firstChild();
-    QWebElement ulElement;
+    QString exposuresInfo = QString();
 
     for (int i = 0, iMax = mExposureNames.count(); i < iMax; ++i) {
         if (mExposureDisplayed[i] != filteredExposureNames.contains(mExposureNames[i])) {
-            QString displayValue = mExposureDisplayed[i]?"none":"table-row";
-
-            trElement.setStyleProperty("display", displayValue);
-
-            ulElement = trElement.firstChild().firstChild().nextSibling();
-
-            if (ulElement.hasClass("visible"))
-                ulElement.setStyleProperty("display", displayValue);
-
             mExposureDisplayed[i] = !mExposureDisplayed[i];
-        }
 
-        trElement = trElement.nextSibling();
+            exposuresInfo += QString("%1[%2, \"%3\"]").arg(exposuresInfo.isEmpty()?QString():", ",
+                                                           QString::number(i),
+                                                           mExposureDisplayed[i]?"table-row":"none");
+        }
     }
-*/
+
+    page()->runJavaScript(QString("setMessage(\"%1\");"
+                                  "showHideExposures(%2);").arg(message(), "["+exposuresInfo+"]"));
 }
 
 //==============================================================================

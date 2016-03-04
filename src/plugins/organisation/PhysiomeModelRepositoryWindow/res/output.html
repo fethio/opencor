@@ -122,13 +122,22 @@
 
         <script>
             var messageElement;
+            var exposuresElement;
 
             function initialize() {
                 messageElement = document.getElementById("message");
+                exposuresElement = document.getElementById("exposures");
             }
 
             function setMessage(message) {
                 messageElement.innerHTML = message;
+            }
+
+            function showHideExposures(exposuresInfo) {
+                var exposures = exposuresElement.children;
+
+                for (i = 0, iMax = exposuresInfo.length; i < iMax; ++i)
+                    exposures[exposuresInfo[i][0]].style.display = exposuresInfo[i][1];
             }
         </script>
     </head>
