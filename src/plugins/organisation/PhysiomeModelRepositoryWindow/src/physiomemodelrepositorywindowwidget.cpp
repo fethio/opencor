@@ -214,12 +214,16 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
     // Initialise our list of exposures
 
     QString exposures = QString();
+    QRegularExpression filterRegEx = QRegularExpression(pFilter, QRegularExpression::CaseInsensitiveOption);
+
+    mNumberOfFilteredExposures = 0;
 
     for (int i = 0, iMax = pExposures.count(); i < iMax; ++i) {
         QString exposureUrl = pExposures[i].url();
         QString exposureName = pExposures[i].name();
+        bool exposureDisplayed = exposureName.contains(filterRegEx);
 
-        exposures += "<tr id=\"exposure_"+QString::number(i)+"\">\n"
+        exposures += "<tr id=\"exposure_"+QString::number(i)+"\" style=\"display: "+(exposureDisplayed?"table-row":"none")+";\">\n"
                      "    <td class=\"exposure\">\n"
                      "        <table class=\"fullWidth\">\n"
                      "            <tbody>\n"
@@ -246,11 +250,11 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
                      "</tr>\n";
 
         mExposureNames << exposureName;
-        mExposureDisplayed << true;
+        mExposureDisplayed << exposureDisplayed;
         mExposureUrlId.insert(exposureUrl, i);
-    }
 
-    mNumberOfFilteredExposures = mExposureNames.filter(QRegularExpression(pFilter, QRegularExpression::CaseInsensitiveOption)).count();
+        mNumberOfFilteredExposures += exposureDisplayed;
+    }
 
     setHtmlSynchronously(mTemplate.arg(message(), exposures));
 
