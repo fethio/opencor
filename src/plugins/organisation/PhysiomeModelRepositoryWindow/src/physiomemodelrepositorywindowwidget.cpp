@@ -282,9 +282,9 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
         if (mExposureDisplayed[i] != filteredExposureNames.contains(mExposureNames[i])) {
             mExposureDisplayed[i] = !mExposureDisplayed[i];
 
-            exposuresInfo += QString("%1[%2, \"%3\"]").arg(exposuresInfo.isEmpty()?QString():", ",
-                                                           QString::number(i),
-                                                           mExposureDisplayed[i]?"table-row":"none");
+            exposuresInfo += QString("%1[%2, %3]").arg(exposuresInfo.isEmpty()?QString():", ",
+                                                       QString::number(i),
+                                                       QString::number(mExposureDisplayed[i]));
         }
     }
 
