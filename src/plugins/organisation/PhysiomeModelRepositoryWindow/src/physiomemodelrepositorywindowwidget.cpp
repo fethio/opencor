@@ -437,7 +437,7 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered()
         if (element.parent().hasClass("exposureFile"))
             linkToolTip = tr("Open Exposure File");
         else
-            linkToolTip = tr("Browser Exposure");
+            linkToolTip = tr("Browse Exposure");
     }
 
     setLinkToolTip(linkToolTip);
