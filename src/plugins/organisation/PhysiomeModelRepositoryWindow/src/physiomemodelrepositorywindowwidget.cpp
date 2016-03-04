@@ -143,8 +143,9 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
 
     Core::readFileContentsFromFile(":/output.html", fileContents);
 
-    setHtmlSynchronously(QString(fileContents).arg(Core::iconDataUri(":/oxygen/places/folder-downloads.png", 16, 16),
-                                                   Core::iconDataUri(":/oxygen/actions/document-open-remote.png", 16, 16)));
+    mTemplate = QString(fileContents).arg(Core::iconDataUri(":/oxygen/places/folder-downloads.png", 16, 16),
+                                          Core::iconDataUri(":/oxygen/actions/document-open-remote.png", 16, 16),
+                                          "%1", "%2");
 }
 
 //==============================================================================
@@ -279,6 +280,8 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
         mExposureDisplayed << true;
         mExposureUrlId.insert(exposureUrl, i);
     }
+
+    setHtmlSynchronously(mTemplate.arg(message(), exposures));
 }
 
 //==============================================================================
