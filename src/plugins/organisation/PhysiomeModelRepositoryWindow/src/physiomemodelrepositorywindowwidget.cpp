@@ -87,6 +87,7 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     mExposureNames(QStringList()),
     mExposureDisplayed(QBoolList()),
     mExposureUrlId(QMap<QString, int>()),
+    mInitialized(false),
     mErrorMessage(QString()),
     mInternetConnectionAvailable(true),
     mNumberOfFilteredExposures(0),
@@ -149,9 +150,10 @@ PhysiomeModelRepositoryWindowWidget::~PhysiomeModelRepositoryWindowWidget()
 
 void PhysiomeModelRepositoryWindowWidget::retranslateUi()
 {
-    // Retranslate our message
+    // Retranslate our message, if we have been initialised
 
-    page()->runJavaScript(QString("setMessage(\"%1\");").arg(message()));
+    if (mInitialized)
+        page()->runJavaScript(QString("setMessage(\"%1\");").arg(message()));
 }
 
 //==============================================================================
@@ -251,6 +253,8 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
     mNumberOfFilteredExposures = mExposureNames.filter(QRegularExpression(pFilter, QRegularExpression::CaseInsensitiveOption)).count();
 
     setHtmlSynchronously(mTemplate.arg(message(), exposures));
+
+    mInitialized = true;
 }
 
 //==============================================================================

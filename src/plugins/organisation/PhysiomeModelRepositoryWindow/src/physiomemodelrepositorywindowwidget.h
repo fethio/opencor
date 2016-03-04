@@ -100,6 +100,8 @@ private:
     QBoolList mExposureDisplayed;
     QMap<QString, int> mExposureUrlId;
 
+    bool mInitialized;
+
     QString mTemplate;
     QString mErrorMessage;
     bool mInternetConnectionAvailable;
