@@ -81,7 +81,7 @@ PhysiomeModelRepositoryWindowWindow::PhysiomeModelRepositoryWindowWindow(QWidget
     mPhysiomeModelRepositoryWidget = new PhysiomeModelRepositoryWindowWidget(this);
 
 //---ISSUE908--- CHECK THAT THE SIDES OF mPhysiomeModelRepositoryWidget LOOK
-//               FINE ON WINDOWS AND LINUX...
+//               AESTHETICALLY FINE ON WINDOWS AND LINUX...
     mGui->dockWidgetContents->layout()->addWidget(Core::newLineWidget(this));
     mGui->dockWidgetContents->layout()->addWidget(mPhysiomeModelRepositoryWidget);
 
