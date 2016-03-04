@@ -97,33 +97,6 @@ void WebEngineViewWidget::setHtmlSynchronously(const QString &pHtml,
 
 //==============================================================================
 
-void WebEngineViewWidget::clearElement(const QString &pElementId)
-{
-    // Clear the contents of the given element
-
-    page()->runJavaScript(QString("var element = document.getElementById('%1');"
-                                  ""
-                                  "if (element) {"
-                                  "    while (element.firstChild)"
-                                  "        element.removeChild(element.firstChild);"
-                                  "}").arg(pElementId));
-}
-
-//==============================================================================
-
-void WebEngineViewWidget::setElementHtml(const QString &pElementId,
-                                         const QString &pHtml)
-{
-    // Assign the given HTML code to the given element
-
-    page()->runJavaScript(QString("var element = document.getElementById('%1');"
-                                  ""
-                                  "if (element) "
-                                  "    element.innerHTML = '%2';").arg(pElementId, pHtml));
-}
-
-//==============================================================================
-
 bool WebEngineViewWidget::event(QEvent *pEvent)
 {
     // Override the change of the cursor and tool tip when hovering a link

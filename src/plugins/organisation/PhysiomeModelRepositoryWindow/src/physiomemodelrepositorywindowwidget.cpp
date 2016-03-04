@@ -234,10 +234,6 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
 
     // Initialise our list of exposures
 
-    static const QString ExposuresId = "exposures";
-
-    clearElement(ExposuresId);
-
     QString exposures = QString();
 
     for (int i = 0, iMax = pExposures.count(); i < iMax; ++i) {
@@ -274,8 +270,6 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
         mExposureDisplayed << true;
         mExposureUrlId.insert(exposureUrl, i);
     }
-
-    setElementHtml(ExposuresId, exposures);
 }
 
 //==============================================================================
