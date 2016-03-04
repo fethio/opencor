@@ -109,6 +109,8 @@ private:
 
     QString mExposureUrl;
 
+    QString message() const;
+
 Q_SIGNALS:
     void cloneWorkspace(const QString &pUrl, const QString &pDescription);
     void showExposureFiles(const QString &pUrl, const QString &pDescription);

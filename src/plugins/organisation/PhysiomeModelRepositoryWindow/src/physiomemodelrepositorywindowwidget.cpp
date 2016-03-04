@@ -162,25 +162,7 @@ void PhysiomeModelRepositoryWindowWidget::retranslateUi()
 {
     // Retranslate our message
 
-    QString message = QString();
-
-    if (mInternetConnectionAvailable && mErrorMessage.isEmpty()) {
-        if (!mNumberOfFilteredExposures) {
-            if (!mExposureNames.isEmpty())
-                message = tr("No exposure matches your criteria.");
-        } else if (mNumberOfFilteredExposures == 1) {
-            message = tr("<strong>1</strong> exposure was found:");
-        } else {
-            message = tr("<strong>%1</strong> exposures were found:").arg(mNumberOfFilteredExposures);
-        }
-    } else {
-        message = tr("<strong>Error:</strong> ")+Core::formatMessage(mInternetConnectionAvailable?
-                                                                         mErrorMessage:
-                                                                         Core::noInternetConnectionAvailableMessage(),
-                                                                     true, true);
-    }
-
-    page()->runJavaScript(QString("setMessage(\"%1\");").arg(message));
+    page()->runJavaScript(QString("setMessage(\"%1\");").arg(message()));
 }
 
 //==============================================================================
@@ -214,6 +196,33 @@ void PhysiomeModelRepositoryWindowWidget::paintEvent(QPaintEvent *pEvent)
 #endif
                true, false, false, false
               );
+}
+
+//==============================================================================
+
+QString PhysiomeModelRepositoryWindowWidget::message() const
+{
+    // Determine the message to be displayed, if any
+
+    QString res = QString();
+
+    if (mInternetConnectionAvailable && mErrorMessage.isEmpty()) {
+        if (!mNumberOfFilteredExposures) {
+            if (!mExposureNames.isEmpty())
+                res = tr("No exposure matches your criteria.");
+        } else if (mNumberOfFilteredExposures == 1) {
+            res = tr("<strong>1</strong> exposure was found:");
+        } else {
+            res = tr("<strong>%1</strong> exposures were found:").arg(mNumberOfFilteredExposures);
+        }
+    } else {
+        res = tr("<strong>Error:</strong> ")+Core::formatMessage(mInternetConnectionAvailable?
+                                                                     mErrorMessage:
+                                                                     Core::noInternetConnectionAvailableMessage(),
+                                                                 true, true);
+    }
+
+    return res;
 }
 
 //==============================================================================
@@ -286,7 +295,7 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
 
     filteredExposureNames.removeDuplicates();
 
-    retranslateUi();
+    page()->runJavaScript(QString("setMessage(\"%1\");").arg(message()));
 
     // Show/hide the relevant exposures
     // Note: to call QWebElement::setStyleProperty() many times is time
