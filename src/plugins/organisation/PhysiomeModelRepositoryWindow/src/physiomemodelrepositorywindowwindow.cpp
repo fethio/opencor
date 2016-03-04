@@ -457,8 +457,8 @@ void PhysiomeModelRepositoryWindowWindow::finished(QNetworkReply *pNetworkReply)
         // Ask our PMR widget to initialise itself and filter its output
 
         mPhysiomeModelRepositoryWidget->initialize(exposures, errorMessage,
+                                                   mGui->filterValue->text(),
                                                    internetConnectionAvailable);
-        mPhysiomeModelRepositoryWidget->filter(mGui->filterValue->text());
     }
 
     // Show ourselves as not busy anymore, but only under certain conditions

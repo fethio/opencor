@@ -230,6 +230,7 @@ QString PhysiomeModelRepositoryWindowWidget::message() const
 
 void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelRepositoryWindowExposures &pExposures,
                                                      const QString &pErrorMessage,
+                                                     const QString &pFilter,
                                                      const bool &pInternetConnectionAvailable)
 {
     // Initialise / keep track of some properties
@@ -280,6 +281,8 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
         mExposureDisplayed << true;
         mExposureUrlId.insert(exposureUrl, i);
     }
+
+    mNumberOfFilteredExposures = mExposureNames.filter(QRegularExpression(pFilter, QRegularExpression::CaseInsensitiveOption)).count();
 
     setHtmlSynchronously(mTemplate.arg(message(), exposures));
 }
