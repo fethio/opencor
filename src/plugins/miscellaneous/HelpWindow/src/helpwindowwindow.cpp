@@ -19,8 +19,8 @@ specific language governing permissions and limitations under the License.
 // Help window
 //==============================================================================
 
+#include "borderedwidget.h"
 #include "corecliutils.h"
-#include "coreguiutils.h"
 #include "helpwindowwindow.h"
 #include "helpwindowwidget.h"
 #include "toolbarwidget.h"
@@ -106,9 +106,16 @@ HelpWindowWindow::HelpWindowWindow(QWidget *pParent) :
     mHelpWindowWidget->setObjectName("HelpWindowWidget");
 
 //---ISSUE908--- CHECK THAT THE SIDES OF mHelpWindowWidget LOOK AESTHETICALLY
-//               FINE ON WINDOWS AND LINUX...
-    mGui->layout->addWidget(Core::newLineWidget(this));
-    mGui->layout->addWidget(mHelpWindowWidget);
+//               FINE ON WINDOWS, LINUX AND OS X...
+#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
+    mGui->layout->addWidget(new Core::BorderedWidget(mHelpWindowWidget,
+                                                     true, true, true, true));
+#elif defined(Q_OS_MAC)
+    mGui->layout->addWidget(new Core::BorderedWidget(mHelpWindowWidget,
+                                                     true, false, false, false));
+#else
+    #error Unsupported platform
+#endif
 
     // Create and populate our context menu
 
