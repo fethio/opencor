@@ -182,7 +182,7 @@ enum {
 HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
                                    const QUrl &pHomePage, QWidget *pParent) :
     Core::WebEngineViewWidget(pParent),
-    Core::CommonWidget(pParent),
+    Core::CommonWidget(),
     mHelpEngine(pHelpEngine),
     mHomePage(pHomePage),
     mZoomLevel(-1)   // This will ensure that mZoomLevel gets initialised by our
@@ -403,28 +403,6 @@ void HelpWindowWidget::wheelEvent(QWheelEvent *pEvent)
 
         QWebEngineView::wheelEvent(pEvent);
     }
-}
-
-//==============================================================================
-
-void HelpWindowWidget::paintEvent(QPaintEvent *pEvent)
-{
-    // Default handling of the event
-
-    QWebEngineView::paintEvent(pEvent);
-
-    // Draw a border
-
-    drawBorder(
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
-               true, true, true, true,
-#elif defined(Q_OS_MAC)
-               true, false, false, false,
-#else
-    #error Unsupported platform
-#endif
-               true, false, false, false
-              );
 }
 
 //==============================================================================

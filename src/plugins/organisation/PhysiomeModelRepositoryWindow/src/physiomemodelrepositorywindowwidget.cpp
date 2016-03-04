@@ -82,7 +82,7 @@ QString PhysiomeModelRepositoryWindowExposure::name() const
 
 PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget *pParent) :
     Core::WebEngineViewWidget(pParent),
-    Core::CommonWidget(pParent),
+    Core::CommonWidget(),
     mGui(new Ui::PhysiomeModelRepositoryWindowWidget),
     mExposureNames(QStringList()),
     mExposureDisplayed(QBoolList()),
@@ -100,18 +100,6 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
 
     layout()->setMargin(0);
     layout()->setSpacing(0);
-
-    // Add a small margin ourselves, so that no visual trace of the border drawn
-    // by drawBorder() in paintEvent() is left when scrolling (on Windows and
-    // Linux, but it doesn't harm doing it for all our supported platforms)
-    // Note: not sure why, but no matter how many pixels are specified for the
-    //       margin, no margin actually exists, but it addresses the issue with
-    //       the border drawn by drawBorder()...
-
-//---ISSUE908--- MAKE SURE THE BELOW WORKS...
-    setStyleSheet("QWebEngineView {"
-                  "    margin: 1px;"
-                  "}");
 
     // Create and populate our context menu
 
@@ -175,28 +163,6 @@ QSize PhysiomeModelRepositoryWindowWidget::sizeHint() const
     //       it, to have a decent size when docked to the main window...
 
     return defaultSize(0.15);
-}
-
-//==============================================================================
-
-void PhysiomeModelRepositoryWindowWidget::paintEvent(QPaintEvent *pEvent)
-{
-    // Default handling of the event
-
-    QWebEngineView::paintEvent(pEvent);
-
-    // Draw a border
-
-    drawBorder(
-#if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
-               true, true, true, true,
-#elif defined(Q_OS_MAC)
-               true, false, false, false,
-#else
-    #error Unsupported platform
-#endif
-               true, false, false, false
-              );
 }
 
 //==============================================================================

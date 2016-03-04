@@ -122,7 +122,6 @@ protected:
 
     virtual void mouseReleaseEvent(QMouseEvent *pEvent);
     virtual void wheelEvent(QWheelEvent *pEvent);
-    virtual void paintEvent(QPaintEvent *pEvent);
 
 private:
     QHelpEngine *mHelpEngine;

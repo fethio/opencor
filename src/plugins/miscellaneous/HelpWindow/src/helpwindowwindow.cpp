@@ -20,6 +20,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include "corecliutils.h"
+#include "coreguiutils.h"
 #include "helpwindowwindow.h"
 #include "helpwindowwidget.h"
 #include "toolbarwidget.h"
@@ -104,6 +105,9 @@ HelpWindowWindow::HelpWindowWindow(QWidget *pParent) :
 
     mHelpWindowWidget->setObjectName("HelpWindowWidget");
 
+//---ISSUE908--- CHECK THAT THE SIDES OF mHelpWindowWidget LOOK AESTHETICALLY
+//               FINE ON WINDOWS AND LINUX...
+    mGui->layout->addWidget(Core::newLineWidget(this));
     mGui->layout->addWidget(mHelpWindowWidget);
 
     // Create and populate our context menu
