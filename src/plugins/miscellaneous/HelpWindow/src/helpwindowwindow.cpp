@@ -105,8 +105,6 @@ HelpWindowWindow::HelpWindowWindow(QWidget *pParent) :
 
     mHelpWindowWidget->setObjectName("HelpWindowWidget");
 
-//---ISSUE908--- CHECK THAT THE SIDES OF mHelpWindowWidget LOOK AESTHETICALLY
-//               FINE ON WINDOWS, LINUX AND OS X...
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     mGui->layout->addWidget(new Core::BorderedWidget(mHelpWindowWidget,
                                                      true, true, true, true));

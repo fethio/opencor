@@ -81,8 +81,6 @@ PhysiomeModelRepositoryWindowWindow::PhysiomeModelRepositoryWindowWindow(QWidget
 
     mPhysiomeModelRepositoryWidget = new PhysiomeModelRepositoryWindowWidget(this);
 
-//---ISSUE908--- CHECK THAT THE SIDES OF mPhysiomeModelRepositoryWidget LOOK
-//               AESTHETICALLY FINE ON WINDOWS, LINUX AND OS X...
 #if defined(Q_OS_WIN) || defined(Q_OS_LINUX)
     mGui->dockWidgetContents->layout()->addWidget(new Core::BorderedWidget(mPhysiomeModelRepositoryWidget,
                                                                            true, true, true, true));
