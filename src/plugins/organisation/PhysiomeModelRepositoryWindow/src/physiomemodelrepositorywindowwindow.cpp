@@ -463,7 +463,7 @@ void PhysiomeModelRepositoryWindowWindow::finished(QNetworkReply *pNetworkReply)
 
         std::sort(exposures.begin(), exposures.end());
 
-        // Ask our PMR widget to initialise itself and filter its output
+        // Ask our PMR widget to initialise itself
 
         mPhysiomeModelRepositoryWidget->initialize(exposures, errorMessage,
                                                    mGui->filterValue->text(),
