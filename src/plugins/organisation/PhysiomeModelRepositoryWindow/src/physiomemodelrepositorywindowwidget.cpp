@@ -33,7 +33,6 @@ specific language governing permissions and limitations under the License.
 #include <QIODevice>
 #include <QLayout>
 #include <QMenu>
-#include <QPaintEvent>
 #include <QRegularExpression>
 
 //==============================================================================
