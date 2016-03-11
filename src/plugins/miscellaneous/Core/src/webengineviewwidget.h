@@ -51,8 +51,6 @@ public:
     void setHtmlSynchronously(const QString &pHtml,
                               const QUrl &pBaseUrl = QUrl());
 
-    QString hoveredLink() const;
-
 protected:
     virtual bool event(QEvent *pEvent);
 
@@ -60,11 +58,6 @@ private:
     bool mResettingCursor;
 
     QString mLinkToolTip;
-
-    QString mHoveredLink;
-
-private Q_SLOTS:
-    void linkHovered(const QString &pLink);
 };
 
 //==============================================================================

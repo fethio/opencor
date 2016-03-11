@@ -45,11 +45,6 @@ WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
 
     setFocusPolicy(Qt::NoFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    // Keep track of the currently hovered link, if any
-
-    connect(page(), SIGNAL(linkHovered(const QString &)),
-            this, SLOT(linkHovered(const QString &)));
 }
 
 //==============================================================================
@@ -102,15 +97,6 @@ void WebEngineViewWidget::setHtmlSynchronously(const QString &pHtml,
 
 //==============================================================================
 
-QString WebEngineViewWidget::hoveredLink() const
-{
-    // Return the currently hovered link, if any
-
-    return mHoveredLink;
-}
-
-//==============================================================================
-
 bool WebEngineViewWidget::event(QEvent *pEvent)
 {
     // Override the change of the cursor and tool tip when hovering a link
@@ -142,15 +128,6 @@ bool WebEngineViewWidget::event(QEvent *pEvent)
     } else {
         return QWebEngineView::event(pEvent);
     }
-}
-
-//==============================================================================
-
-void WebEngineViewWidget::linkHovered(const QString &pLink)
-{
-    // Keep track of the currently hovered link, if any
-
-    mHoveredLink = pLink;
 }
 
 //==============================================================================

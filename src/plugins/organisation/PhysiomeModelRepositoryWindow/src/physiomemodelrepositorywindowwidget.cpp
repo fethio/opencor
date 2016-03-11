@@ -90,6 +90,7 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     mErrorMessage(QString()),
     mInternetConnectionAvailable(true),
     mNumberOfFilteredExposures(0),
+    mHideExposureFiles(QMap<QString, bool>()),
     mExposureUrl(QString())
 {
     // Set up the GUI
@@ -122,8 +123,8 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
 
     connect(page(), SIGNAL(linkClicked(const QUrl &)),
             this, SLOT(linkClicked()));
-    connect(page(), SIGNAL(linkHovered(const QString &, const QString &, const QString &)),
-            this, SLOT(linkHovered()));
+    connect(page(), SIGNAL(linkHovered(const QString &)),
+            this, SLOT(linkHovered(const QString &)));
 
     // Retrieve the output template
 
@@ -195,6 +196,12 @@ QString PhysiomeModelRepositoryWindowWidget::message() const
 
 //==============================================================================
 
+static const auto PmrScheme = QStringLiteral("pmr");
+static const auto CloneWorkspaceAction = QStringLiteral("cloneWorkspace");
+static const auto ShowExposureFilesAction = QStringLiteral("showExposureFiles");
+
+//==============================================================================
+
 void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelRepositoryWindowExposures &pExposures,
                                                      const QString &pErrorMessage,
                                                      const QString &pFilter,
@@ -235,10 +242,10 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
                      "                        </ul>\n"
                      "                    </td>\n"
                      "                    <td class=\"button\">\n"
-                     "                        <a class=\"noHover\" href=\"cloneWorkspace|"+exposureUrl+"|"+exposureName+"\"><img class=\"button clone\"/></a>\n"
+                     "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+CloneWorkspaceAction+"/"+exposureUrl+"\"><img class=\"button clone\"/></a>\n"
                      "                    </td>\n"
                      "                    <td class=\"button\">\n"
-                     "                        <a class=\"noHover\" href=\"showExposureFiles|"+exposureUrl+"|"+exposureName+"\"><img id=\"exposure_"+QString::number(i)+"\" class=\"button open\"/></a>\n"
+                     "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+ShowExposureFilesAction+"/"+exposureUrl+"\"><img id=\"exposure_"+QString::number(i)+"\" class=\"button open\"/></a>\n"
                      "                    </td>\n"
                      "                </tr>\n"
                      "            </tbody>\n"
@@ -405,42 +412,33 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked()
 
 //==============================================================================
 
-void PhysiomeModelRepositoryWindowWidget::linkHovered()
+void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
 {
-/*---ISSUE908---
-    // Retrieve some information about the link
-
-    QString link;
-    QString textContent;
-
-    QWebElement element = retrieveLinkInformation(link, textContent);
-
     // Update our tool tip based on whether we are hovering a text or button
     // link
-    // Note: this follows the approach used in linkClicked()...
 
     QString linkToolTip = QString();
+    QUrl url = pLink;
 
-    if (textContent.isEmpty()) {
-        QStringList linkList = link.split("|");
-
-        if (!linkList[0].compare("cloneWorkspace")) {
+    if (!url.scheme().compare(PmrScheme)) {
+        if (!url.host().compare(CloneWorkspaceAction, Qt::CaseInsensitive)) {
             linkToolTip = tr("Clone Workspace");
-        } else if (linkList.count() == 3) {
-            if (page()->mainFrame()->documentElement().findFirst(QString("ul[id=exposureFiles_%1]").arg(mExposureUrlId.value(linkList[1]))).firstChild().isNull())
+        } else {
+            if (mHideExposureFiles.value(url.path()))
                 linkToolTip = tr("Show Exposure Files");
             else
                 linkToolTip = tr("Hide Exposure Files");
         }
     } else {
+/*---ISSUE908---
         if (element.parent().hasClass("exposureFile"))
             linkToolTip = tr("Open Exposure File");
         else
             linkToolTip = tr("Browse Exposure");
+*/
     }
 
     setLinkToolTip(linkToolTip);
-*/
 }
 
 //==============================================================================

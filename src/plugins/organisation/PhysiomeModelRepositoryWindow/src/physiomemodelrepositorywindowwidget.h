@@ -108,6 +108,8 @@ private:
 
     int mNumberOfFilteredExposures;
 
+    QMap<QString, bool> mHideExposureFiles;
+
     QString mExposureUrl;
 
     QString message() const;
@@ -122,7 +124,7 @@ private Q_SLOTS:
     void on_actionCopy_triggered();
 
     void linkClicked();
-    void linkHovered();
+    void linkHovered(const QString &pLink);
 
     void showCustomContextMenu();
 };
