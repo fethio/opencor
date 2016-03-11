@@ -90,6 +90,7 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     mErrorMessage(QString()),
     mInternetConnectionAvailable(true),
     mNumberOfFilteredExposures(0),
+    mExposureUrls(QStringList()),
     mHideExposureFiles(QMap<QString, bool>()),
     mExposureUrl(QString())
 {
@@ -209,13 +210,16 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
 {
     // Initialise / keep track of some properties
 
-    mExposureNames = QStringList();
-    mExposureDisplayed = QBoolList();
-    mExposureUrlId = QMap<QString, int>();
+    mExposureNames.clear();
+    mExposureDisplayed.clear();
+    mExposureUrlId.clear();
 
     mErrorMessage = pErrorMessage;
 
     mInternetConnectionAvailable = pInternetConnectionAvailable;
+
+    mExposureUrls.clear();
+    mHideExposureFiles.clear();
 
     // Initialise our list of exposures
 
@@ -258,6 +262,8 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
         mExposureNames << exposureName;
         mExposureDisplayed << exposureDisplayed;
         mExposureUrlId.insert(exposureUrl, i);
+
+        mExposureUrls << exposureUrl;
 
         mNumberOfFilteredExposures += exposureDisplayed;
     }
@@ -434,12 +440,10 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
     } else {
         mExposureUrl = pLink;
 
-/*---ISSUE908---
-        if (element.parent().hasClass("exposureFile"))
-            linkToolTip = tr("Open Exposure File");
-        else
-*/
+        if (mExposureUrls.contains(pLink))
             linkToolTip = tr("Browse Exposure");
+        else
+            linkToolTip = tr("Open Exposure File");
     }
 
     setLinkToolTip(linkToolTip);
