@@ -414,13 +414,15 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked()
 
 void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
 {
-    // Update our tool tip based on whether we are hovering a text or button
-    // link
+    // Update mExposureUrl and our tool tip based on whether we are hovering a
+    // text or button link
 
     QString linkToolTip = QString();
     QUrl url = pLink;
 
     if (!url.scheme().compare(PmrScheme)) {
+        mExposureUrl = QString();
+
         if (!url.host().compare(CloneWorkspaceAction, Qt::CaseInsensitive)) {
             linkToolTip = tr("Clone Workspace");
         } else {
@@ -430,12 +432,14 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
                 linkToolTip = tr("Hide Exposure Files");
         }
     } else {
+        mExposureUrl = pLink;
+
 /*---ISSUE908---
         if (element.parent().hasClass("exposureFile"))
             linkToolTip = tr("Open Exposure File");
         else
-            linkToolTip = tr("Browse Exposure");
 */
+            linkToolTip = tr("Browse Exposure");
     }
 
     setLinkToolTip(linkToolTip);
@@ -445,20 +449,10 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
 
 void PhysiomeModelRepositoryWindowWidget::showCustomContextMenu()
 {
-/*---ISSUE908---
-    // Retrieve some information about the link, if any
+    // Show our context menu to allow the copying of the exposure URL
 
-    QString textContent;
-
-    retrieveLinkInformation(mExposureUrl, textContent);
-
-    // Show our context menu to allow the copying of the URL of the exposure,
-    // but only if we are over a link, i.e. if both mLink and textContent are
-    // not empty
-
-    if (!mExposureUrl.isEmpty() && !textContent.isEmpty())
+    if (!mExposureUrl.isEmpty())
         mContextMenu->exec(QCursor::pos());
-*/
 }
 
 //==============================================================================
