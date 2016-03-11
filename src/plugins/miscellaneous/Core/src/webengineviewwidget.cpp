@@ -45,6 +45,11 @@ WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
 
     setFocusPolicy(Qt::NoFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // Keep track of the currently hovered link, if any
+
+    connect(page(), SIGNAL(linkHovered(const QString &)),
+            this, SLOT(linkHovered(const QString &)));
 }
 
 //==============================================================================
@@ -97,6 +102,15 @@ void WebEngineViewWidget::setHtmlSynchronously(const QString &pHtml,
 
 //==============================================================================
 
+QString WebEngineViewWidget::hoveredLink() const
+{
+    // Return the currently hovered link, if any
+
+    return mHoveredLink;
+}
+
+//==============================================================================
+
 bool WebEngineViewWidget::event(QEvent *pEvent)
 {
     // Override the change of the cursor and tool tip when hovering a link
@@ -132,37 +146,12 @@ bool WebEngineViewWidget::event(QEvent *pEvent)
 
 //==============================================================================
 
-/*---ISSUE908---
-QWebElement WebEngineViewWidget::retrieveLinkInformation(QString &pLink,
-                                                         QString &pTextContent)
+void WebEngineViewWidget::linkHovered(const QString &pLink)
 {
-    // Retrieve the link and text content values for the link, if any, below our
-    // mouse pointer
-    // Note: normally, one would want to handle the linkHovered() signal, but it
-    //       may provide the wrong information. Indeed, say that you are over a
-    //       link and then scroll down/up using your mouse wheel, and end up
-    //       over another link and click it. Now, because your mouse didn't
-    //       move, no linkHovered() message will have been emitted (and
-    //       handled), which means that if we need that information to process
-    //       the click, then we will have the wrong information...
+    // Keep track of the currently hovered link, if any
 
-    QWebHitTestResult hitTestResult = page()->mainFrame()->hitTestContent(mapFromGlobal(QCursor::pos()));
-    QWebElement res = hitTestResult.element();
-
-    while (!res.isNull() && res.tagName().compare("A"))
-        res = res.parent();
-
-    if (res.isNull()) {
-        pLink = QString();
-        pTextContent = QString();
-    } else {
-        pLink = res.attribute("href");
-        pTextContent = hitTestResult.linkText();
-    }
-
-    return res;
+    mHoveredLink = pLink;
 }
-*/
 
 //==============================================================================
 

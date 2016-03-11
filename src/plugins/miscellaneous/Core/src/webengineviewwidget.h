@@ -45,15 +45,13 @@ class CORE_EXPORT WebEngineViewWidget : public QWebEngineView
 public:
     explicit WebEngineViewWidget(QWidget *pParent);
 
-/*---ISSUE908---
-    QWebElement retrieveLinkInformation(QString &pLink, QString &pTextContent);
-*/
-
     void setLinkToolTip(const QString &pLinkToolTip);
 
     void setUrlSynchronously(const QUrl &pUrl);
     void setHtmlSynchronously(const QString &pHtml,
                               const QUrl &pBaseUrl = QUrl());
+
+    QString hoveredLink() const;
 
 protected:
     virtual bool event(QEvent *pEvent);
@@ -62,6 +60,11 @@ private:
     bool mResettingCursor;
 
     QString mLinkToolTip;
+
+    QString mHoveredLink;
+
+private Q_SLOTS:
+    void linkHovered(const QString &pLink);
 };
 
 //==============================================================================
