@@ -89,7 +89,7 @@ private:
                         const QString &pUrl = QString(),
                         const QString &pExtra = QString());
 
-    void cloneWorkspace(const QString &pWorkspace);
+    void doCloneWorkspace(const QString &pWorkspace);
 
 private Q_SLOTS:
     void on_filterValue_textChanged(const QString &pText);
@@ -101,8 +101,8 @@ private Q_SLOTS:
 
     void retrieveExposuresList(const bool &pVisible);
 
-    void cloneWorkspace(const QString &pUrl, const QString &pDescription);
-    void showExposureFiles(const QString &pUrl, const QString &pDescription);
+    void cloneWorkspace(const QString &pUrl);
+    void showExposureFiles(const QString &pUrl);
 };
 
 //==============================================================================

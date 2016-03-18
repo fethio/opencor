@@ -118,10 +118,6 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
 
     // Some connections to handle the clicking and hovering of a link
 
-/*---ISSUE908---
-    page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-*/
-
     connect(page(), SIGNAL(linkClicked(const QString &)),
             this, SLOT(linkClicked(const QString &)));
     connect(page(), SIGNAL(linkHovered(const QString &)),
@@ -370,51 +366,46 @@ void PhysiomeModelRepositoryWindowWidget::on_actionCopy_triggered()
 
 void PhysiomeModelRepositoryWindowWidget::linkClicked(const QString &pLink)
 {
-Q_UNUSED(pLink);
-/*---ISSUE908---
-    // Retrieve some information about the link
-
-    QString link;
-    QString textContent;
-
-    QWebElement element = retrieveLinkInformation(link, textContent);
-
     // Check whether we have clicked a text or button link
 
-    if (textContent.isEmpty()) {
+    QUrl url = pLink;
+
+    if (!url.scheme().compare(PmrScheme)) {
         // We have clicked on a button link, so let people know whether we want
         // to clone a workspace or whether we want to show/hide exposure files
 
-        QStringList linkList = link.split("|");
+        QString action = url.authority();
+        QString pmrUrl = Core::urlPath(url);
 
-        if (!linkList[0].compare("cloneWorkspace")) {
-            emit cloneWorkspace(linkList[1], linkList[2]);
+        if (!action.compare(CloneWorkspaceAction, Qt::CaseInsensitive)) {
+            emit cloneWorkspaceRequested(pmrUrl);
         } else {
             // Show/hide exposure files, if we have them, or let people know
             // that we want to show them
 
-            int id = mExposureUrlId.value(linkList[1]);
+/*---ISSUE908---
+            int id = mExposureUrlId.value(pmrUrl);
 
             QWebElement documentElement = page()->mainFrame()->documentElement();
             QWebElement ulElement = documentElement.findFirst(QString("ul[id=exposureFiles_%1]").arg(id));
 
-            if (ulElement.firstChild().isNull()) {
-                emit showExposureFiles(linkList[1], linkList[2]);
-            } else {
-                showExposureFiles(linkList[1],
-                                  documentElement.findFirst(QString("img[id=exposure_%1]").arg(id)).hasClass("button"));
-            }
+            if (ulElement.firstChild().isNull())
+                emit showExposureFilesRequested(pmrUrl);
+            else
+                showExposureFiles(pmrUrl, documentElement.findFirst(QString("img[id=exposure_%1]").arg(id)).hasClass("button"));
+*/
         }
     } else {
         // Open an exposure link in the user's browser or ask for an exposure
         // file to be opened in OpenCOR
 
+/*---ISSUE908---
         if (element.parent().hasClass("exposureFile"))
-            emit exposureFileOpenRequested(link);
+            emit openExposureFileRequested(pLink);
         else
-            QDesktopServices::openUrl(link);
-    }
 */
+            QDesktopServices::openUrl(pLink);
+    }
 }
 
 //==============================================================================

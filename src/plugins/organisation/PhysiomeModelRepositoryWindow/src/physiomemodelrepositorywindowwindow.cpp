@@ -113,12 +113,12 @@ PhysiomeModelRepositoryWindowWindow::PhysiomeModelRepositoryWindowWindow(QWidget
 
     // Some connections to know what our PMR widget wants from us
 
-    connect(mPhysiomeModelRepositoryWidget, SIGNAL(cloneWorkspace(const QString &, const QString &)),
-            this, SLOT(cloneWorkspace(const QString &, const QString &)));
-    connect(mPhysiomeModelRepositoryWidget, SIGNAL(showExposureFiles(const QString &, const QString &)),
-            this, SLOT(showExposureFiles(const QString &, const QString &)));
+    connect(mPhysiomeModelRepositoryWidget, SIGNAL(cloneWorkspaceRequested(const QString &)),
+            this, SLOT(cloneWorkspace(const QString &)));
+    connect(mPhysiomeModelRepositoryWidget, SIGNAL(showExposureFilesRequested(const QString &)),
+            this, SLOT(showExposureFiles(const QString &)));
 
-    connect(mPhysiomeModelRepositoryWidget, SIGNAL(exposureFileOpenRequested(const QString &)),
+    connect(mPhysiomeModelRepositoryWidget, SIGNAL(openExposureFileRequested(const QString &)),
             this, SLOT(openFile(const QString &)));
 }
 
@@ -217,7 +217,7 @@ void PhysiomeModelRepositoryWindowWindow::sendPmrRequest(const PmrRequest &pPmrR
 
 //==============================================================================
 
-void PhysiomeModelRepositoryWindowWindow::cloneWorkspace(const QString &pWorkspace)
+void PhysiomeModelRepositoryWindowWindow::doCloneWorkspace(const QString &pWorkspace)
 {
     // Retrieve the name of an empty directory
 
@@ -454,7 +454,7 @@ void PhysiomeModelRepositoryWindowWindow::finished(QNetworkReply *pNetworkReply)
         // Clone the workspace, if possible and requested
 
         if (!mNumberOfExposureFilesLeft && (pmrRequest == ExposureFileForCloning))
-            cloneWorkspace(mWorkspaces.value(url));
+            doCloneWorkspace(mWorkspaces.value(url));
 
         break;
     }
@@ -517,8 +517,7 @@ void PhysiomeModelRepositoryWindowWindow::retrieveExposuresList(const bool &pVis
 
 //==============================================================================
 
-void PhysiomeModelRepositoryWindowWindow::cloneWorkspace(const QString &pUrl,
-                                                         const QString &pDescription)
+void PhysiomeModelRepositoryWindowWindow::cloneWorkspace(const QString &pUrl)
 {
     // Check whether we already know about the workspace for the given exposure
 
@@ -527,26 +526,25 @@ void PhysiomeModelRepositoryWindowWindow::cloneWorkspace(const QString &pUrl,
     if (!workspace.isEmpty()) {
         busy(true);
 
-        cloneWorkspace(workspace);
+        doCloneWorkspace(workspace);
 
         busy(false);
     } else {
         // To retrieve the workspace associated with the given exposure, we
         // first need to retrieve its bookmark URLs
 
-        sendPmrRequest(BookmarkUrlsForCloning, pUrl, pDescription);
+        sendPmrRequest(BookmarkUrlsForCloning, pUrl, "---ISSUE908---");
     }
 }
 
 //==============================================================================
 
-void PhysiomeModelRepositoryWindowWindow::showExposureFiles(const QString &pUrl,
-                                                            const QString &pDescription)
+void PhysiomeModelRepositoryWindowWindow::showExposureFiles(const QString &pUrl)
 {
     // To show exposure files, we first need to retrieve the bookmark URLs for
     // the given exposure
 
-    sendPmrRequest(BookmarkUrlsForExposureFiles, pUrl, pDescription);
+    sendPmrRequest(BookmarkUrlsForExposureFiles, pUrl, "---ISSUE908---");
 }
 
 //==============================================================================

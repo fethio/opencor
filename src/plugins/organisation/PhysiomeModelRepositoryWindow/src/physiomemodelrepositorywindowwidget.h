@@ -116,10 +116,10 @@ private:
     QString message() const;
 
 Q_SIGNALS:
-    void cloneWorkspace(const QString &pUrl, const QString &pDescription);
-    void showExposureFiles(const QString &pUrl, const QString &pDescription);
+    void cloneWorkspaceRequested(const QString &pUrl);
+    void showExposureFilesRequested(const QString &pUrl);
 
-    void exposureFileOpenRequested(const QString &pUrl);
+    void openExposureFileRequested(const QString &pUrl);
 
 private Q_SLOTS:
     void on_actionCopy_triggered();
