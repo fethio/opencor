@@ -124,7 +124,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void on_actionCopy_triggered();
 
-    void linkClicked();
+    void linkClicked(const QString &pLink);
     void linkHovered(const QString &pLink);
 
     void showCustomContextMenu();

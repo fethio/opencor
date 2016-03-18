@@ -141,37 +141,6 @@ void HelpWindowUrlSchemeHandler::requestStarted(QWebEngineUrlRequestJob *pReques
 
 //==============================================================================
 
-HelpWindowPage::HelpWindowPage(QObject *pParent) :
-    QWebEnginePage(pParent)
-{
-}
-
-//==============================================================================
-
-bool HelpWindowPage::acceptNavigationRequest(const QUrl &pUrl,
-                                             NavigationType pType,
-                                             bool pIsMainFrame)
-{
-    Q_UNUSED(pType);
-    Q_UNUSED(pIsMainFrame);
-
-    // Determine whether the URL refers to an OpenCOR document (qthelp://...) or
-    // an external resource of sorts (e.g. http[s]://... and opencor://...), and
-    // if it is the latter then just open the URL the default way
-
-    QString urlScheme = pUrl.scheme();
-
-    if (!urlScheme.compare("qthelp")) {
-        return true;
-    } else {
-        QDesktopServices::openUrl(pUrl);
-
-        return false;
-    }
-}
-
-//==============================================================================
-
 enum {
     MinimumZoomLevel =  1,
     DefaultZoomLevel = 10
@@ -188,9 +157,9 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
     mZoomLevel(-1)   // This will ensure that mZoomLevel gets initialised by our
                      // first call to setZoomLevel
 {
-    // Use our own help page and URL scheme handler
+    // Specify and use our own URL scheme handler
 
-    setPage(new HelpWindowPage(this));
+    setSupportedUrlSchemes(QStringList() << "qthelp");
 
     page()->profile()->installUrlSchemeHandler("qthelp", new HelpWindowUrlSchemeHandler(pHelpEngine, this));
 
@@ -205,6 +174,9 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
     setZoomLevel(DefaultZoomLevel);
 
     // Some connections
+
+    connect(this, SIGNAL(linkClicked(const QString &)),
+            this, SLOT(linkClicked(const QString &)));
 
     connect(this, SIGNAL(urlChanged(const QUrl &)),
             this, SLOT(urlChanged(const QUrl &)));
@@ -403,6 +375,15 @@ void HelpWindowWidget::wheelEvent(QWheelEvent *pEvent)
 
         QWebEngineView::wheelEvent(pEvent);
     }
+}
+
+//==============================================================================
+
+void HelpWindowWidget::linkClicked(const QString &pLink)
+{
+    // Open the link the default way
+
+    QDesktopServices::openUrl(pLink);
 }
 
 //==============================================================================

@@ -81,21 +81,6 @@ private:
 
 //==============================================================================
 
-class HelpWindowPage : public QWebEnginePage
-{
-public:
-    explicit HelpWindowPage(QObject *pParent);
-
-protected:
-    virtual bool acceptNavigationRequest(const QUrl &pUrl, NavigationType pType,
-                                         bool pIsMainFrame);
-
-private:
-    QMap<QString, QString> mFileNames;
-};
-
-//==============================================================================
-
 class HelpWindowWidget : public Core::WebEngineViewWidget,
                          public Core::CommonWidget
 {
@@ -146,6 +131,8 @@ Q_SIGNALS:
     void zoomOutEnabled(const bool &pEnabled);
 
 private Q_SLOTS:
+    void linkClicked(const QString &pLink);
+
     void urlChanged(const QUrl &pUrl);
 
     void selectionChanged();

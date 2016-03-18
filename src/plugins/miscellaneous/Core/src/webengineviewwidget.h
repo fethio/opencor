@@ -38,12 +38,36 @@ namespace Core {
 
 //==============================================================================
 
+class WebEnginePage : public QWebEnginePage
+{
+    Q_OBJECT
+
+public:
+    explicit WebEnginePage(QObject *pParent);
+
+    void setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes);
+
+protected:
+    virtual bool acceptNavigationRequest(const QUrl &pUrl, NavigationType pType,
+                                         bool pIsMainFrame);
+
+private:
+    QStringList mSupportedUrlSchemes;
+
+Q_SIGNALS:
+    void linkClicked(const QString &pLink);
+};
+
+//==============================================================================
+
 class CORE_EXPORT WebEngineViewWidget : public QWebEngineView
 {
     Q_OBJECT
 
 public:
     explicit WebEngineViewWidget(QWidget *pParent);
+
+    void setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes);
 
     void setLinkToolTip(const QString &pLinkToolTip);
 
@@ -55,9 +79,15 @@ protected:
     virtual bool event(QEvent *pEvent);
 
 private:
+    WebEnginePage *mPage;
+
     bool mResettingCursor;
 
     QString mLinkToolTip;
+
+Q_SIGNALS:
+    void linkClicked(const QString &pLink);
+    void linkHovered(const QString &pLink);
 };
 
 //==============================================================================

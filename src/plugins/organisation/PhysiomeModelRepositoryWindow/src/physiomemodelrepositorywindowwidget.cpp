@@ -122,8 +122,8 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
 */
 
-    connect(page(), SIGNAL(linkClicked(const QUrl &)),
-            this, SLOT(linkClicked()));
+    connect(page(), SIGNAL(linkClicked(const QString &)),
+            this, SLOT(linkClicked(const QString &)));
     connect(page(), SIGNAL(linkHovered(const QString &)),
             this, SLOT(linkHovered(const QString &)));
 
@@ -368,8 +368,9 @@ void PhysiomeModelRepositoryWindowWidget::on_actionCopy_triggered()
 
 //==============================================================================
 
-void PhysiomeModelRepositoryWindowWidget::linkClicked()
+void PhysiomeModelRepositoryWindowWidget::linkClicked(const QString &pLink)
 {
+Q_UNUSED(pLink);
 /*---ISSUE908---
     // Retrieve some information about the link
 

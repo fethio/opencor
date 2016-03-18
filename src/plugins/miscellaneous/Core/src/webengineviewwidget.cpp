@@ -36,8 +36,54 @@ namespace Core {
 
 //==============================================================================
 
+WebEnginePage::WebEnginePage(QObject *pParent) :
+    QWebEnginePage(pParent),
+    mSupportedUrlSchemes(QStringList())
+{
+}
+
+//==============================================================================
+
+void WebEnginePage::setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes)
+{
+    // Set our supported URL schemes
+
+    mSupportedUrlSchemes = pUrlSupportedSchemes;
+}
+
+//==============================================================================
+
+bool WebEnginePage::acceptNavigationRequest(const QUrl &pUrl,
+                                            NavigationType pType,
+                                            bool pIsMainFrame)
+{
+    Q_UNUSED(pType);
+    Q_UNUSED(pIsMainFrame);
+
+    // Accept the navigation request if mSupportedUrlSchemes is empty or if
+    // mSupportedUrlSchemes contains the given URL's scheme, otherwise let the
+    // user know that a link has been 'clicked'
+
+    if (mSupportedUrlSchemes.isEmpty()) {
+        return true;
+    } else {
+        QString urlScheme = pUrl.scheme();
+
+        if (mSupportedUrlSchemes.contains(urlScheme)) {
+            return true;
+        } else {
+            emit linkClicked(pUrl.toString());
+
+            return false;
+        }
+    }
+}
+
+//==============================================================================
+
 WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
     QWebEngineView(pParent),
+    mPage(new WebEnginePage(this)),
     mResettingCursor(false),
     mLinkToolTip(QString())
 {
@@ -45,6 +91,26 @@ WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
 
     setFocusPolicy(Qt::NoFocus);
     setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    // Use our own Web engine page
+
+    setPage(mPage);
+
+    // Forward some messages from our Web engine page
+
+    connect(mPage, SIGNAL(linkClicked(const QString &)),
+            this, SIGNAL(linkClicked(const QString &)));
+    connect(mPage, SIGNAL(linkHovered(const QString &)),
+            this, SIGNAL(linkHovered(const QString &)));
+}
+
+//==============================================================================
+
+void WebEngineViewWidget::setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes)
+{
+    // Set our supported URL schemes
+
+    mPage->setSupportedUrlSchemes(pUrlSupportedSchemes);
 }
 
 //==============================================================================
