@@ -60,22 +60,17 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &pUrl,
     Q_UNUSED(pType);
     Q_UNUSED(pIsMainFrame);
 
-    // Accept the navigation request if mSupportedUrlSchemes is empty or if
-    // mSupportedUrlSchemes contains the given URL's scheme, otherwise let the
-    // user know that a link has been 'clicked'
+    // Accept the navigation request if mSupportedUrlSchemes contains the given
+    // URL's scheme, otherwise let the user know that a link has been 'clicked'
 
-    if (mSupportedUrlSchemes.isEmpty()) {
+    QString urlScheme = pUrl.scheme();
+
+    if (mSupportedUrlSchemes.contains(urlScheme)) {
         return true;
     } else {
-        QString urlScheme = pUrl.scheme();
+        emit linkClicked(pUrl.toString());
 
-        if (mSupportedUrlSchemes.contains(urlScheme)) {
-            return true;
-        } else {
-            emit linkClicked(pUrl.toString());
-
-            return false;
-        }
+        return false;
     }
 }
 
