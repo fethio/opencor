@@ -84,10 +84,6 @@ private:
     bool mResettingCursor;
 
     QString mLinkToolTip;
-
-Q_SIGNALS:
-    void linkClicked(const QString &pLink);
-    void linkHovered(const QString &pLink);
 };
 
 //==============================================================================

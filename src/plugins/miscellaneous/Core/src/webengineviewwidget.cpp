@@ -95,13 +95,6 @@ WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
     // Use our own Web engine page
 
     setPage(mPage);
-
-    // Forward some messages from our Web engine page
-
-    connect(mPage, SIGNAL(linkClicked(const QString &)),
-            this, SIGNAL(linkClicked(const QString &)));
-    connect(mPage, SIGNAL(linkHovered(const QString &)),
-            this, SIGNAL(linkHovered(const QString &)));
 }
 
 //==============================================================================

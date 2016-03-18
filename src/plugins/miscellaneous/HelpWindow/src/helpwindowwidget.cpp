@@ -175,7 +175,7 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
 
     // Some connections
 
-    connect(this, SIGNAL(linkClicked(const QString &)),
+    connect(page(), SIGNAL(linkClicked(const QString &)),
             this, SLOT(linkClicked(const QString &)));
 
     connect(this, SIGNAL(urlChanged(const QUrl &)),
