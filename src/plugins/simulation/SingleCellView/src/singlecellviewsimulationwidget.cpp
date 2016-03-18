@@ -2090,9 +2090,40 @@ bool SingleCellViewSimulationWidget::doFurtherInitialize()
 
         foreach (Core::Property *solverProperty, solverProperties) {
             if (!solverProperty->id().compare(id)) {
-                solverProperty->setValue(QString::fromStdString(algorithmParameter->getValue()));
+                QVariant solverPropertyValue = QString::fromStdString(algorithmParameter->getValue());
 
-                propertySet = true;
+                switch (solverProperty->type()) {
+                case Core::Property::Section:
+#ifdef QT_DEBUG
+                    // We should never come here...
+
+                    qFatal("FATAL ERROR | %s:%d: the solver property cannot be of section type.", __FILE__, __LINE__);
+#endif
+
+                    break;
+                case Core::Property::String:
+                    solverProperty->setValue(solverPropertyValue.toString());
+
+                    break;
+                case Core::Property::Integer:
+                    solverProperty->setIntegerValue(solverPropertyValue.toInt());
+
+                    break;
+                case Core::Property::Double:
+                    solverProperty->setDoubleValue(solverPropertyValue.toDouble());
+
+                    break;
+                case Core::Property::List:
+                    solverProperty->setListValue(solverPropertyValue.toString());
+
+                    break;
+                case Core::Property::Boolean:
+                    solverProperty->setBooleanValue(solverPropertyValue.toBool());
+
+                    break;
+                }
+
+                propertySet = solverProperty->type() != Core::Property::Section;
 
                 break;
             }
@@ -2261,12 +2292,16 @@ void SingleCellViewSimulationWidget::furtherInitialize()
     // initialise our simulation, if we still have a valid simulation
     // environment
 
+    mPlugin->viewWidget()->showBusyWidget(this, true);
+
     bool validSimulationEnvironment = doFurtherInitialize();
 
     initializeGui(validSimulationEnvironment);
 
     if (validSimulationEnvironment)
         initializeSimulation();
+
+    mPlugin->viewWidget()->hideBusyWidget();
 }
 
 //==============================================================================
@@ -2302,7 +2337,6 @@ void SingleCellViewSimulationWidget::simulationDataExport()
 {
     // Export our simulation data results
 
-    setEnabled(false);
     mPlugin->viewWidget()->showBusyWidget(this, true);
 
     DataStoreInterface *dataStoreInterface = mDataStoreInterfaces.value(qobject_cast<QAction *>(sender()));
@@ -2313,7 +2347,6 @@ void SingleCellViewSimulationWidget::simulationDataExport()
     dataStoreInterface->deleteDataStoreExporterInstance(dataStoreExporter);
 
     mPlugin->viewWidget()->hideBusyWidget();
-    setEnabled(true);
 }
 
 //==============================================================================
