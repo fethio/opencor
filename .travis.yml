@@ -19,7 +19,7 @@ install:
       && sudo apt-add-repository -y ppa:ubuntu-toolchain-r/test
       && sudo apt-add-repository -y ppa:beineri/opt-qt56-trusty
       && sudo apt-get -qq update
-      && sudo apt-get -qq install g++-4.8 libc6-i386 qt55location qt55multimedia qt55sensors qt55svg qt55tools qt55webchannel qt55webkit
+      && sudo apt-get -qq install g++-4.8 libc6-i386 qt56location qt56multimedia qt56sensors qt56svg qt56tools qt56webchannel qt56webengine
       && export CXX="g++-4.8"
       && export CC="gcc-4.8"
       ;
