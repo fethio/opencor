@@ -58,10 +58,6 @@ namespace Core {
 
 //==============================================================================
 
-typedef QMap<int, Plugin *> CentralWidgetViewPlugins;
-
-//==============================================================================
-
 class CentralWidget;
 class UserMessageWidget;
 class TabBarWidget;
@@ -78,13 +74,16 @@ public:
     void setEnabled(const bool &pEnabled);
 
     TabBarWidget * viewTabs() const;
-    CentralWidgetViewPlugins * viewPlugins() const;
+
+    Plugins viewPlugins() const;
+    void addViewPlugin(Plugin *pViewPlugin);
 
 private:
     bool mEnabled;
 
     TabBarWidget *mViewTabs;
-    CentralWidgetViewPlugins *mViewPlugins;
+
+    Plugins mViewPlugins;
 };
 
 //==============================================================================
@@ -123,8 +122,8 @@ public:
 
     bool canClose();
 
-    void selectMode(const QString &pModeName);
-    void selectView(const QString &pViewName);
+    bool selectMode(const QString &pModeName);
+    bool selectView(const QString &pViewName);
 
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *pEvent);
@@ -143,6 +142,7 @@ private:
     State mState;
 
     Plugins mLoadedFileHandlingPlugins;
+    Plugins mLoadedFileTypePlugins;
     Plugins mLoadedGuiPlugins;
     Plugins mLoadedViewPlugins;
 
@@ -174,6 +174,8 @@ private:
     QMap<QString, QString> mRemoteLocalFileNames;
 
     QMap<QString, QWidget *> mViews;
+
+    QStringList mDefaultViews;
 
     Plugin * viewPlugin(const int &pIndex) const;
     Plugin * viewPlugin(const QString &pFileName) const;

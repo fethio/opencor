@@ -58,17 +58,19 @@ SEDMLSupportPlugin::SEDMLSupportPlugin()
 
     mFileTypes = FileTypes() << new FileType(qobject_cast<FileTypeInterface *>(this),
                                              SedmlMimeType, SedmlFileExtension);
+
+    mDefaultViews = QStringList() << "SingleCellView" << "RawSEDMLView" << "RawTextView";
 }
 
 //==============================================================================
 // File interface
 //==============================================================================
 
-FileTypes SEDMLSupportPlugin::fileTypes() const
+bool SEDMLSupportPlugin::isFile(const QString &pFileName) const
 {
-    // Return the file types that we support
+    // Return whether the given file is of the type that we support
 
-    return mFileTypes;
+    return SedmlFileManager::instance()->isFile(pFileName);
 }
 
 //==============================================================================

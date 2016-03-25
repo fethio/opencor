@@ -480,11 +480,13 @@ void SingleCellViewWidget::fileRenamed(const QString &pOldFileName,
     SingleCellViewSimulationWidget *simulationWidget = mSimulationWidgets.value(pOldFileName);
 
     if (simulationWidget) {
+        simulationWidget->setFileName(pNewFileName);
+
         mSimulationWidgets.insert(pNewFileName, simulationWidget);
         mSimulationWidgets.remove(pOldFileName);
     }
 
-    // Make sure that GUI of our simulation widgets is up to date
+    // Make sure that the GUI of our simulation widgets is up to date
 
     foreach (SingleCellViewSimulationWidget *simulationWidget, mSimulationWidgets.values())
         simulationWidget->updateGui();

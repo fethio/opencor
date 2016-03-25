@@ -58,17 +58,19 @@ CellMLSupportPlugin::CellMLSupportPlugin()
 
     mFileTypes = FileTypes() << new FileType(qobject_cast<FileTypeInterface *>(this),
                                              CellmlMimeType, CellmlFileExtension);
+
+    mDefaultViews = QStringList() << "CellMLTextView" << "RawCellMLView" << "RawTextView";
 }
 
 //==============================================================================
 // File interface
 //==============================================================================
 
-FileTypes CellMLSupportPlugin::fileTypes() const
+bool CellMLSupportPlugin::isFile(const QString &pFileName) const
 {
-    // Return the file types that we support
+    // Return whether the given file is of the type that we support
 
-    return mFileTypes;
+    return CellmlFileManager::instance()->isFile(pFileName);
 }
 
 //==============================================================================

@@ -75,7 +75,8 @@ QString FileType::description() const
 //==============================================================================
 
 FileTypeInterface::FileTypeInterface() :
-    mFileTypes(FileTypes())
+    mFileTypes(FileTypes()),
+    mDefaultViews(QStringList())
 {
 }
 
@@ -87,6 +88,24 @@ FileTypeInterface::~FileTypeInterface()
 
     foreach (FileType *fileType, mFileTypes)
         delete fileType;
+}
+
+//==============================================================================
+
+FileTypes FileTypeInterface::fileTypes() const
+{
+    // Return the file types that we support
+
+    return mFileTypes;
+}
+
+//==============================================================================
+
+QStringList FileTypeInterface::defaultViews() const
+{
+    // Return our default views
+
+    return mDefaultViews;
 }
 
 //==============================================================================

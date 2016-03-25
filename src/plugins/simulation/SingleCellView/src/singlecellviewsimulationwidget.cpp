@@ -1149,6 +1149,15 @@ QString SingleCellViewSimulationWidget::fileName() const
 
 //==============================================================================
 
+void SingleCellViewSimulationWidget::setFileName(const QString &pFileName)
+{
+    // Set our file name
+
+    mFileName = pFileName;
+}
+
+//==============================================================================
+
 SEDMLSupport::SedmlFile * SingleCellViewSimulationWidget::sedmlFile() const
 {
     // Return our SED-ML file
@@ -1648,6 +1657,8 @@ void SingleCellViewSimulationWidget::on_actionSedmlExportSedmlFile_triggered()
     QString cellmlFileName = remoteFile?fileManagerInstance->url(mFileName):mFileName;
     QString cellmlFileCompleteSuffix = QFileInfo(cellmlFileName).completeSuffix();
     QString sedmlFileName = cellmlFileName;
+    QStringList sedmlFilters = Core::filters(mPlugin->sedmlFileTypes());
+    QString firstSedmlFilter = sedmlFilters.first();
 
     if (!cellmlFileCompleteSuffix.isEmpty()) {
         sedmlFileName.replace(QRegularExpression(QRegularExpression::escape(cellmlFileCompleteSuffix)+"$"),
@@ -1658,7 +1669,7 @@ void SingleCellViewSimulationWidget::on_actionSedmlExportSedmlFile_triggered()
 
     sedmlFileName = Core::getSaveFileName(QObject::tr("Export To SED-ML File"),
                                           sedmlFileName,
-                                          Core::fileTypes(mPlugin->sedmlFileTypes()));
+                                          sedmlFilters, &firstSedmlFilter);
 
     // Create a SED-ML file using the SED-ML file name that has been provided
 
@@ -1697,6 +1708,8 @@ void SingleCellViewSimulationWidget::on_actionSedmlExportCombineArchive_triggere
     QString cellmlFileName = remoteFile?fileManagerInstance->url(mFileName):mFileName;
     QString cellmlFileCompleteSuffix = QFileInfo(cellmlFileName).completeSuffix();
     QString combineArchiveName = cellmlFileName;
+    QStringList combineFilters = Core::filters(mPlugin->combineFileTypes());
+    QString firstCombineFilter = combineFilters.first();
 
     if (!cellmlFileCompleteSuffix.isEmpty()) {
         combineArchiveName.replace(QRegularExpression(QRegularExpression::escape(cellmlFileCompleteSuffix)+"$"),
@@ -1707,7 +1720,7 @@ void SingleCellViewSimulationWidget::on_actionSedmlExportCombineArchive_triggere
 
     combineArchiveName = Core::getSaveFileName(QObject::tr("Export To COMBINE Archive"),
                                                combineArchiveName,
-                                               Core::fileTypes(mPlugin->combineFileTypes()));
+                                               combineFilters, &firstCombineFilter);
 
     // Effectively export ourselves to a COMBINE archive, if a COMBINE archive
     // name has been provided
@@ -3099,13 +3112,9 @@ void SingleCellViewSimulationWidget::openCellmlFile()
                                                                        fileManager->url(mCellmlFile->fileName()):
                                                                        mCellmlFile->fileName()));
 
-    // Ask OpenCOR to switch to the requested CellML editing view after having
-    // selected the correct mode
+    // Ask OpenCOR to switch to the requested CellML editing view
 
-    Plugin *plugin = mCellmlEditingViewPlugins.value(qobject_cast<QAction *>(sender()));
-
-    QDesktopServices::openUrl("opencor://Core.selectMode/"+ViewInterface::viewModeAsString(qobject_cast<ViewInterface *>(plugin->instance())->viewMode()));
-    QDesktopServices::openUrl("opencor://Core.selectView/"+plugin->name());
+    QDesktopServices::openUrl("opencor://Core.selectView/"+mCellmlEditingViewPlugins.value(qobject_cast<QAction *>(sender()))->name());
 }
 
 //==============================================================================

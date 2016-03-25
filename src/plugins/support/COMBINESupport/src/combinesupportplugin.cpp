@@ -50,17 +50,19 @@ COMBINESupportPlugin::COMBINESupportPlugin()
 
     mFileTypes = FileTypes() << new FileType(qobject_cast<FileTypeInterface *>(this),
                                              CombineMimeType, CombineFileExtension);
+
+    mDefaultViews = QStringList() << "SingleCellView";
 }
 
 //==============================================================================
 // File interface
 //==============================================================================
 
-FileTypes COMBINESupportPlugin::fileTypes() const
+bool COMBINESupportPlugin::isFile(const QString &pFileName) const
 {
-    // Return the file types that we support
+    // Return whether the given file is of the type that we support
 
-    return mFileTypes;
+    return CombineFileManager::instance()->isFile(pFileName);
 }
 
 //==============================================================================
