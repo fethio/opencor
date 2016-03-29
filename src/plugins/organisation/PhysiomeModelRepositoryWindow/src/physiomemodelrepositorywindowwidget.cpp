@@ -375,7 +375,7 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked(const QString &pLink)
         // to clone a workspace or whether we want to show/hide exposure files
 
         QString action = url.authority();
-        QString pmrUrl = Core::urlPath(url);
+        QString pmrUrl = Core::urlArguments(url);
 
         if (!action.compare(CloneWorkspaceAction, Qt::CaseInsensitive)) {
             emit cloneWorkspaceRequested(pmrUrl);
