@@ -5,8 +5,7 @@ dist: trusty
 
 os:
   - linux
-#---ISSUE908---
-#  - osx
+  - osx
 
 env:
   - CONFIG=Release
