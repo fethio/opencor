@@ -783,9 +783,15 @@ void SingleCellViewSimulationWidget::initialize(const bool &pReloadingView)
 
     mGui->actionRunPauseResumeSimulation->setEnabled(variableOfIntegration);
 
-    // Update our simulation mode
+    // Update our simulation mode or clear our simulation data (should there be
+    // some) in case we are reloading ourselves
+    // Note: to clear our simualtion data will also update our simulation
+    //       mode, so we are fine...
 
-    updateSimulationMode();
+    if (pReloadingView)
+        on_actionClearSimulationData_triggered();
+    else
+        updateSimulationMode();
 
     // Initialise our contents widget and make sure that we have the required
     // type(s) of solvers
@@ -3043,7 +3049,7 @@ void SingleCellViewSimulationWidget::updateSimulationResults(SingleCellViewSimul
     if (simulation == mSimulation) {
         double simulationProgress = mPlugin->viewWidget()->simulationResultsSize(mFileName)/simulation->size();
 
-        if (visible) {
+        if (pForceUpdateSimulationResults || visible) {
             mProgressBarWidget->setValue(simulationProgress);
         } else {
             // We are not visible, so create an icon that shows our simulation's
