@@ -311,8 +311,6 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 
     static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
 
-    mHaveExposureFiles.insert(pUrl, true);
-
     QString exposureFiles = QString();
 
     foreach (const QString &exposureFile, pExposureFiles) {
@@ -331,6 +329,10 @@ void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
                                                             const bool &pShow)
 {
     mHideExposureFiles.insert(pUrl, pShow);
+
+    page()->runJavaScript(QString("showExposureFiles(%1, %2);").arg(mExposureUrlId.value(pUrl))
+                                                               .arg(pShow));
+
 /*---ISSUE908---
     // Show the exposure files for the given exposure
 
@@ -389,10 +391,13 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked(const QString &pLink)
             // Show/hide exposure files, if we have them, or let people know
             // that we want to show them
 
-            if (!mHaveExposureFiles.value(pmrUrl))
+            if (!mHaveExposureFiles.value(pmrUrl)) {
+                mHaveExposureFiles.insert(pmrUrl, true);
+
                 emit showExposureFilesRequested(pmrUrl);
-            else
+            } else {
                 showExposureFiles(pmrUrl, !mHideExposureFiles.value(pmrUrl));
+            }
         }
     } else {
         // Open an exposure link in the user's browser or ask for an exposure
