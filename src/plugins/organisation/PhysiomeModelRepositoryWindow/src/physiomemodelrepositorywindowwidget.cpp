@@ -310,8 +310,6 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 Q_UNUSED(pExposureFiles);
     // Add the given exposure files to the exposure
 
-Q_UNUSED(pUrl);
-Q_UNUSED(pExposureFiles);
     mHaveExposureFiles.insert(pUrl, true);
 //    static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
 /*---ISSUE908---
@@ -332,8 +330,6 @@ Q_UNUSED(pExposureFiles);
 void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
                                                             const bool &pShow)
 {
-Q_UNUSED(pUrl);
-Q_UNUSED(pShow);
     mHideExposureFiles.insert(pUrl, pShow);
 /*---ISSUE908---
     // Show the exposure files for the given exposure
