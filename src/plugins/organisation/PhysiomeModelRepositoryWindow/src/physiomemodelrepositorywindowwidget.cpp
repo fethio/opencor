@@ -307,6 +307,7 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
 void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
                                                            const QStringList &pExposureFiles)
 {
+Q_UNUSED(pExposureFiles);
     // Add the given exposure files to the exposure
 
 Q_UNUSED(pUrl);
