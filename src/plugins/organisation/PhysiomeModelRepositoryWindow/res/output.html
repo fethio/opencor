@@ -153,6 +153,7 @@
             }
 
             function showExposureFiles(id, show) {
+                document.getElementById("showExposureFiles_"+id).className = (show?"downButton":"button")+" open";
                 document.getElementById("exposureFiles_"+id).style.display = show?"inherit":"none";
             }
         </script>
