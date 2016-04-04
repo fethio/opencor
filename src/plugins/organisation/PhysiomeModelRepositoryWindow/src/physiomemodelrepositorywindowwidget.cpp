@@ -231,7 +231,7 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
         QString exposureName = pExposures[i].name();
         bool exposureDisplayed = exposureName.contains(filterRegEx);
 
-        exposures += "<tr id=\"exposure_"+QString::number(i)+"\" style=\"display: "+(exposureDisplayed?"table-row":"none")+";\">\n"
+        exposures += "<tr style=\"display: "+QString(exposureDisplayed?"table-row":"none")+";\">\n"
                      "    <td class=\"exposure\">\n"
                      "        <table class=\"fullWidth\">\n"
                      "            <tbody>\n"
@@ -247,7 +247,7 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
                      "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+CloneWorkspaceAction+"/"+exposureUrl+"\"><img class=\"button clone\"/></a>\n"
                      "                    </td>\n"
                      "                    <td class=\"button\">\n"
-                     "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+ShowExposureFilesAction+"/"+exposureUrl+"\"><img id=\"exposure_"+QString::number(i)+"\" class=\"button open\"/></a>\n"
+                     "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+ShowExposureFilesAction+"/"+exposureUrl+"\"><img id=\"showExposureFiles_"+QString::number(i)+"\" class=\"button open\"/></a>\n"
                      "                    </td>\n"
                      "                </tr>\n"
                      "            </tbody>\n"
@@ -299,7 +299,7 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
     }
 
     page()->runJavaScript(QString("setMessage(\"%1\");"
-                                  "showHideExposures(%2);").arg(message(), "["+exposuresInfo+"]"));
+                                  "showHideExposures([%2]);").arg(message(), exposuresInfo));
 }
 
 //==============================================================================
@@ -307,22 +307,22 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
 void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
                                                            const QStringList &pExposureFiles)
 {
-Q_UNUSED(pExposureFiles);
-    // Add the given exposure files to the exposure
+    // Add the given exposure files to the exposure which URL is given
+
+    static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
 
     mHaveExposureFiles.insert(pUrl, true);
-//    static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
-/*---ISSUE908---
 
-    QWebElement ulElement = page()->mainFrame()->documentElement().findFirst(QString("ul[id=exposureFiles_%1]").arg(mExposureUrlId.value(pUrl)));
+    QString exposureFiles = QString();
 
     foreach (const QString &exposureFile, pExposureFiles) {
-        ulElement.appendInside(QString("<li class=\"exposureFile\">"
-                                       "    <a href=\"%1\">%2</a>"
-                                       "</li>").arg(exposureFile, QString(exposureFile).remove(FilePathRegEx)));
+        exposureFiles += QString("%1[\"%2\", \"%3\"]").arg(exposureFiles.isEmpty()?QString():", ",
+                                                           exposureFile,
+                                                           QString(exposureFile).remove(FilePathRegEx));
     }
-*/
-    showExposureFiles(pUrl);
+
+    page()->runJavaScript(QString("addExposureFiles(%1, [%2]);").arg(mExposureUrlId.value(pUrl))
+                                                                .arg(exposureFiles));
 }
 
 //==============================================================================
