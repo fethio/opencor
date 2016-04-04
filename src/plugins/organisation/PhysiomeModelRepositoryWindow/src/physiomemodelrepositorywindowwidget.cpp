@@ -429,7 +429,7 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
             else
                 linkToolTip = tr("Hide Exposure Files");
         }
-    } else {
+    } else if (!pLink.isEmpty()) {
         mExposureUrl = pLink;
 
         if (mExposureUrls.contains(pLink))
