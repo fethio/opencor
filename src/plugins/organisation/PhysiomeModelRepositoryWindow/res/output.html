@@ -151,6 +151,10 @@
 
                 document.getElementById("exposureFiles_"+id).innerHTML = innerHtml;
             }
+
+            function showExposureFiles(id, show) {
+                document.getElementById("exposureFiles_"+id).style.display = show?"table-row":"none";
+            }
         </script>
     </head>
     <body onload="initialize();" ondragstart="return false;" ondrop="return false;">

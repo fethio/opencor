@@ -328,33 +328,13 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
                                                             const bool &pShow)
 {
+    // Show/hide our exposure files
+
     mHideExposureFiles.insert(pUrl, pShow);
 
     page()->runJavaScript(QString("showExposureFiles(%1, %2);").arg(mExposureUrlId.value(pUrl))
                                                                .arg(pShow));
 
-/*---ISSUE908---
-    // Show the exposure files for the given exposure
-
-    int id = mExposureUrlId.value(pUrl);
-    QWebElement documentElement = page()->mainFrame()->documentElement();
-    QWebElement imgElement = documentElement.findFirst(QString("img[id=exposure_%1]").arg(id));
-    QWebElement ulElement = documentElement.findFirst(QString("ul[id=exposureFiles_%1]").arg(id));
-
-    if (pShow) {
-        imgElement.removeClass("button");
-        imgElement.addClass("downButton");
-
-        ulElement.addClass("visible");
-        ulElement.setStyleProperty("display", "table-row");
-    } else {
-        imgElement.addClass("button");
-        imgElement.removeClass("downButton");
-
-        ulElement.removeClass("visible");
-        ulElement.setStyleProperty("display", "none");
-    }
-*/
     // Update our tool tip (in case the user move the mouse but still remains
     // above the show/hide button)
 
