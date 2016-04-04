@@ -109,6 +109,7 @@ private:
     int mNumberOfFilteredExposures;
 
     QStringList mExposureUrls;
+    QMap<QString, bool> mHaveExposureFiles;
     QMap<QString, bool> mHideExposureFiles;
 
     QString mExposureUrl;

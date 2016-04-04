@@ -91,6 +91,7 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     mInternetConnectionAvailable(true),
     mNumberOfFilteredExposures(0),
     mExposureUrls(QStringList()),
+    mHaveExposureFiles(QMap<QString, bool>()),
     mHideExposureFiles(QMap<QString, bool>()),
     mExposureUrl(QString())
 {
@@ -215,6 +216,7 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
     mInternetConnectionAvailable = pInternetConnectionAvailable;
 
     mExposureUrls.clear();
+    mHaveExposureFiles.clear();
     mHideExposureFiles.clear();
 
     // Initialise our list of exposures
@@ -309,6 +311,7 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 
 Q_UNUSED(pUrl);
 Q_UNUSED(pExposureFiles);
+    mHaveExposureFiles.insert(pUrl, true);
 //    static const QRegularExpression FilePathRegEx = QRegularExpression("^.*/");
 /*---ISSUE908---
 
@@ -320,6 +323,7 @@ Q_UNUSED(pExposureFiles);
                                        "</li>").arg(exposureFile, QString(exposureFile).remove(FilePathRegEx)));
     }
 */
+    showExposureFiles(pUrl);
 }
 
 //==============================================================================
@@ -329,6 +333,7 @@ void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
 {
 Q_UNUSED(pUrl);
 Q_UNUSED(pShow);
+    mHideExposureFiles.insert(pUrl, pShow);
 /*---ISSUE908---
     // Show the exposure files for the given exposure
 
@@ -351,6 +356,10 @@ Q_UNUSED(pShow);
         ulElement.setStyleProperty("display", "none");
     }
 */
+    // Update our tool tip (in case the user move the mouse but still remains
+    // above the show/hide button)
+
+    linkHovered(PmrScheme+"://"+ShowExposureFilesAction+"/"+pUrl);
 }
 
 //==============================================================================
@@ -379,21 +388,14 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked(const QString &pLink)
 
         if (!action.compare(CloneWorkspaceAction, Qt::CaseInsensitive)) {
             emit cloneWorkspaceRequested(pmrUrl);
-        } else {
+        } else if (!action.compare(ShowExposureFilesAction, Qt::CaseInsensitive)) {
             // Show/hide exposure files, if we have them, or let people know
             // that we want to show them
 
-/*---ISSUE908---
-            int id = mExposureUrlId.value(pmrUrl);
-
-            QWebElement documentElement = page()->mainFrame()->documentElement();
-            QWebElement ulElement = documentElement.findFirst(QString("ul[id=exposureFiles_%1]").arg(id));
-
-            if (ulElement.firstChild().isNull())
+            if (!mHaveExposureFiles.value(pmrUrl))
                 emit showExposureFilesRequested(pmrUrl);
             else
-                showExposureFiles(pmrUrl, documentElement.findFirst(QString("img[id=exposure_%1]").arg(id)).hasClass("button"));
-*/
+                showExposureFiles(pmrUrl, !mHideExposureFiles.value(pmrUrl));
         }
     } else {
         // Open an exposure link in the user's browser or ask for an exposure
@@ -424,7 +426,7 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
         if (!url.host().compare(CloneWorkspaceAction, Qt::CaseInsensitive)) {
             linkToolTip = tr("Clone Workspace");
         } else {
-            if (mHideExposureFiles.value(url.path()))
+            if (!mHideExposureFiles.value(Core::urlArguments(url)))
                 linkToolTip = tr("Show Exposure Files");
             else
                 linkToolTip = tr("Hide Exposure Files");
