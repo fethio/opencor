@@ -381,14 +381,10 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked(const QString &pLink)
         }
     } else {
         // Open an exposure link in the user's browser or ask for an exposure
-        // file to be opened in OpenCOR
+        // file to be opened in OpenCOR (this will be done automatically thanks
+        // to our OpenCOR URL scheme)
 
-/*---ISSUE908---
-        if (element.parent().hasClass("exposureFile"))
-            emit openExposureFileRequested(pLink);
-        else
-*/
-            QDesktopServices::openUrl(pLink);
+        QDesktopServices::openUrl(pLink);
     }
 }
 
