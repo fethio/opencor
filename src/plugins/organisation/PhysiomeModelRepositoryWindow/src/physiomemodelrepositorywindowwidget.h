@@ -112,7 +112,7 @@ private:
     QMap<QString, bool> mHaveExposureFiles;
     QMap<QString, bool> mHideExposureFiles;
 
-    QString mExposureUrl;
+    QString mExposureOrExposureFileUrl;
 
     QString message() const;
 

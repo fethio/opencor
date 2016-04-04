@@ -93,7 +93,7 @@ PhysiomeModelRepositoryWindowWidget::PhysiomeModelRepositoryWindowWidget(QWidget
     mExposureUrls(QStringList()),
     mHaveExposureFiles(QMap<QString, bool>()),
     mHideExposureFiles(QMap<QString, bool>()),
-    mExposureUrl(QString())
+    mExposureOrExposureFileUrl(QString())
 {
     // Set up the GUI
 
@@ -345,9 +345,9 @@ void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
 
 void PhysiomeModelRepositoryWindowWidget::on_actionCopy_triggered()
 {
-    // Copy the URL of the exposure to the clipboard
+    // Copy the URL of the exposure or exposure file to the clipboard
 
-    QApplication::clipboard()->setText(mExposureUrl);
+    QApplication::clipboard()->setText(mExposureOrExposureFileUrl);
 }
 
 //==============================================================================
@@ -392,14 +392,14 @@ void PhysiomeModelRepositoryWindowWidget::linkClicked(const QString &pLink)
 
 void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
 {
-    // Update mExposureUrl and our tool tip based on whether we are hovering a
-    // text or button link
+    // Update mExposureOrExposureFileUrl and our tool tip based on whether we
+    // are hovering a text or button link
 
     QString linkToolTip = QString();
     QUrl url = pLink;
 
     if (!url.scheme().compare(PmrScheme)) {
-        mExposureUrl = QString();
+        mExposureOrExposureFileUrl = QString();
 
         if (!url.host().compare(CloneWorkspaceAction, Qt::CaseInsensitive)) {
             linkToolTip = tr("Clone Workspace");
@@ -410,7 +410,7 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
                 linkToolTip = tr("Hide Exposure Files");
         }
     } else if (!pLink.isEmpty()) {
-        mExposureUrl = pLink;
+        mExposureOrExposureFileUrl = pLink;
 
         if (mExposureUrls.contains(pLink))
             linkToolTip = tr("Browse Exposure");
@@ -425,9 +425,10 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
 
 void PhysiomeModelRepositoryWindowWidget::showCustomContextMenu()
 {
-    // Show our context menu to allow the copying of the exposure URL
+    // Show our context menu to allow the copying of the exposure URL or
+    // exposure file URL
 
-    if (!mExposureUrl.isEmpty())
+    if (!mExposureOrExposureFileUrl.isEmpty())
         mContextMenu->exec(QCursor::pos());
 }
 
