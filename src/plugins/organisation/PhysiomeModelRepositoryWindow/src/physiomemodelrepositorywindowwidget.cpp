@@ -315,7 +315,7 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 
     foreach (const QString &exposureFile, pExposureFiles) {
         exposureFiles += QString("%1[\"%2\", \"%3\"]").arg(exposureFiles.isEmpty()?QString():", ",
-                                                           "opencor://openFile"+exposureFile,
+                                                           "opencor://openFile/"+exposureFile,
                                                            QString(exposureFile).remove(FilePathRegEx));
     }
 
