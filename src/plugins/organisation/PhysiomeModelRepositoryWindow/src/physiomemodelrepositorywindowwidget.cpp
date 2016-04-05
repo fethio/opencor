@@ -395,8 +395,8 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
     // Update mExposureOrExposureFileUrl and our tool tip based on whether we
     // are hovering a text or button link
 
-    QString linkToolTip = QString();
     QUrl url = pLink;
+    QString linkToolTip;
 
     if (!url.scheme().compare(PmrScheme)) {
         mExposureOrExposureFileUrl = QString();
@@ -416,6 +416,10 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
             linkToolTip = tr("Browse Exposure");
         else
             linkToolTip = tr("Open Exposure File");
+    } else {
+        mExposureOrExposureFileUrl = QString();
+
+        linkToolTip = QString();
     }
 
     setLinkToolTip(linkToolTip);
