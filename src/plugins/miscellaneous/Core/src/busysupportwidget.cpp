@@ -27,9 +27,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QMainWindow>
-#include <QRect>
 
 //==============================================================================
 
@@ -61,11 +59,11 @@ void BusySupportWidget::showBusyWidget(QWidget *pParent, const bool &pGlobal,
 
     hideBusyWidget();
 
-    // Create and show our new busy widget centered
+    // Create and show our new busy widget resized
 
     mBusyWidget = new BusyWidget(pParent, pGlobal, pProgress);
 
-    centerBusyWidget();
+    resizeBusyWidget();
 
     // Disable our parent widget (or OpenCOR itself in case our parent is the
     // central widget), if any
@@ -117,21 +115,16 @@ void BusySupportWidget::hideBusyWidget()
 
 //==============================================================================
 
-void BusySupportWidget::centerBusyWidget()
+void BusySupportWidget::resizeBusyWidget()
 {
     // Make sure that we have a busy widget
 
     if (!mBusyWidget)
         return;
 
-    // Center our busy widget
+    // Resize our busy widget
 
-    QRect desktopGeometry = qApp->desktop()->availableGeometry();
-    int parentWidth = mBusyWidget->parentWidget()?mBusyWidget->parentWidget()->width():desktopGeometry.width();
-    int parentHeight = mBusyWidget->parentWidget()?mBusyWidget->parentWidget()->height():desktopGeometry.height();
-
-    mBusyWidget->move(0.5*(parentWidth-mBusyWidget->width()),
-                      0.5*(parentHeight-mBusyWidget->height()));
+    mBusyWidget->resize();
 }
 
 //==============================================================================
