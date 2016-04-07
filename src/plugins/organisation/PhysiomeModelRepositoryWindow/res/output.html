@@ -156,6 +156,10 @@
                 document.getElementById("showExposureFilesButton_"+id).className = (show?"downButton":"button")+" open";
                 document.getElementById("exposureFiles_"+id).style.display = show?"inherit":"none";
             }
+
+            function updateShowExposureFilesButton(id, up) {
+                document.getElementById("showExposureFilesButton_"+id).className = (up?"button":"downButton")+" open";
+            }
         </script>
     </head>
     <body onload="initialize();" ondragstart="return false;" ondrop="return false;">

@@ -290,6 +290,10 @@ void PhysiomeModelRepositoryWindowWindow::doShowExposureFiles(const QString &pEx
                                   tr("No exposure file URL could be found for <a href=\"%1\">%2</a>.").arg(pExposureUrl, mExposureNames.value(pExposureUrl))
                                  +"<br/><br/>"+mInformationNoteMessage,
                                   QMessageBox::Ok);
+
+        // Ask the corresponding exposure file button to reset its type
+
+        mPhysiomeModelRepositoryWidget->resetShowExposureFilesButton(pExposureUrl);
     }
 }
 

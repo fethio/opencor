@@ -247,7 +247,7 @@ void PhysiomeModelRepositoryWindowWidget::initialize(const PhysiomeModelReposito
                      "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+CloneWorkspaceAction+"/"+exposureUrl+"\"><img class=\"button clone\"/></a>\n"
                      "                    </td>\n"
                      "                    <td class=\"button\">\n"
-                     "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+ShowExposureFilesAction+"/"+exposureUrl+"\"><img id=\"showExposureFilesButton_"+QString::number(i)+"\" class=\"button open\"/></a>\n"
+                     "                        <a class=\"noHover\" href=\""+PmrScheme+"://"+ShowExposureFilesAction+"/"+exposureUrl+"\"><img id=\"showExposureFilesButton_"+QString::number(i)+"\" class=\"button open\" onclick=\"updateShowExposureFilesButton("+QString::number(i)+", false);\"/></a>\n"
                      "                    </td>\n"
                      "                </tr>\n"
                      "            </tbody>\n"
@@ -339,6 +339,19 @@ void PhysiomeModelRepositoryWindowWidget::showExposureFiles(const QString &pUrl,
     // above the show/hide button)
 
     linkHovered(PmrScheme+"://"+ShowExposureFilesAction+"/"+pUrl);
+}
+
+//==============================================================================
+
+void PhysiomeModelRepositoryWindowWidget::resetShowExposureFilesButton(const QString &pUrl)
+{
+    // Remove the fact that we have some exposure files for the given URL
+
+    mHaveExposureFiles.remove(pUrl);
+
+    // Reset the button for showing our exposure files
+
+    page()->runJavaScript(QString("updateShowExposureFilesButton(%1, true);").arg(mExposureUrlId.value(pUrl)));
 }
 
 //==============================================================================

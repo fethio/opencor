@@ -88,6 +88,8 @@ public:
                           const QStringList &pExposureFiles);
     void showExposureFiles(const QString &pUrl, const bool &pShow = true);
 
+    void resetShowExposureFilesButton(const QString &pUrl);
+
 protected:
     virtual QSize sizeHint() const;
 
