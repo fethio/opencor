@@ -304,6 +304,10 @@ void PhysiomeModelRepositoryWindowWidget::filter(const QString &pFilter)
 
 //==============================================================================
 
+static const auto OpenExposureFileCommand = "opencor://openFile/";
+
+//==============================================================================
+
 void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
                                                            const QStringList &pExposureFiles)
 {
@@ -315,7 +319,7 @@ void PhysiomeModelRepositoryWindowWidget::addExposureFiles(const QString &pUrl,
 
     foreach (const QString &exposureFile, pExposureFiles) {
         exposureFiles += QString("%1[\"%2\", \"%3\"]").arg(exposureFiles.isEmpty()?QString():", ",
-                                                           "opencor://openFile/"+exposureFile,
+                                                           OpenExposureFileCommand+exposureFile,
                                                            QString(exposureFile).remove(FilePathRegEx));
     }
 
@@ -425,10 +429,13 @@ void PhysiomeModelRepositoryWindowWidget::linkHovered(const QString &pLink)
     } else if (!pLink.isEmpty()) {
         mExposureOrExposureFileUrl = pLink;
 
-        if (mExposureUrls.contains(pLink))
+        if (mExposureUrls.contains(pLink)) {
             linkToolTip = tr("Browse Exposure");
-        else
+        } else {
+            mExposureOrExposureFileUrl.remove(OpenExposureFileCommand, Qt::CaseInsensitive);
+
             linkToolTip = tr("Open Exposure File");
+        }
     } else {
         mExposureOrExposureFileUrl = QString();
 
