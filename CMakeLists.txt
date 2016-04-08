@@ -723,12 +723,10 @@ ELSE()
         # Note: indeed, on Travis CI, the PPA we use doesn't have those
         #       libraries...
 
-        MATH(EXPR ICU_MINOR_VERSION "${Qt5Widgets_VERSION_MINOR}-1")
-
         FOREACH(QT_FILE icudata icui18n icuuc)
             LINUX_DEPLOY_QT_LIBRARY(${QT_LIBRARY_DIR}
-                                    ${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.${Qt5Widgets_VERSION_MAJOR}${ICU_MINOR_VERSION}.1
-                                    ${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.${Qt5Widgets_VERSION_MAJOR}${ICU_MINOR_VERSION})
+                                    ${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.${Qt5Widgets_VERSION_MAJOR}${Qt5Widgets_VERSION_MINOR}.1
+                                    ${CMAKE_SHARED_LIBRARY_PREFIX}${QT_FILE}${CMAKE_SHARED_LIBRARY_SUFFIX}.${Qt5Widgets_VERSION_MAJOR}${Qt5Widgets_VERSION_MINOR})
         ENDFOREACH()
     ENDIF()
 
