@@ -1206,17 +1206,6 @@ MACRO(OS_X_DEPLOY_QT_WEB_ENGINE_PROCESS)
                                                                       ${DIRNAME}
                            WORKING_DIRECTORY ${LOCAL_QT_WEB_ENGINE_CORE_DIR})
     ENDFOREACH()
-
-    # Update the RPATH information for QtWebEngineProcess
-
-    SET(QT_WEB_ENGINE_PROCESS_FILENAME ${LOCAL_QT_WEB_ENGINE_CORE_VERSION_DIR}/Helpers/QtWebEngineProcess.app/Contents/MacOS/QtWebEngineProcess)
-
-    FOREACH(DEPENDENCY_NAME Core Gui Network Qml Quick WebChannel)
-        ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
-                           COMMAND install_name_tool -change @executable_path/../../../../../../../Qt${DEPENDENCY_NAME}.framework/Qt${DEPENDENCY_NAME}
-                                                             @executable_path/../../../../../../../Qt${DEPENDENCY_NAME}.framework/${VERSION_DIR}/Qt${DEPENDENCY_NAME}
-                                                             ${QT_WEB_ENGINE_PROCESS_FILENAME})
-    ENDFOREACH()
 ENDMACRO()
 
 #===============================================================================
