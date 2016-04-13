@@ -258,12 +258,12 @@ MACRO(INITIALISE_PROJECT)
         ADD_DEFINITIONS(-DENABLE_SAMPLES)
     ENDIF()
 
-    # On OS X, make sure that we support 10.7 and later, unless a specific
+    # On OS X, make sure that we support 10.8 and later, unless a specific
     # deployment target has been specified
 
     IF(APPLE)
         IF("${CMAKE_OSX_DEPLOYMENT_TARGET}" STREQUAL "")
-            SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.7)
+            SET(CMAKE_OSX_DEPLOYMENT_TARGET 10.8)
         ENDIF()
 
         IF(SHOW_INFORMATION_MESSAGE)
