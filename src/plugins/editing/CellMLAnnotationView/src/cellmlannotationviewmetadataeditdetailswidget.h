@@ -61,8 +61,13 @@ namespace OpenCOR {
 
 namespace Core {
     class UserMessageWidget;
-    class WebEngineViewWidget;
 }   // namespace Core
+
+//==============================================================================
+
+namespace WebViewer {
+    class WebEngineViewWidget;
+}   // namespace WebViewer
 
 //==============================================================================
 
@@ -154,7 +159,7 @@ private:
     Core::UserMessageWidget *mOutputMessage;
 
     QString mOutputOntologicalTermsTemplate;
-    Core::WebEngineViewWidget *mOutputOntologicalTerms;
+    WebViewer::WebEngineViewWidget *mOutputOntologicalTerms;
 
     InformationType mInformationType;
 

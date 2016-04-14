@@ -25,7 +25,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include "commonwidget.h"
-#include "webengineviewwidget.h"
+#include "webviewerwidget.h"
 
 //==============================================================================
 
@@ -81,7 +81,7 @@ private:
 
 //==============================================================================
 
-class HelpWindowWidget : public Core::WebEngineViewWidget,
+class HelpWindowWidget : public WebViewer::WebEngineViewWidget,
                          public Core::CommonWidget
 {
     Q_OBJECT

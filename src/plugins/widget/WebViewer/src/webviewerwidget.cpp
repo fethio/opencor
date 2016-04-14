@@ -16,10 +16,10 @@ specific language governing permissions and limitations under the License.
 *******************************************************************************/
 
 //==============================================================================
-// Web view widget
+// Web viewer widget
 //==============================================================================
 
-#include "webengineviewwidget.h"
+#include "webviewerwidget.h"
 
 //==============================================================================
 
@@ -32,7 +32,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 namespace OpenCOR {
-namespace Core {
+namespace WebViewer {
 
 //==============================================================================
 
@@ -186,7 +186,7 @@ bool WebEngineViewWidget::event(QEvent *pEvent)
 
 //==============================================================================
 
-}   // namespace Core
+}   // namespace WebViewer
 }   // namespace OpenCOR
 
 //==============================================================================

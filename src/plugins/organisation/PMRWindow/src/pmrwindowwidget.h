@@ -26,7 +26,7 @@ specific language governing permissions and limitations under the License.
 
 #include "commonwidget.h"
 #include "corecliutils.h"
-#include "webengineviewwidget.h"
+#include "webviewerwidget.h"
 
 //==============================================================================
 
@@ -66,7 +66,7 @@ typedef QList<PmrWindowExposure> PmrWindowExposures;
 
 //==============================================================================
 
-class PmrWindowWidget : public Core::WebEngineViewWidget,
+class PmrWindowWidget : public WebViewer::WebEngineViewWidget,
                         public Core::CommonWidget
 {
     Q_OBJECT

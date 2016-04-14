@@ -150,7 +150,7 @@ enum {
 
 HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
                                    const QUrl &pHomePage, QWidget *pParent) :
-    Core::WebEngineViewWidget(pParent),
+    WebViewer::WebEngineViewWidget(pParent),
     Core::CommonWidget(),
     mHelpEngine(pHelpEngine),
     mHomePage(pHomePage),

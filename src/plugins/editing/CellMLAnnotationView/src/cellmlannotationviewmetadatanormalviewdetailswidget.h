@@ -51,6 +51,11 @@ namespace OpenCOR {
 
 namespace Core {
     class UserMessageWidget;
+}   // namespace Core
+
+//==============================================================================
+
+namespace WebViewer {
     class WebEngineViewWidget;
 }   // namespace Core
 
@@ -109,7 +114,7 @@ private:
     Core::UserMessageWidget *mOutputMessage;
 
     QString mOutputOntologicalTermsTemplate;
-    Core::WebEngineViewWidget *mOutputOntologicalTerms;
+    WebViewer::WebEngineViewWidget *mOutputOntologicalTerms;
 
     ObjRef<iface::cellml_api::CellMLElement> mElement;
 

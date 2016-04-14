@@ -16,79 +16,37 @@ specific language governing permissions and limitations under the License.
 *******************************************************************************/
 
 //==============================================================================
-// Web view widget
+// Web viewer plugin
 //==============================================================================
 
-#ifndef WEBENGINEVIEWWIDGET_H
-#define WEBENGINEVIEWWIDGET_H
-
-//==============================================================================
-
-#include "coreglobal.h"
+#ifndef WEBVIEWERPLUGIN_H
+#define WEBVIEWERPLUGIN_H
 
 //==============================================================================
 
-#include <QString>
-#include <QWebEngineView>
+#include "plugininfo.h"
 
 //==============================================================================
 
 namespace OpenCOR {
-namespace Core {
+namespace WebViewer {
 
 //==============================================================================
 
-class WebEnginePage : public QWebEnginePage
+PLUGININFO_FUNC WebViewerPluginInfo();
+
+//==============================================================================
+
+class WebViewerPlugin : public QObject
 {
     Q_OBJECT
 
-public:
-    explicit WebEnginePage(QObject *pParent);
-
-    void setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes);
-
-protected:
-    virtual bool acceptNavigationRequest(const QUrl &pUrl, NavigationType pType,
-                                         bool pIsMainFrame);
-
-private:
-    QStringList mSupportedUrlSchemes;
-
-Q_SIGNALS:
-    void linkClicked(const QString &pLink);
+    Q_PLUGIN_METADATA(IID "OpenCOR.WebViewerPlugin" FILE "webviewerplugin.json")
 };
 
 //==============================================================================
 
-class CORE_EXPORT WebEngineViewWidget : public QWebEngineView
-{
-    Q_OBJECT
-
-public:
-    explicit WebEngineViewWidget(QWidget *pParent);
-
-    void setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes);
-
-    void setLinkToolTip(const QString &pLinkToolTip);
-
-    void setUrlSynchronously(const QUrl &pUrl);
-    void setHtmlSynchronously(const QString &pHtml,
-                              const QUrl &pBaseUrl = QUrl());
-
-protected:
-    virtual bool event(QEvent *pEvent);
-
-private:
-    WebEnginePage *mPage;
-
-    bool mResettingCursor;
-
-    QString mLinkToolTip;
-};
-
-//==============================================================================
-
-}   // namespace Core
+}   // namespace WebViewer
 }   // namespace OpenCOR
 
 //==============================================================================
