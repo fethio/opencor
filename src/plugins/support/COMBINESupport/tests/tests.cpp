@@ -59,13 +59,11 @@ void Tests::initTestCase()
     //       those warnings and, if anything, they just pollute our test output,
     //       so...
 
-    qInstallMessageHandler(dummyMessageHandler);
-
+qInstallMessageHandler(dummyMessageHandler);
     QXmlSchema schema;
+qInstallMessageHandler(0);
 
     Q_UNUSED(schema);
-
-    qInstallMessageHandler(0);
 
     // Create a simple COMBINE archive that contains various files
 
@@ -145,7 +143,9 @@ void Tests::basicTests()
     QString yetAnotherFileName = OpenCOR::Core::temporaryFileName();
 
     QVERIFY(otherCombineArchive.load());
+qInstallMessageHandler(dummyMessageHandler);
     QVERIFY(otherCombineArchive.isValid());
+qInstallMessageHandler(0);
     QVERIFY(otherCombineArchive.save(yetAnotherFileName));
 
     QByteArray otherFileContents;
@@ -205,7 +205,9 @@ void Tests::loadingErrorTests()
     combineArchive.setFileName(OpenCOR::fileName("src/plugins/support/COMBINESupport/tests/data/notvalidomex.omex"));
 
     QVERIFY(combineArchive.reload());
+qInstallMessageHandler(dummyMessageHandler);
     QVERIFY(!combineArchive.isValid());
+qInstallMessageHandler(0);
     QVERIFY(combineArchive.issues().count() == 1);
     QCOMPARE(combineArchive.issues().first().message(), QString("the manifest is not a valid OMEX file"));
 
@@ -214,7 +216,9 @@ void Tests::loadingErrorTests()
     combineArchive.setFileName(OpenCOR::fileName("src/plugins/support/COMBINESupport/tests/data/nonexistentfile.omex"));
 
     QVERIFY(combineArchive.reload());
+qInstallMessageHandler(dummyMessageHandler);
     QVERIFY(!combineArchive.isValid());
+qInstallMessageHandler(0);
     QVERIFY(combineArchive.issues().count() == 1);
     QCOMPARE(combineArchive.issues().first().message(), QString("<strong>nonexistentfile.txt</strong> could not be found"));
 
@@ -224,14 +228,16 @@ void Tests::loadingErrorTests()
     combineArchive.setFileName(OpenCOR::fileName("src/plugins/support/COMBINESupport/tests/data/nocombinearchivereference.omex"));
 
     QVERIFY(combineArchive.reload());
+qInstallMessageHandler(dummyMessageHandler);
     QVERIFY(!combineArchive.isValid());
+qInstallMessageHandler(0);
     QVERIFY(combineArchive.issues().count() == 1);
     QCOMPARE(combineArchive.issues().first().message(), QString("no reference to the COMBINE archive itself could be found"));
 }
 
 //==============================================================================
 
-QTEST_GUILESS_MAIN(Tests)
+QTEST_APPLESS_MAIN(Tests)
 
 //==============================================================================
 // End of file
