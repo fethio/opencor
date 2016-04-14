@@ -68,7 +68,6 @@ ADD_PLUGIN(Core
         src
     QT_MODULES
         Network
-        WebEngineWidgets
         Widgets
         Xml
         XmlPatterns
