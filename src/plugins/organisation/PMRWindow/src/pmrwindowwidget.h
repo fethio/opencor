@@ -66,7 +66,7 @@ typedef QList<PmrWindowExposure> PmrWindowExposures;
 
 //==============================================================================
 
-class PmrWindowWidget : public WebViewer::WebEngineViewWidget,
+class PmrWindowWidget : public WebViewer::WebViewerWidget,
                         public Core::CommonWidget
 {
     Q_OBJECT

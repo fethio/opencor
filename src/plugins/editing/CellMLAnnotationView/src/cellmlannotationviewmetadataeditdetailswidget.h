@@ -66,7 +66,7 @@ namespace Core {
 //==============================================================================
 
 namespace WebViewer {
-    class WebEngineViewWidget;
+    class WebViewerWidget;
 }   // namespace WebViewer
 
 //==============================================================================
@@ -159,7 +159,7 @@ private:
     Core::UserMessageWidget *mOutputMessage;
 
     QString mOutputOntologicalTermsTemplate;
-    WebViewer::WebEngineViewWidget *mOutputOntologicalTerms;
+    WebViewer::WebViewerWidget *mOutputOntologicalTerms;
 
     InformationType mInformationType;
 

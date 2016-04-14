@@ -80,7 +80,7 @@ QString PmrWindowExposure::name() const
 //==============================================================================
 
 PmrWindowWidget::PmrWindowWidget(QWidget *pParent) :
-    WebViewer::WebEngineViewWidget(pParent),
+    WebViewer::WebViewerWidget(pParent),
     Core::CommonWidget(),
     mGui(new Ui::PmrWindowWidget),
     mExposureNames(QStringList()),

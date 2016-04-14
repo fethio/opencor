@@ -114,7 +114,7 @@ CellmlAnnotationViewMetadataNormalViewDetailsWidget::CellmlAnnotationViewMetadat
 
     mOutputOntologicalTermsTemplate = fileContents;
 
-    mOutputOntologicalTerms = new WebViewer::WebEngineViewWidget(mOutput);
+    mOutputOntologicalTerms = new WebViewer::WebViewerWidget(mOutput);
 
     mOutputOntologicalTerms->setContextMenuPolicy(Qt::CustomContextMenu);
 

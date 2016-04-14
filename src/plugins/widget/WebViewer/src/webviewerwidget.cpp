@@ -36,7 +36,7 @@ namespace WebViewer {
 
 //==============================================================================
 
-WebEnginePage::WebEnginePage(QObject *pParent) :
+WebViewerPage::WebViewerPage(QObject *pParent) :
     QWebEnginePage(pParent),
     mSupportedUrlSchemes(QStringList())
 {
@@ -44,7 +44,7 @@ WebEnginePage::WebEnginePage(QObject *pParent) :
 
 //==============================================================================
 
-void WebEnginePage::setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes)
+void WebViewerPage::setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes)
 {
     // Set our supported URL schemes
 
@@ -53,7 +53,7 @@ void WebEnginePage::setSupportedUrlSchemes(const QStringList &pUrlSupportedSchem
 
 //==============================================================================
 
-bool WebEnginePage::acceptNavigationRequest(const QUrl &pUrl,
+bool WebViewerPage::acceptNavigationRequest(const QUrl &pUrl,
                                             NavigationType pType,
                                             bool pIsMainFrame)
 {
@@ -76,9 +76,9 @@ bool WebEnginePage::acceptNavigationRequest(const QUrl &pUrl,
 
 //==============================================================================
 
-WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
+WebViewerWidget::WebViewerWidget(QWidget *pParent) :
     QWebEngineView(pParent),
-    mPage(new WebEnginePage(this)),
+    mPage(new WebViewerPage(this)),
     mResettingCursor(false),
     mLinkToolTip(QString())
 {
@@ -94,7 +94,7 @@ WebEngineViewWidget::WebEngineViewWidget(QWidget *pParent) :
 
 //==============================================================================
 
-void WebEngineViewWidget::setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes)
+void WebViewerWidget::setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes)
 {
     // Set our supported URL schemes
 
@@ -103,7 +103,7 @@ void WebEngineViewWidget::setSupportedUrlSchemes(const QStringList &pUrlSupporte
 
 //==============================================================================
 
-void WebEngineViewWidget::setLinkToolTip(const QString &pLinkToolTip)
+void WebViewerWidget::setLinkToolTip(const QString &pLinkToolTip)
 {
     // Set our link tool tip
 
@@ -112,7 +112,7 @@ void WebEngineViewWidget::setLinkToolTip(const QString &pLinkToolTip)
 
 //==============================================================================
 
-void WebEngineViewWidget::setUrlSynchronously(const QUrl &pUrl)
+void WebViewerWidget::setUrlSynchronously(const QUrl &pUrl)
 {
     // Set the given URL synchronously
 
@@ -131,8 +131,8 @@ void WebEngineViewWidget::setUrlSynchronously(const QUrl &pUrl)
 
 //==============================================================================
 
-void WebEngineViewWidget::setHtmlSynchronously(const QString &pHtml,
-                                               const QUrl &pBaseUrl)
+void WebViewerWidget::setHtmlSynchronously(const QString &pHtml,
+                                           const QUrl &pBaseUrl)
 {
     // Set the given HTML code synchronously
 
@@ -151,7 +151,7 @@ void WebEngineViewWidget::setHtmlSynchronously(const QString &pHtml,
 
 //==============================================================================
 
-bool WebEngineViewWidget::event(QEvent *pEvent)
+bool WebViewerWidget::event(QEvent *pEvent)
 {
     // Override the change of the cursor and tool tip when hovering a link
 

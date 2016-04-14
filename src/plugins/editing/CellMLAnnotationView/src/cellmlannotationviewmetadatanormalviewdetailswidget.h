@@ -56,7 +56,7 @@ namespace Core {
 //==============================================================================
 
 namespace WebViewer {
-    class WebEngineViewWidget;
+    class WebViewerWidget;
 }   // namespace Core
 
 //==============================================================================
@@ -114,7 +114,7 @@ private:
     Core::UserMessageWidget *mOutputMessage;
 
     QString mOutputOntologicalTermsTemplate;
-    WebViewer::WebEngineViewWidget *mOutputOntologicalTerms;
+    WebViewer::WebViewerWidget *mOutputOntologicalTerms;
 
     ObjRef<iface::cellml_api::CellMLElement> mElement;
 

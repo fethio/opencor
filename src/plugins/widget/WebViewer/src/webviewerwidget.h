@@ -38,12 +38,12 @@ namespace WebViewer {
 
 //==============================================================================
 
-class WebEnginePage : public QWebEnginePage
+class WebViewerPage : public QWebEnginePage
 {
     Q_OBJECT
 
 public:
-    explicit WebEnginePage(QObject *pParent);
+    explicit WebViewerPage(QObject *pParent);
 
     void setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes);
 
@@ -60,12 +60,12 @@ Q_SIGNALS:
 
 //==============================================================================
 
-class WEBVIEWER_EXPORT WebEngineViewWidget : public QWebEngineView
+class WEBVIEWER_EXPORT WebViewerWidget : public QWebEngineView
 {
     Q_OBJECT
 
 public:
-    explicit WebEngineViewWidget(QWidget *pParent);
+    explicit WebViewerWidget(QWidget *pParent);
 
     void setSupportedUrlSchemes(const QStringList &pUrlSupportedSchemes);
 
@@ -79,7 +79,7 @@ protected:
     virtual bool event(QEvent *pEvent);
 
 private:
-    WebEnginePage *mPage;
+    WebViewerPage *mPage;
 
     bool mResettingCursor;
 
