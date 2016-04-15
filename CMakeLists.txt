@@ -433,8 +433,8 @@ IF(WIN32)
     )
 
     TARGET_LINK_LIBRARIES(${WINDOWS_CLI_PROJECT_NAME}
-        Qt5::Core
         Qt5::Network
+        Qt5::Widgets
     )
 ENDIF()
 
