@@ -5,7 +5,8 @@ dist: trusty
 
 os:
   - linux
-  - osx
+#---ISSUE908---
+#  - osx
 
 env:
   - CONFIG=Release
@@ -36,13 +37,14 @@ script:
        fi
     && make -j 3
     && cd ..
-    && if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-         build/bin/runtests
-         ;
-       else
-         build/OpenCOR.app/Contents/MacOS/runtests
-         ;
-       fi
+#---ISSUE908---
+#    && if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+#         build/bin/runtests
+#         ;
+#       else
+#         build/OpenCOR.app/Contents/MacOS/runtests
+#         ;
+#       fi
 
 notifications:
   email: team@opencor.ws
