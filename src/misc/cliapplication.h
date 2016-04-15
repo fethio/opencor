@@ -33,6 +33,7 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 class QCoreApplication;
+class QOpenGLContext;
 
 //==============================================================================
 
@@ -55,6 +56,8 @@ private:
     PluginManager *mPluginManager;
 
     Plugins mLoadedCliPlugins;
+
+    QOpenGLContext *mOpenglContext;
 
     void loadPlugins();
 

@@ -35,7 +35,12 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QCoreApplication>
+#include <QOpenGLContext>
 #include <QSettings>
+
+//==============================================================================
+
+Q_GUI_EXPORT void qt_gl_set_global_share_context(QOpenGLContext *pContext);
 
 //==============================================================================
 
@@ -47,15 +52,39 @@ CliApplication::CliApplication() :
     mPluginManager(0),
     mLoadedCliPlugins(Plugins())
 {
+    // Create a dummy OpenGL context object and set it as our global OpenGL
+    // context object
+    // Note: upon initialisation, Qt WebEngine creates an OpenGL context object
+    //       and then creates the OpenGL context itself by calling
+    //       QOpenGLContext::create() (see QtWebEngineCore::initialize() in
+    //       [QtSources]/qtwebengine/src/webengine/api/qtwebengineglobal.cpp).
+    //       However, that second step requires having a GUI application. So, to
+    //       do all of this with a CLI application will not work (read: it will
+    //       crash OpenCOR), hence we here create our own OpenGL context object
+    //       (but not its corresponding OpenGL context, obviously) and set it as
+    //       our global OpenGL context object since Qt WebEngine will only
+    //       create an OpenGL context object if there isn't already a global one
+    //       available...
+
+    mOpenglContext = new QOpenGLContext();
+
+    qt_gl_set_global_share_context(mOpenglContext);
 }
 
 //==============================================================================
 
 CliApplication::~CliApplication()
 {
+    // Reset our global OpenGL context object
+    // Note: we need to do this so that, after trying OpenCOR as a CLI
+    //       application, we can run it as a GUI application...
+
+    qt_gl_set_global_share_context(0);
+
     // Delete some internal objects
 
     delete mPluginManager;
+    delete mOpenglContext;
 }
 
 //==============================================================================
