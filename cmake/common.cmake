@@ -90,16 +90,7 @@ MACRO(INITIALISE_PROJECT)
     #       file can properly refer to our embedded copy of the Qt libraries
     #       (see OS_X_CLEAN_UP_FILE_WITH_QT_LIBRARIES())...
 
-    IF(APPLE)
-        IF(ENABLE_TRAVIS_CI)
-            SET(QT_DBUS)
-            # Note: the Cocoa plugin requires QtDBus, but it is not part of the
-            #       Qt Brew formula, which is actually fine since we don't need
-            #       to run the GUI version of OpenCOR...
-        ELSE()
-            SET(QT_DBUS QtDBus)
-        ENDIF()
-
+    IF(APPLE AND NOT ENABLE_TRAVIS_CI)
         IF(ENABLE_TESTS)
             SET(QT_TEST QtTest)
         ELSE()
@@ -110,7 +101,7 @@ MACRO(INITIALISE_PROJECT)
             QtCLucene
             QtConcurrent
             QtCore
-            ${QT_DBUS}
+            QtDBus
             QtGui
             QtHelp
             QtMacExtras
