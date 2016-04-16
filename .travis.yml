@@ -4,12 +4,12 @@ sudo: required
 dist: trusty
 
 os:
-  - linux
+#  - linux
   - osx
 
 env:
   - CONFIG=Release
-  - CONFIG=Debug
+#  - CONFIG=Debug
 
 install:
   - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
@@ -40,6 +40,8 @@ script:
          build/bin/runtests
          ;
        else
+         ./run -c CellMLTools::help
+         &&
          build/OpenCOR.app/Contents/MacOS/runtests
          ;
        fi
