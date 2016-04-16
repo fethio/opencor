@@ -307,10 +307,8 @@ MACRO(INITIALISE_PROJECT)
 
         IF(ENABLE_TRAVIS_CI)
             SET(CMAKE_INSTALL_RPATH "/usr/local/opt/qt5/Frameworks;@executable_path/../Frameworks;@executable_path/../PlugIns/${CMAKE_PROJECT_NAME}")
-            # Note: QtDBus is not part of the Qt Brew formula, so we don't want
-            #       to risk getting messages about two frameworks being
-            #       available and that one of them will be used, but that we
-            #       don't know which one...
+            # Note: on Travis CI, we don't deploy the Qt frameworks hence our
+            #       RPATH refers to the system's Qt frameworks instead...
         ELSE()
             SET(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../PlugIns/${CMAKE_PROJECT_NAME}")
         ENDIF()
