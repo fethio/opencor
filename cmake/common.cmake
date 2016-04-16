@@ -94,8 +94,8 @@ MACRO(INITIALISE_PROJECT)
         IF(ENABLE_TRAVIS_CI)
             SET(QT_DBUS)
             # Note: the Cocoa plugin requires QtDBus, but it is not part of the
-            #       default Qt Brew formula, which is actually fine since we
-            #       don't need to run the GUI version of OpenCOR...
+            #       Qt Brew formula, which is actually fine since we don't need
+            #       to run the GUI version of OpenCOR...
         ELSE()
             SET(QT_DBUS QtDBus)
         ENDIF()
@@ -317,7 +317,15 @@ MACRO(INITIALISE_PROJECT)
     IF(APPLE)
         SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
-        SET(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../PlugIns/${CMAKE_PROJECT_NAME}")
+        IF(ENABLE_TRAVIS_CI)
+            SET(CMAKE_INSTALL_RPATH "/usr/local/opt/qt5/Frameworks;@executable_path/../PlugIns/${CMAKE_PROJECT_NAME}")
+            # Note: QtDBus is not part of the Qt Brew formula, so we don't want
+            #       to risk getting messages about two frameworks being
+            #       available and that one of them will be used, but that we
+            #       don't know which one...
+        ELSE()
+            SET(CMAKE_INSTALL_RPATH "@executable_path/../Frameworks;@executable_path/../PlugIns/${CMAKE_PROJECT_NAME}")
+        ENDIF()
     ELSEIF(NOT WIN32)
         SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN/../plugins/${CMAKE_PROJECT_NAME}")
     ENDIF()
