@@ -479,7 +479,9 @@ IF(APPLE)
 
     # Deploy our Qt libraries
 
-    OS_X_DEPLOY_QT_LIBRARIES(${OS_X_QT_LIBRARIES})
+    IF(NOT ENABLE_TRAVIS_CI)
+        OS_X_DEPLOY_QT_LIBRARIES(${OS_X_QT_LIBRARIES})
+    ENDIF()
 
     # Deploy some plugins
 

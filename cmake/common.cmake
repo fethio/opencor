@@ -86,11 +86,8 @@ MACRO(INITIALISE_PROJECT)
     SET(QT_VERSION_PATCH ${Qt5Widgets_VERSION_PATCH})
 
     # On OS X, keep track of the Qt libraries against which we need to link
-    # Note: this is needed, among other things, to make sure that any Qt-based
-    #       file can properly refer to our embedded copy of the Qt libraries
-    #       (see OS_X_CLEAN_UP_FILE_WITH_QT_LIBRARIES())...
 
-    IF(APPLE AND NOT ENABLE_TRAVIS_CI)
+    IF(APPLE)
         IF(ENABLE_TESTS)
             SET(QT_TEST QtTest)
         ELSE()
@@ -309,7 +306,7 @@ MACRO(INITIALISE_PROJECT)
         SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 
         IF(ENABLE_TRAVIS_CI)
-            SET(CMAKE_INSTALL_RPATH "/usr/local/opt/qt5/Frameworks;@executable_path/../PlugIns/${CMAKE_PROJECT_NAME}")
+            SET(CMAKE_INSTALL_RPATH "/usr/local/opt/qt5/Frameworks;@executable_path/../Frameworks;@executable_path/../PlugIns/${CMAKE_PROJECT_NAME}")
             # Note: QtDBus is not part of the Qt Brew formula, so we don't want
             #       to risk getting messages about two frameworks being
             #       available and that one of them will be used, but that we
