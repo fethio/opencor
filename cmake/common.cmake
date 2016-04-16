@@ -98,7 +98,7 @@ MACRO(INITIALISE_PROJECT)
             QtCLucene
             QtConcurrent
             QtCore
-#            QtDBus
+            QtDBus
             QtGui
             QtHelp
             QtMacExtras
