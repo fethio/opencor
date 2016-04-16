@@ -22,7 +22,7 @@ install:
       && brew unlink cmake
       && brew install cmake qt5
       && chmod -R 755 /usr/local/opt/qt5/*
-      && ls -alR /usr/local/opt/qt5/../Cellar/qt5/5.6.0
+      && ls -alR /usr/local/opt/Cellar/qt5/5.6.0
       ;
     fi
 
