@@ -1902,10 +1902,10 @@ void CentralWidget::fileChanged(const QString &pFileName,
 
         if (QMessageBox::question(mainWindow(), tr("File Modified"),
                                   pFileChanged?
-                                      tr("<strong>%1</strong> has been modified. Do you want to reload it?").arg(pFileName):
                                       pDependenciesChanged?
-                                          tr("<strong>%1</strong> has had one or several of its dependencies modified. Do you want to reload it?").arg(pFileName):
-                                          tr("<strong>%1</strong> and/or one or several of its dependencies has been modified. Do you want to reload it?").arg(pFileName),
+                                          tr("<strong>%1</strong> and one or several of its dependencies has been modified. Do you want to reload it?").arg(pFileName):
+                                          tr("<strong>%1</strong> has been modified. Do you want to reload it?").arg(pFileName):
+                                      tr("<strong>%1</strong> has had one or several of its dependencies modified. Do you want to reload it?").arg(pFileName),
                                   QMessageBox::Yes|QMessageBox::No,
                                   QMessageBox::Yes) == QMessageBox::Yes) {
             // The user wants to reload the file
@@ -1935,11 +1935,17 @@ void CentralWidget::fileChanged(const QString &pFileName,
                     break;
                 }
             }
-        } else {
+        } else if (pFileChanged) {
             // The user doesn't want to reload the file, so consider it as
             // modified
 
             fileManagerInstance->setModified(pFileName, true);
+        } else {
+            // The user doesn't want to reload the file (after one or several of
+            // its dependencies has changed) , so consider its dependencies as
+            // modified
+
+            fileManagerInstance->setDependenciesModified(pFileName, true);
         }
     }
 }
