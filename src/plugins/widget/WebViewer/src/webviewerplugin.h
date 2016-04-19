@@ -19,8 +19,7 @@ specific language governing permissions and limitations under the License.
 // Web viewer plugin
 //==============================================================================
 
-#ifndef WEBVIEWERPLUGIN_H
-#define WEBVIEWERPLUGIN_H
+#pragma once
 
 //==============================================================================
 
@@ -48,10 +47,6 @@ class WebViewerPlugin : public QObject
 
 }   // namespace WebViewer
 }   // namespace OpenCOR
-
-//==============================================================================
-
-#endif
 
 //==============================================================================
 // End of file
