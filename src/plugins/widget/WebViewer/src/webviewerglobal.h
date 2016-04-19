@@ -19,8 +19,7 @@ specific language governing permissions and limitations under the License.
 // Web viewer global
 //==============================================================================
 
-#ifndef WEBVIEWERGLOBAL_H
-#define WEBVIEWERGLOBAL_H
+#pragma once
 
 //==============================================================================
 
@@ -36,7 +35,6 @@ specific language governing permissions and limitations under the License.
 
 //==============================================================================
 
-#endif
 
 //==============================================================================
 // End of file
