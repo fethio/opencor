@@ -63,8 +63,7 @@ MACRO(INITIALISE_PROJECT)
     # Required packages
 
     SET(REQUIRED_QT_MODULES
-        Network
-        Widgets
+        WebEngineWidgets
     )
 
     FOREACH(REQUIRED_QT_MODULE ${REQUIRED_QT_MODULES})

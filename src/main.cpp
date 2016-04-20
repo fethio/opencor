@@ -34,6 +34,7 @@ specific language governing permissions and limitations under the License.
 #include <QProcess>
 #include <QSettings>
 #include <QVariant>
+#include <QWebEngineProfile>
 
 //==============================================================================
 
@@ -224,6 +225,13 @@ int main(int pArgC, char *pArgV[])
 
     splashScreen->show();
 #endif
+
+    // Retrieve Qt WebEngine's default profile
+    // Note: we are not interested in it, but it's a trick to ensure that Qt
+    //       WebEngine is linked to the OpenCOR executable. Indeed, this is
+    //       needed if we want OpenCOR to work in a virtual machine...
+
+    QWebEngineProfile::defaultProfile();
 
     // Create our main window
 
