@@ -48,7 +48,7 @@ namespace OpenCOR {
 
 //==============================================================================
 
-CliApplication::CliApplication() :
+CliApplication::CliApplication(int &pArgC, char **pArgV) :
     mPluginManager(0),
     mLoadedCliPlugins(Plugins())
 {
@@ -69,19 +69,27 @@ CliApplication::CliApplication() :
     mOpenglContext = new QOpenGLContext();
 
     qt_gl_set_global_share_context(mOpenglContext);
+
+    // Create our CLI application
+
+    mCliApplication = new QCoreApplication(pArgC, pArgV);
 }
 
 //==============================================================================
 
 CliApplication::~CliApplication()
 {
+    // Delete some internal objects
+
+    delete mCliApplication;
+
     // Reset our global OpenGL context object
     // Note: we need to do this so that, after trying OpenCOR as a CLI
     //       application, we can run it as a GUI application...
 
     qt_gl_set_global_share_context(0);
 
-    // Delete some internal objects
+    // Delete some further internal objects
 
     delete mPluginManager;
     delete mOpenglContext;
