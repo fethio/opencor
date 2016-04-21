@@ -79,6 +79,8 @@ MACRO(INITIALISE_PROJECT)
     SET(QT_BINARY_DIR ${_qt5Widgets_install_prefix}/bin)
     SET(QT_LIBRARY_DIR ${_qt5Widgets_install_prefix}/lib)
     SET(QT_PLUGINS_DIR ${_qt5Widgets_install_prefix}/plugins)
+    SET(QT_RESOURCES_DIR ${_qt5Widgets_install_prefix}/resources)
+    SET(QT_WEBENGINE_TRANSLATIONS_DIR ${_qt5Widgets_install_prefix}/translations/qtwebengine_locales)
     SET(QT_VERSION ${Qt5Widgets_VERSION})
     SET(QT_VERSION_MAJOR ${Qt5Widgets_VERSION_MAJOR})
     SET(QT_VERSION_MINOR ${Qt5Widgets_VERSION_MINOR})
@@ -1003,58 +1005,52 @@ ENDMACRO()
 
 #===============================================================================
 
-MACRO(WINDOWS_DEPLOY_OPENGL_DLLS)
-    # We use OpenGL through ANGLE, which requires deploying the following DLLs
-    
-    FOREACH(OPENGL_DLL_NAME D3Dcompiler_47 libEGL libGLESV2 opengl32sw)
-        SET(OPENGL_DLL_RELEASE_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${OPENGL_DLL_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
-        SET(OPENGL_DLL_DEBUG_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${OPENGL_DLL_NAME}d${CMAKE_SHARED_LIBRARY_SUFFIX})
-
-        IF(NOT EXISTS ${QT_BINARY_DIR}/${OPENGL_DLL_DEBUG_FILENAME})
-            # No debug version of the OpenGL DLL exists, so use its release 
-            # version instead
-
-            SET(OPENGL_DLL_DEBUG_FILENAME ${OPENGL_DLL_RELEASE_FILENAME})
-        ENDIF()
-
-        IF(RELEASE_MODE)
-            SET(OPENGL_DLL_FILENAME ${OPENGL_DLL_RELEASE_FILENAME})
-        ELSE()
-            SET(OPENGL_DLL_FILENAME ${OPENGL_DLL_DEBUG_FILENAME})
-        ENDIF()
-
-        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${OPENGL_DLL_FILENAME})
-        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} bin ${OPENGL_DLL_FILENAME})
-
-        # Deploy the OpenGL DLL
-
-        INSTALL(FILES ${QT_BINARY_DIR}/${OPENGL_DLL_RELEASE_FILENAME}
-                DESTINATION bin)
-    ENDFOREACH()
-ENDMACRO()
-
-#===============================================================================
-
 MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
 #---ISSUE908--- TO BE DONE...
 
-    # OpenGL is a prerequisite to Qt WebEngine, so deploy its DLLs
-    
-    WINDOWS_DEPLOY_OPENGL_DLLS()
-
-    # Copy the the Qt WebEngine process to both the build and build/bin folders,
-    # so we can test things both from within Qt Creator and without first having
-    # to deploy OpenCOR
+    # Copy (and deploy) the Qt WebEngine process to both the build and build/bin
+    # folders, so we can test things both from within Qt Creator and without
+    # first having to deploy OpenCOR
 
     SET(QT_WEB_ENGINE_PROCESS_FILENAME QtWebEngineProcess.exe)
 
     COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${QT_WEB_ENGINE_PROCESS_FILENAME})
     COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} bin ${QT_WEB_ENGINE_PROCESS_FILENAME})
 
-    # Deploy the Qt WebEngine process
-
     INSTALL(FILES ${QT_BINARY_DIR}/${QT_WEB_ENGINE_PROCESS_FILENAME}
             DESTINATION bin)
+
+    # Do the same with Qt WebEngine's resources
+
+    SET(RESOURCES_DIR resources)
+
+    FILE(GLOB RESOURCE_FILEPATHS ${QT_RESOURCES_DIR}/*.*)
+
+    FOREACH(RESOURCE_FILEPATH ${RESOURCE_FILEPATHS})
+        GET_FILENAME_COMPONENT(RESOURCE_FILENAME ${RESOURCE_FILEPATH} NAME)
+
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_RESOURCES_DIR} ./${RESOURCES_DIR} ${RESOURCE_FILENAME})
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_RESOURCES_DIR} bin/${RESOURCES_DIR} ${RESOURCE_FILENAME})
+
+        INSTALL(FILES ${QT_RESOURCES_DIR}/${RESOURCE_FILENAME}
+                DESTINATION bin/${RESOURCES_DIR})
+    ENDFOREACH()
+
+    # Do the same with Qt WebEngine's translations
+
+    SET(WEBENGINE_TRANSLATIONS_DIR translations/qtwebengine_locales)
+
+    FILE(GLOB TRANSLATION_FILEPATHS ${QT_WEBENGINE_TRANSLATIONS_DIR}/*.*)
+
+    FOREACH(TRANSLATION_FILEPATH ${TRANSLATION_FILEPATHS})
+        GET_FILENAME_COMPONENT(TRANSLATION_FILENAME ${TRANSLATION_FILEPATH} NAME)
+
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_WEBENGINE_TRANSLATIONS_DIR} ./${WEBENGINE_TRANSLATIONS_DIR} ${TRANSLATION_FILENAME})
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_WEBENGINE_TRANSLATIONS_DIR} bin/${WEBENGINE_TRANSLATIONS_DIR} ${TRANSLATION_FILENAME})
+
+        INSTALL(FILES ${QT_WEBENGINE_TRANSLATIONS_DIR}/${TRANSLATION_FILENAME}
+                DESTINATION bin/${WEBENGINE_TRANSLATIONS_DIR})
+    ENDFOREACH()
 ENDMACRO()
 
 #===============================================================================
