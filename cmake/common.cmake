@@ -1003,8 +1003,45 @@ ENDMACRO()
 
 #===============================================================================
 
+MACRO(WINDOWS_DEPLOY_OPENGL_DLLS)
+    # We use OpenGL through ANGLE, which requires deploying the following DLLs
+    
+    FOREACH(OPENGL_DLL_NAME D3Dcompiler_47 libEGL libGLESV2 opengl32sw)
+        SET(OPENGL_DLL_RELEASE_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${OPENGL_DLL_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
+        SET(OPENGL_DLL_DEBUG_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${OPENGL_DLL_NAME}d${CMAKE_SHARED_LIBRARY_SUFFIX})
+
+        IF(NOT EXISTS ${QT_BINARY_DIR}/${OPENGL_DLL_DEBUG_FILENAME})
+            # No debug version of the OpenGL DLL exists, so use its release 
+            # version instead
+
+            SET(OPENGL_DLL_DEBUG_FILENAME ${OPENGL_DLL_RELEASE_FILENAME})
+        ENDIF()
+
+        IF(RELEASE_MODE)
+            SET(OPENGL_DLL_FILENAME ${OPENGL_DLL_RELEASE_FILENAME})
+        ELSE()
+            SET(OPENGL_DLL_FILENAME ${OPENGL_DLL_DEBUG_FILENAME})
+        ENDIF()
+
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${OPENGL_DLL_FILENAME})
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} bin ${OPENGL_DLL_FILENAME})
+
+        # Deploy the OpenGL DLL
+
+        INSTALL(FILES ${QT_BINARY_DIR}/${OPENGL_DLL_RELEASE_FILENAME}
+                DESTINATION bin)
+    ENDFOREACH()
+ENDMACRO()
+
+#===============================================================================
+
 MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
 #---ISSUE908--- TO BE DONE...
+
+    # OpenGL is a prerequisite to Qt WebEngine, so deploy its DLLs
+    
+    WINDOWS_DEPLOY_OPENGL_DLLS()
+
     # Copy the the Qt WebEngine process to both the build and build/bin folders,
     # so we can test things both from within Qt Creator and without first having
     # to deploy OpenCOR
