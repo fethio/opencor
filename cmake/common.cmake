@@ -969,12 +969,34 @@ MACRO(WINDOWS_DEPLOY_QT_LIBRARIES)
             SET(LIBRARY_FILENAME ${LIBRARY_DEBUG_FILENAME})
         ENDIF()
 
-        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${LIBRARY_FILENAME})
-        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} bin ${LIBRARY_FILENAME})
+        IF("${LIBRARY}" STREQUAL "Qt5Core")
+            # Qt WebEngine relies on the value of qt_prfxpath to work, however
+            # this value is hard-coded in the Qt Core library (!!), so we need
+            # to patch it
+
+            COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${LIBRARY_FILENAME})
+
+            STRING(REPLACE "/" "\\" PATCHQTCORELIBRARY_ARGUMENT "${PROJECT_BUILD_DIR}/${LIBRARY_FILENAME}")
+            
+            TRY_RUN(PATCHQTCORELIBRARY_RUN PATCHQTCORELIBRARY_COMPILE
+                    ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/patchqtcorelibrary.c
+                    ARGS ${PATCHQTCORELIBRARY_ARGUMENT})
+
+            IF(NOT PATCHQTCORELIBRARY_COMPILE OR PATCHQTCORELIBRARY_RUN)
+                MESSAGE(FATAL_ERROR "We could not patch the Qt Core library...")
+            ENDIF()
+                    
+            SET(LIBRARY_DIRNAME ${PROJECT_BUILD_DIR})
+        ELSE()
+            SET(LIBRARY_DIRNAME ${QT_BINARY_DIR})
+        ENDIF()
+
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${LIBRARY_DIRNAME} . ${LIBRARY_FILENAME})
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${LIBRARY_DIRNAME} bin ${LIBRARY_FILENAME})
 
         # Deploy the Qt library
 
-        INSTALL(FILES ${QT_BINARY_DIR}/${LIBRARY_FILENAME}
+        INSTALL(FILES ${LIBRARY_DIRNAME}/${LIBRARY_FILENAME}
                 DESTINATION bin)
     ENDFOREACH()
 ENDMACRO()
@@ -1008,8 +1030,6 @@ ENDMACRO()
 #===============================================================================
 
 MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
-#---ISSUE908--- TO BE DONE...
-
     # Copy (and deploy) the Qt WebEngine process to both the build and build/bin
     # folders, so we can test things both from within Qt Creator and without
     # first having to deploy OpenCOR
