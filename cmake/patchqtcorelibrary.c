@@ -54,7 +54,7 @@ int main(int argc, char **argv)
     }
 
 	// Read the whole contents of the Qt Core library
-    
+
 	fseek(file, 0, SEEK_SET);
 
 	if (!fread(fileContents, fileSize, 1, file)) {
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     filePosition += NEEDLE_SIZE;
 
     fileContents[filePosition] = '.';
-    
+
     while (fileContents[++filePosition] != 0)
         fileContents[filePosition] = 0;
 
@@ -96,10 +96,10 @@ int main(int argc, char **argv)
 
 	if (!fwrite(fileContents, fileSize, 1, file)) {
         fclose(file);
-        
+
         return 1;
     }
-    
+
 	fclose(file);
 
 	// Free the memory we previously allocated
