@@ -950,6 +950,23 @@ ENDMACRO()
 
 #===============================================================================
 
+MACRO(PATCH_QT_CORE_LIBRARY QT_CORE_LIBRARY_FILENAME)
+    # Try to patch the given Qt Core library
+    # Note: Qt WebEngine relies on the value of qt_prfxpath to work, however
+    #       this value is hard-coded in the Qt Core library (!!), so we need
+    #       to patch it...
+
+    TRY_RUN(PATCHQTCORELIBRARY_RUN PATCHQTCORELIBRARY_COMPILE
+            ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/patchqtcorelibrary.c
+            ARGS ${QT_CORE_LIBRARY_FILENAME})
+
+    IF(NOT PATCHQTCORELIBRARY_COMPILE OR PATCHQTCORELIBRARY_RUN)
+        MESSAGE(FATAL_ERROR "We could not patch the Qt Core library...")
+    ENDIF()
+ENDMACRO()
+
+#===============================================================================
+
 MACRO(WINDOWS_DEPLOY_QT_LIBRARIES)
     FOREACH(LIBRARY ${ARGN})
         # Copy the Qt library to both the build and build/bin folders, so we can
@@ -973,22 +990,12 @@ MACRO(WINDOWS_DEPLOY_QT_LIBRARIES)
         ENDIF()
 
         IF("${LIBRARY}" STREQUAL "Qt5Core")
-            # Qt WebEngine relies on the value of qt_prfxpath to work, however
-            # this value is hard-coded in the Qt Core library (!!), so we need
-            # to patch it
-
             COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${LIBRARY_FILENAME})
 
-            STRING(REPLACE "/" "\\"
+            STRING(REPLACE "/" "\\\\"
                    PATCHQTCORELIBRARY_ARGUMENT "${PROJECT_BUILD_DIR}/${LIBRARY_FILENAME}")
 
-            TRY_RUN(PATCHQTCORELIBRARY_RUN PATCHQTCORELIBRARY_COMPILE
-                    ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/patchqtcorelibrary.c
-                    ARGS ${PATCHQTCORELIBRARY_ARGUMENT})
-
-            IF(NOT PATCHQTCORELIBRARY_COMPILE OR PATCHQTCORELIBRARY_RUN)
-                MESSAGE(FATAL_ERROR "We could not patch the Qt Core library...")
-            ENDIF()
+            PATCH_QT_CORE_LIBRARY(${PATCHQTCORELIBRARY_ARGUMENT})
 
             SET(LIBRARY_DIRNAME ${PROJECT_BUILD_DIR})
         ELSE()
