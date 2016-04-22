@@ -1228,18 +1228,16 @@ MACRO(OS_X_DEPLOY_QT_WEB_ENGINE_PROCESS)
     SET(QT_WEB_ENGINE_CORE_DIR QtWebEngineCore.framework)
     SET(QT_WEB_ENGINE_CORE_VERSION_DIR ${QT_WEB_ENGINE_CORE_DIR}/${VERSION_DIR})
     SET(LOCAL_FRAMEWORKS_DIR ${PROJECT_BUILD_DIR}/${CMAKE_PROJECT_NAME}.app/Contents/Frameworks)
-    SET(LOCAL_QT_WEB_ENGINE_CORE_DIR ${LOCAL_FRAMEWORKS_DIR}/${QT_WEB_ENGINE_CORE_DIR})
-    SET(LOCAL_QT_WEB_ENGINE_CORE_VERSION_DIR ${LOCAL_FRAMEWORKS_DIR}/${QT_WEB_ENGINE_CORE_VERSION_DIR})
 
     FOREACH(DIRNAME Helpers Resources)
         ADD_CUSTOM_COMMAND(TARGET ${CMAKE_PROJECT_NAME} POST_BUILD
                            COMMAND ${CMAKE_COMMAND} -E copy_directory ${QT_LIBRARY_DIR}/${QT_WEB_ENGINE_CORE_VERSION_DIR}/${DIRNAME}
-                                                                      ${LOCAL_QT_WEB_ENGINE_CORE_VERSION_DIR}/${DIRNAME})
+                                                                      ${LOCAL_FRAMEWORKS_DIR}/${QT_WEB_ENGINE_CORE_VERSION_DIR}/${DIRNAME})
 
         ADD_CUSTOM_COMMAND(TARGET ${PROJECT_NAME} POST_BUILD
                            COMMAND ${CMAKE_COMMAND} -E create_symlink ${VERSION_DIR}/${DIRNAME}
                                                                       ${DIRNAME}
-                           WORKING_DIRECTORY ${LOCAL_QT_WEB_ENGINE_CORE_DIR})
+                           WORKING_DIRECTORY ${LOCAL_FRAMEWORKS_DIR}/${QT_WEB_ENGINE_CORE_DIR})
     ENDFOREACH()
 ENDMACRO()
 
