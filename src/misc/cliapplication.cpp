@@ -57,14 +57,13 @@ CliApplication::CliApplication(int &pArgC, char **pArgV) :
     // Note: upon initialisation, Qt WebEngine creates an OpenGL context object
     //       and then creates the OpenGL context itself by calling
     //       QOpenGLContext::create() (see QtWebEngineCore::initialize() in
-    //       [QtSources]/qtwebengine/src/webengine/api/qtwebengineglobal.cpp).
-    //       However, that second step requires having a GUI application. So, to
-    //       do all of this with a CLI application will not work (read: it will
-    //       crash OpenCOR), hence we here create our own OpenGL context object
-    //       (but not its corresponding OpenGL context, obviously) and set it as
-    //       our global OpenGL context object since Qt WebEngine will only
-    //       create an OpenGL context object if there isn't already a global one
-    //       available...
+    //       [QtSources]/core/api/qtwebenginecoreglobal.cpp). However, that
+    //       second step requires having a GUI application. So, to do all of
+    //       this with a CLI application will not work (read: it will crash
+    //       OpenCOR), hence we here create our own OpenGL context object (but
+    //       not its corresponding OpenGL context) and set it as our global
+    //       OpenGL context object since Qt WebEngine will only create an OpenGL
+    //       context object if there isn't already a global one available...
 
     mOpenglContext = new QOpenGLContext();
 
