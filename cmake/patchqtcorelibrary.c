@@ -18,14 +18,11 @@ specific language governing permissions and limitations under the License.
 #include <stdio.h>
 #include <stdlib.h>
 
-#define NEEDLE "qt_prfxpath="
-#define NEEDLE_SIZE 12
-
 int main(int argc, char **argv)
 {
-	FILE *file;
-	size_t i, fileSize, filePosition;
-	char *fileContents;
+        FILE *file;
+        size_t i, fileSize, filePosition;
+        char *fileContents;
 
     // Make sure that we have the correct number of arguments
 
@@ -45,19 +42,19 @@ int main(int argc, char **argv)
 
     // Allocate enough memory to read the whole contents of the Qt Core library
 
-	fileContents = (char *) malloc(fileSize+1);
+        fileContents = (char *) malloc(fileSize+1);
 
-	if (!fileContents) {
+        if (!fileContents) {
         fclose(file);
 
         return 1;
     }
 
-	// Read the whole contents of the Qt Core library
+        // Read the whole contents of the Qt Core library
 
-	fseek(file, 0, SEEK_SET);
+        fseek(file, 0, SEEK_SET);
 
-	if (!fread(fileContents, fileSize, 1, file)) {
+        if (!fread(fileContents, fileSize, 1, file)) {
         fclose(file);
 
         return 1;
@@ -68,12 +65,15 @@ int main(int argc, char **argv)
     filePosition = -1;
 
     for (i = 0; i < fileSize; ++i) {
-        if (fileContents[i] == NEEDLE[0]) {
-            if (!strncmp(fileContents+i, NEEDLE, NEEDLE_SIZE)) {
-                filePosition = i;
+        if (   (fileContents[i+ 0] == 'q') && (fileContents[i+ 1] == 't')
+            && (fileContents[i+ 2] == '_') && (fileContents[i+ 3] == 'p')
+            && (fileContents[i+ 4] == 'r') && (fileContents[i+ 5] == 'f')
+            && (fileContents[i+ 6] == 'x') && (fileContents[i+ 7] == 'p')
+            && (fileContents[i+ 8] == 'a') && (fileContents[i+ 9] == 't')
+            && (fileContents[i+10] == 'h') && (fileContents[i+11] == '=')) {
+            filePosition = i;
 
-                break;
-            }
+            break;
         }
     }
 
@@ -85,26 +85,26 @@ int main(int argc, char **argv)
 
     // Patch the Qt Core library
 
-    filePosition += NEEDLE_SIZE;
+    filePosition += 12;
 
     fileContents[filePosition] = '.';
 
     while (fileContents[++filePosition] != 0)
         fileContents[filePosition] = 0;
 
-	fseek(file, 0, SEEK_SET);
+        fseek(file, 0, SEEK_SET);
 
-	if (!fwrite(fileContents, fileSize, 1, file)) {
+        if (!fwrite(fileContents, fileSize, 1, file)) {
         fclose(file);
 
         return 1;
     }
 
-	fclose(file);
+        fclose(file);
 
-	// Free the memory we previously allocated
+        // Free the memory we previously allocated
 
-	free(fileContents);
+        free(fileContents);
 
     return 0;
 }
