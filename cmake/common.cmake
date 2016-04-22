@@ -76,15 +76,17 @@ MACRO(INITIALISE_PROJECT)
 
     # Keep track of some information about Qt
 
-    SET(QT_BINARY_DIR ${_qt5Widgets_install_prefix}/bin)
-    SET(QT_LIBRARY_DIR ${_qt5Widgets_install_prefix}/lib)
-    SET(QT_PLUGINS_DIR ${_qt5Widgets_install_prefix}/plugins)
-    SET(QT_RESOURCES_DIR ${_qt5Widgets_install_prefix}/resources)
-    SET(QT_WEBENGINE_TRANSLATIONS_DIR ${_qt5Widgets_install_prefix}/translations/qtwebengine_locales)
     SET(QT_VERSION ${Qt5Widgets_VERSION})
     SET(QT_VERSION_MAJOR ${Qt5Widgets_VERSION_MAJOR})
     SET(QT_VERSION_MINOR ${Qt5Widgets_VERSION_MINOR})
     SET(QT_VERSION_PATCH ${Qt5Widgets_VERSION_PATCH})
+
+    SET(QT_DIR ${_qt5Widgets_install_prefix})
+    SET(QT_BINARY_DIR ${QT_DIR}/bin)
+    SET(QT_LIBRARY_DIR ${QT_DIR}/lib)
+    SET(QT_PLUGINS_DIR ${QT_DIR}/plugins)
+    SET(QT_RESOURCES_DIR ${QT_DIR}/resources)
+    SET(QT_WEBENGINE_TRANSLATIONS_DIR ${QT_DIR}/translations/qtwebengine_locales)
 
     # On OS X, keep track of the Qt libraries against which we need to link
 
@@ -976,7 +978,8 @@ MACRO(WINDOWS_DEPLOY_QT_LIBRARIES)
 
             COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${LIBRARY_FILENAME})
 
-            STRING(REPLACE "/" "\\" PATCHQTCORELIBRARY_ARGUMENT "${PROJECT_BUILD_DIR}/${LIBRARY_FILENAME}")
+            STRING(REPLACE "/" "\\"
+                   PATCHQTCORELIBRARY_ARGUMENT "${PROJECT_BUILD_DIR}/${LIBRARY_FILENAME}")
 
             TRY_RUN(PATCHQTCORELIBRARY_RUN PATCHQTCORELIBRARY_COMPILE
                     ${CMAKE_BINARY_DIR} ${CMAKE_SOURCE_DIR}/cmake/patchqtcorelibrary.c
@@ -1060,7 +1063,8 @@ MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
 
     # Do the same with Qt WebEngine's translations
 
-    SET(WEBENGINE_TRANSLATIONS_DIR translations/qtwebengine_locales)
+    STRING(REPLACE "${QT_DIR}/" ""
+           WEBENGINE_TRANSLATIONS_DIR "${QT_WEBENGINE_TRANSLATIONS_DIR}")
 
     FILE(GLOB TRANSLATION_FILEPATHS ${QT_WEBENGINE_TRANSLATIONS_DIR}/*.*)
 
