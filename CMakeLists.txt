@@ -634,7 +634,7 @@ IF(WIN32)
 
     # Deploy QtWebEngineProcess
 
-    WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS()
+    DEPLOY_QT_WEB_ENGINE_PROCESS()
 
     # Batch and VBScript files to run OpenCOR (useful when downloading a ZIPped
     # version of OpenCOR)
@@ -747,7 +747,7 @@ ELSE()
 
     # Deploy QtWebEngineProcess
 
-    LINUX_DEPLOY_QT_WEB_ENGINE_PROCESS()
+    DEPLOY_QT_WEB_ENGINE_PROCESS()
 
     # Shell script to run OpenCOR
 

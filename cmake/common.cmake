@@ -1032,17 +1032,32 @@ ENDMACRO()
 
 #===============================================================================
 
-MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
+MACRO(WINDOWS_DEPLOY_LIBRARY DIRNAME FILENAME)
+    # Deploy the library file
+
+    INSTALL(FILES ${DIRNAME}/${FILENAME}
+            DESTINATION bin)
+ENDMACRO()
+
+#===============================================================================
+
+MACRO(DEPLOY_QT_WEB_ENGINE_PROCESS)
     # Copy (and deploy) the Qt WebEngine process to both the build and build/bin
     # folders, so we can test things both from within Qt Creator and without
     # first having to deploy OpenCOR
 
-    SET(QT_WEB_ENGINE_PROCESS_FILENAME QtWebEngineProcess.exe)
+    IF(WIN32)
+        SET(QT_WEB_ENGINE_PROCESS_DIRNAME ${QT_BINARY_DIR})
+        SET(QT_WEB_ENGINE_PROCESS_FILENAME QtWebEngineProcess.exe)
+    ELSE()
+        SET(QT_WEB_ENGINE_PROCESS_DIRNAME ${QT_LIBRARY_EXECUTABLES_DIR})
+        SET(QT_WEB_ENGINE_PROCESS_FILENAME QtWebEngineProcess)
+    ENDIF()
 
-    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${QT_WEB_ENGINE_PROCESS_FILENAME})
-    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} bin ${QT_WEB_ENGINE_PROCESS_FILENAME})
+    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_WEB_ENGINE_PROCESS_DIRNAME} . ${QT_WEB_ENGINE_PROCESS_FILENAME})
+    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_WEB_ENGINE_PROCESS_DIRNAME} bin ${QT_WEB_ENGINE_PROCESS_FILENAME})
 
-    INSTALL(FILES ${QT_BINARY_DIR}/${QT_WEB_ENGINE_PROCESS_FILENAME}
+    INSTALL(FILES ${QT_WEB_ENGINE_PROCESS_DIRNAME}/${QT_WEB_ENGINE_PROCESS_FILENAME}
             DESTINATION bin)
 
     # Do the same with Qt WebEngine's resources
@@ -1077,15 +1092,6 @@ MACRO(WINDOWS_DEPLOY_QT_WEB_ENGINE_PROCESS)
         INSTALL(FILES ${QT_WEBENGINE_TRANSLATIONS_DIR}/${TRANSLATION_FILENAME}
                 DESTINATION bin/${WEBENGINE_TRANSLATIONS_DIR})
     ENDFOREACH()
-ENDMACRO()
-
-#===============================================================================
-
-MACRO(WINDOWS_DEPLOY_LIBRARY DIRNAME FILENAME)
-    # Deploy the library file
-
-    INSTALL(FILES ${DIRNAME}/${FILENAME}
-            DESTINATION bin)
 ENDMACRO()
 
 #===============================================================================
@@ -1135,12 +1141,6 @@ MACRO(LINUX_DEPLOY_QT_PLUGIN PLUGIN_CATEGORY)
         INSTALL(FILES ${PROJECT_BUILD_DIR}/${PLUGIN_DEST_DIRNAME}/${PLUGIN_FILENAME}
                 DESTINATION ${PLUGIN_DEST_DIRNAME})
     ENDFOREACH()
-ENDMACRO()
-
-#===============================================================================
-
-MACRO(LINUX_DEPLOY_QT_WEB_ENGINE_PROCESS)
-#---ISSUE908--- TO BE DONE...
 ENDMACRO()
 
 #===============================================================================
