@@ -36,9 +36,6 @@ GuiApplication::GuiApplication(const QString &pId, int &pArgC, char **pArgV) :
     mCanEmitFileOpenRequestSignal(false),
     mFileNamesOrOpencorUrls(QStringList())
 {
-    // Filter out OpenSSL warning messages
-
-    QLoggingCategory::setFilterRules("qt.network.ssl.warning=false");
 }
 
 //==============================================================================
