@@ -218,8 +218,8 @@ private Q_SLOTS:
 
     void lookUpQualifier();
 
-    void linkClicked();
-    void linkHovered();
+    void linkClicked(const QString &pLink);
+    void linkHovered(const QString &pLink);
 
     void lookUpTerm();
 

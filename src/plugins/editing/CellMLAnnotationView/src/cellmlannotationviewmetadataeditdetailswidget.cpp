@@ -351,14 +351,10 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
     connect(mOutputOntologicalTerms, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showCustomContextMenu()));
 
-/*---ISSUE908---
-    mOutputOntologicalTerms->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
-*/
-
-    connect(mOutputOntologicalTerms->page(), SIGNAL(linkClicked(const QUrl &)),
-            this, SLOT(linkClicked()));
-    connect(mOutputOntologicalTerms->page(), SIGNAL(linkHovered(const QString &, const QString &, const QString &)),
-            this, SLOT(linkHovered()));
+    connect(mOutputOntologicalTerms->page(), SIGNAL(linkClicked(const QString &)),
+            this, SLOT(linkClicked(const QString &)));
+    connect(mOutputOntologicalTerms->page(), SIGNAL(linkHovered(const QString &)),
+            this, SLOT(linkHovered(const QString &)));
 
     // Add our output message and output for ontological terms to our output
     // widget
@@ -845,7 +841,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::lookUpQualifier()
 
 //==============================================================================
 
-void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked()
+void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked(const QString &pLink)
 {
 /*---ISSUE908---
     // Retrieve some information about the link
@@ -904,7 +900,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked()
 
 //==============================================================================
 
-void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered()
+void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered(const QString &pLink)
 {
 /*---ISSUE908---
     // Retrieve some information about the link
