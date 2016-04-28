@@ -76,6 +76,7 @@ p.center {
 pre {
     border: 1px solid rgba(54, 96, 146, 0.13);
     background: rgba(54, 96, 146, 0.05);
+    font-family: lucida console, monospace, monaco;
 }
 
 table.legend th {
