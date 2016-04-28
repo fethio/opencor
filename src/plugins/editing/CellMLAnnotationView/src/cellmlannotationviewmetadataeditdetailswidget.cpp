@@ -587,12 +587,8 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
     bool showBusyWidget = false;
 
     if (pItems.count()) {
-        // Initialise our web view
-
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
-                                                                                          Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled)));
-
-        // Add the items
+        // Initialise our web view by add the items to it and updating
+        // (initialising) its headers
 
         QString ontologicalTerms = QString();
 
@@ -635,9 +631,9 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
                                 "</tr>\n";
         }
 
-/*---ISSUE908---
-        mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst("tbody").appendInside(ontologicalTerms);
-*/
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
+                                                                                          Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
+                                                                                          ontologicalTerms));
 
         updateOutputHeaders();
     } else {
