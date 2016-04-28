@@ -697,6 +697,11 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::genericLookUp(const QString 
     //       that then to toggle mLookUpQualifierButton may result in mLink and
     //       mTextContent being reset (see below), which may not be what we want
     //       (e.g. if we came here after clicking on a resource/id link)...
+//---ISSUE908--- TO CLICK ON THE Look Up BUTTON WILL, AS EXPECTED, SHOW SOME
+//               INFORMATION ON THE QUALIFIER, BUT THEN THE Look Up BUTTON WILL
+//               LOSE ITS CHECKED STATE THROUGH THE CODE BELOW, WHICH IS
+//               PROBABLY DUE TO THE FACT THAT WE ARE NOT YET DONE WITH PORTING
+//               THIS VIEW...
 
     if ((pInformationType != Qualifier) && mLookUpQualifierButton->isChecked()) {
         disconnect(mLookUpQualifierButton, SIGNAL(toggled(bool)),
@@ -952,6 +957,8 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::termChanged(const QString &p
     updateGui(mElement, true);
 
     mTermValue->setFocus();
+//---ISSUE908--- ONCE WE ARE ALL DONE WITH THIS ISSUE, CHECK WHETHER WE STILL
+//               NEED TO ENSURE THAT mTermValue HAS THE FOCUS...
 
     // Retrieve some ontological terms based on the given term, but only if the
     // term cannot be added directly and if it is not empty
