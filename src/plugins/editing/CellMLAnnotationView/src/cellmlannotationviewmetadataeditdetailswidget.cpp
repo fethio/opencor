@@ -547,22 +547,14 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::upudateOutputMessage(const b
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::updateOutputHeaders()
 {
-/*---ISSUE908---
     // Update our output headers
 
-    QWebElement documentElement = mOutputOntologicalTerms->page()->mainFrame()->documentElement();
-
-    documentElement.findFirst("th[id=nameOrQualifier]").setInnerXml(tr("Name"));
-    documentElement.findFirst("th[id=resource]").setInnerXml(tr("Resource"));
-    documentElement.findFirst("th[id=id]").setInnerXml(tr("Id"));
-
-    QWebElement countElement = documentElement.findFirst("th[id=count]");
-
-    if (mItemsCount == 1)
-        countElement.setInnerXml(tr("(1 term)"));
-    else
-        countElement.setInnerXml(tr("(%1 terms)").arg(QLocale().toString(mItemsCount)));
-*/
+    mOutputOntologicalTerms->page()->runJavaScript(QString("setHeaders(\"%1\", \"%2\", \"%3\", \"%4\");").arg(tr("Name"),
+                                                                                                              tr("Resource"),
+                                                                                                              tr("Id"),
+                                                                                                              (mItemsCount == 1)?
+                                                                                                                  tr("(1 term)"):
+                                                                                                                  tr("(%1 terms)").arg(QLocale().toString(mItemsCount))));
 }
 
 //==============================================================================
@@ -588,7 +580,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
     mItemsMapping.clear();
     mEnabledItems.clear();
 
-    mOutputOntologicalTerms->setHtml(QString());
+    mOutputOntologicalTerms->setHtmlSynchronously(QString());
 
     // Populate our web view, but only if there is at least one item
 
@@ -597,8 +589,8 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
     if (pItems.count()) {
         // Initialise our web view
 
-        mOutputOntologicalTerms->setHtml(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
-                                                                             Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled)));
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
+                                                                                          Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled)));
 
         // Add the items
 

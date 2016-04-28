@@ -96,8 +96,29 @@
                 background-color: rgba(54, 96, 146, 0.05);
             }
         </style>
+
+        <script>
+            var nameOrQualifierElement;
+            var resourceElement;
+            var idElement;
+            var countElement;
+
+            function initialize() {
+                nameOrQualifierElement = document.getElementById("nameOrQualifier");
+                resourceElement = document.getElementById("resource");
+                idElement = document.getElementById("id");
+                countElement = document.getElementById("count");
+            }
+
+            function setHeaders(nameOrQualifier, resource, id, count) {
+                nameOrQualifierElement.innerHTML = nameOrQualifier;
+                resourceElement.innerHTML = resource;
+                idElement.innerHTML = id;
+                countElement.innerHTML = count;
+            }
+        </script>
     </head>
-    <body ondragstart="return false;" ondrop="return false;">
+    <body onload="initialize();" ondragstart="return false;" ondrop="return false;">
         <table>
             <thead>
                 <tr>

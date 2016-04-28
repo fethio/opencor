@@ -324,6 +324,26 @@
         <source>The term &lt;strong&gt;%1&lt;/strong&gt; cannot be added using the above qualifier...</source>
         <translation>Le terme &lt;strong&gt;%1&lt;/strong&gt; ne peut pas être ajouté avec le qualificatif ci-dessus...</translation>
     </message>
+    <message>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>Resource</source>
+        <translation>Ressource</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>(1 term)</source>
+        <translation>(1 terme)</translation>
+    </message>
+    <message>
+        <source>(%1 terms)</source>
+        <translation>(%1 termes)</translation>
+    </message>
 </context>
 <context>
     <name>OpenCOR::CellMLAnnotationView::CellmlAnnotationViewMetadataNormalViewDetailsWidget</name>
