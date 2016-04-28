@@ -843,6 +843,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::lookUpQualifier()
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked(const QString &pLink)
 {
+Q_UNUSED(pLink);
 /*---ISSUE908---
     // Retrieve some information about the link
 
@@ -902,6 +903,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked(const QString &p
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered(const QString &pLink)
 {
+Q_UNUSED(pLink);
 /*---ISSUE908---
     // Retrieve some information about the link
 

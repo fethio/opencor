@@ -497,6 +497,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::showLastRdfTriple()
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkClicked(const QString &pLink)
 {
+Q_UNUSED(pLink);
 /*---ISSUE908---
     // Retrieve some information about the link
 
@@ -602,6 +603,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkClicked(const QStr
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkHovered(const QString &pLink)
 {
+Q_UNUSED(pLink);
 /*---ISSUE908---
     // Retrieve some information about the link
 
