@@ -160,6 +160,8 @@ private:
     QString mOutputOntologicalTermsTemplate;
     WebViewer::WebViewerWidget *mOutputOntologicalTerms;
 
+    bool mInitialized;
+
     InformationType mInformationType;
 
     bool mLookUpInformation;
