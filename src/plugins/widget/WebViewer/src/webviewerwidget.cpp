@@ -57,20 +57,18 @@ bool WebViewerPage::acceptNavigationRequest(const QUrl &pUrl,
                                             NavigationType pType,
                                             bool pIsMainFrame)
 {
-    Q_UNUSED(pType);
     Q_UNUSED(pIsMainFrame);
 
     // Accept the navigation request if mSupportedUrlSchemes contains the given
     // URL's scheme, otherwise let the user know that a link has been 'clicked'
 
-    QString urlScheme = pUrl.scheme();
-
-    if (mSupportedUrlSchemes.contains(urlScheme)) {
-        return true;
-    } else {
+    if (    (pType == QWebEnginePage::NavigationTypeLinkClicked)
+        && !mSupportedUrlSchemes.contains(pUrl.scheme())) {
         emit linkClicked(pUrl.toString());
 
         return false;
+    } else {
+        return true;
     }
 }
 
