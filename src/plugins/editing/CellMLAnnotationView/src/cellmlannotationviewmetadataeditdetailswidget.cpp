@@ -562,6 +562,10 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateOutputHeaders()
 
 //==============================================================================
 
+static const auto CaScheme = QStringLiteral("ca");
+
+//==============================================================================
+
 void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlAnnotationViewMetadataEditDetailsItems &pItems,
                                                                    const bool &pLookUpTerm,
                                                                    const QString &pErrorMessage,
@@ -622,13 +626,13 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
                                 "        "+item.name()+"\n"
                                 "    </td>\n"
                                 "    <td id=\"resource_"+itemInformationSha1+"\">\n"
-                                "        <a href=\""+itemInformation+"\">"+item.resource()+"</a>\n"
+                                "        <a href=\""+CaScheme+"://"+itemInformation+"\">"+item.resource()+"</a>\n"
                                 "    </td>\n"
                                 "    <td id=\"id_"+itemInformationSha1+"\">\n"
-                                "        <a href=\""+itemInformation+"\">"+item.id()+"</a>\n"
+                                "        <a href=\""+CaScheme+"://"+itemInformation+"\">"+item.id()+"</a>\n"
                                 "    </td>\n"
                                 "    <td id=\"button_"+itemInformationSha1+"\">\n"
-                                "        <a class=\"noHover\" href=\""+itemInformationSha1+"\"><img class=\"button\"/></a>\n"
+                                "        <a class=\"noHover\" href=\""+CaScheme+"://"+itemInformationSha1+"\"><img class=\"button\"/></a>\n"
                                 "    </td>\n"
                                 "    <td id=\"disabledButton_"+itemInformationSha1+"\" style=\"display: none;\">\n"
                                 "        <img class=\"disabledButton\"/>\n"
