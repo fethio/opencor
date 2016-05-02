@@ -550,13 +550,14 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateOutputHeaders()
 {
     // Update our output headers, if we have been initialised
 
-    if (mInitialized)
+    if (mInitialized) {
         mOutputOntologicalTerms->page()->runJavaScript(QString("setHeaders(\"%1\", \"%2\", \"%3\", \"%4\");").arg(tr("Name"),
                                                                                                                   tr("Resource"),
                                                                                                                   tr("Id"),
                                                                                                                   (mItemsCount == 1)?
                                                                                                                       tr("(1 term)"):
                                                                                                                       tr("(%1 terms)").arg(QLocale().toString(mItemsCount))));
+    }
 }
 
 //==============================================================================
