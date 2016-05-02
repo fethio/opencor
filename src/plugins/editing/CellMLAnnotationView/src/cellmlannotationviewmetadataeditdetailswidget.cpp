@@ -563,6 +563,9 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateOutputHeaders()
 //==============================================================================
 
 static const auto CaScheme = QStringLiteral("ca");
+static const auto LookUpResourceAction = QStringLiteral("lookUpResource");
+static const auto LookUpIdAction = QStringLiteral("lookUpId");
+static const auto AddTermAction = QStringLiteral("addTerm");
 
 //==============================================================================
 
@@ -626,13 +629,13 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
                                 "        "+item.name()+"\n"
                                 "    </td>\n"
                                 "    <td id=\"resource_"+itemInformationSha1+"\">\n"
-                                "        <a href=\""+CaScheme+"://"+itemInformation+"\">"+item.resource()+"</a>\n"
+                                "        <a href=\""+CaScheme+"://"+LookUpResourceAction+"/"+itemInformation+"\">"+item.resource()+"</a>\n"
                                 "    </td>\n"
                                 "    <td id=\"id_"+itemInformationSha1+"\">\n"
-                                "        <a href=\""+CaScheme+"://"+itemInformation+"\">"+item.id()+"</a>\n"
+                                "        <a href=\""+CaScheme+"://"+LookUpIdAction+"/"+itemInformation+"\">"+item.id()+"</a>\n"
                                 "    </td>\n"
                                 "    <td id=\"button_"+itemInformationSha1+"\">\n"
-                                "        <a class=\"noHover\" href=\""+CaScheme+"://"+itemInformationSha1+"\"><img class=\"button\"/></a>\n"
+                                "        <a class=\"noHover\" href=\""+CaScheme+"://"+AddTermAction+"/"+itemInformationSha1+"\"><img class=\"button\"/></a>\n"
                                 "    </td>\n"
                                 "    <td id=\"disabledButton_"+itemInformationSha1+"\" style=\"display: none;\">\n"
                                 "        <img class=\"disabledButton\"/>\n"
@@ -847,19 +850,17 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::lookUpQualifier()
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked(const QString &pLink)
 {
-Q_UNUSED(pLink);
-/*---ISSUE908---
-    // Retrieve some information about the link
-
-    mOutputOntologicalTerms->retrieveLinkInformation(mLink, mTextContent);
-
     // Check whether we have clicked a resource/id link or a button link
 
-    if (mTextContent.isEmpty()) {
+    QUrl url = pLink;
+    QString urlHost = url.host();
+
+    if (!urlHost.compare(AddTermAction, Qt::CaseInsensitive)) {
         // We have clicked on a button link, so retrieve the item associated
         // with it
 
-        CellmlAnnotationViewMetadataEditDetailsItem item = mItemsMapping.value(mLink);
+        QString itemInformationSha1 = Core::urlArguments(url);
+        CellmlAnnotationViewMetadataEditDetailsItem item = mItemsMapping.value(itemInformationSha1);
 
         // Add the ontological term to our CellML element as an RDF triple
 
@@ -877,12 +878,10 @@ Q_UNUSED(pLink);
 
         // Disable the add button, now that we have added the ontological term
 
-        mEnabledItems.insert(mLink, false);
+        mEnabledItems.insert(itemInformationSha1, false);
 
-        QWebElement documentElement = mOutputOntologicalTerms->page()->mainFrame()->documentElement();
-
-        documentElement.findFirst(QString("td[id=button_%1]").arg(mLink)).setStyleProperty("display", "none");
-        documentElement.findFirst(QString("td[id=disabledButton_%1]").arg(mLink)).setStyleProperty("display", "table-cell");
+        mOutputOntologicalTerms->page()->runJavaScript(QString("enableButton(\"%1\", %2);").arg(itemInformationSha1)
+                                                                                           .arg(false));
 
         // Ask our parent to update its GUI with the added RDF triple
 
@@ -895,42 +894,37 @@ Q_UNUSED(pLink);
 
         // Call our generic look up function
 
-        genericLookUp(mLink,
-                      mUrls.contains(mTextContent)?
+        genericLookUp(Core::urlArguments(url),
+                      !urlHost.compare(LookUpResourceAction, Qt::CaseInsensitive)?
                           Resource:
                           Id);
     }
-*/
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered(const QString &pLink)
 {
-Q_UNUSED(pLink);
-/*---ISSUE908---
-    // Retrieve some information about the link
-
-    QString link;
-    QString textContent;
-
-    mOutputOntologicalTerms->retrieveLinkInformation(link, textContent);
-
-    // Update our tool tip based on whether we are hovering a text or button
+    // Update our tool tip based on whether we are hovering a text or a button
     // link
-    // Note: this follows the approach used in linkClicked()...
 
-    QString linkToolTip = QString();
+    QString linkToolTip;
+    QUrl url = pLink;
 
-    if (!link.isEmpty()) {
-        if (textContent.isEmpty())
-            linkToolTip = tr("Add Term");
+    if (!url.scheme().compare(CaScheme)) {
+        QString urlHost = url.host();
+
+        if (!urlHost.compare(LookUpResourceAction, Qt::CaseInsensitive))
+            linkToolTip = tr("Look Up Resource");
+        else if (!urlHost.compare(LookUpIdAction, Qt::CaseInsensitive))
+            linkToolTip = tr("Look Up Id");
         else
-            linkToolTip = mUrls.contains(textContent)?tr("Look Up Resource"):tr("Look Up Id");
+            linkToolTip = tr("Add Term");
+    } else {
+        linkToolTip = QString();
     }
 
     mOutputOntologicalTerms->setLinkToolTip(linkToolTip);
-*/
 }
 
 //==============================================================================

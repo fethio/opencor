@@ -116,6 +116,11 @@
                 idElement.innerHTML = id;
                 countElement.innerHTML = count;
             }
+
+            function enableButton(id, enabled) {
+                document.getElementById("button_"+id).style.display = enabled?"table-cell":"none";
+                document.getElementById("disabledButton_"+id).style.display = !enabled?"table-cell":"none";
+            }
         </script>
     </head>
     <body onload="initialize();" ondragstart="return false;" ondrop="return false;">
