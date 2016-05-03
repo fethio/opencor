@@ -95,8 +95,8 @@ public:
                    const InformationType &pInformationType = None,
                    const Information &pLookUpRdfTripleInformation = First);
 
-    void addRdfTriple(CellMLSupport::CellmlFileRdfTriple *pRdfTriple,
-                      const bool &pNeedAdditionalGuiUpdates = true);
+    QString addRdfTriple(CellMLSupport::CellmlFileRdfTriple *pRdfTriple,
+                         const bool &pDirectAddition = true);
 
     void filePermissionsChanged();
 

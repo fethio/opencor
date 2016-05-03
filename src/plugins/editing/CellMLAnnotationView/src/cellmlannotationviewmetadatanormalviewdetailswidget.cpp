@@ -269,12 +269,18 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
     if (rdfTriples.count()) {
         // Add the RDF triples
 
+        QString ontologicalTerms = QString();
+
         foreach (CellMLSupport::CellmlFileRdfTriple *rdfTriple, rdfTriples)
-            addRdfTriple(rdfTriple, false);
+            ontologicalTerms += addRdfTriple(rdfTriple, false);
+
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
+                                                                                          Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
+                                                                                          ontologicalTerms));
 
         mInitialized = true;
     } else {
-        mOutputOntologicalTerms->setHtml(QString());
+        mOutputOntologicalTerms->setHtmlSynchronously(QString());
     }
 
     // Do additional GUI updates
@@ -292,17 +298,17 @@ static const auto LookUpIdAction = QStringLiteral("lookUpId");
 
 //==============================================================================
 
-void CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellMLSupport::CellmlFileRdfTriple *pRdfTriple,
-                                                                       const bool &pNeedAdditionalGuiUpdates)
+QString CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellMLSupport::CellmlFileRdfTriple *pRdfTriple,
+                                                                          const bool &pDirectAddition)
 {
     if (!pRdfTriple)
-        return;
+        return QString();
 
     // Initialise our web view, if needed
 
-    if (!mItemsCount) {
-        mOutputOntologicalTerms->setHtml(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16),
-                                                                             Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled)));
+    if (pDirectAddition && !mItemsCount) {
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16),
+                                                                                          Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled)));
     }
 
     // Add the item
@@ -359,11 +365,13 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellMLSup
 
     // Do some additional GUI updates, if needed
 
-    if (pNeedAdditionalGuiUpdates) {
+    if (pDirectAddition) {
         mLookUpRdfTripleInformation = Last;
 
         additionalGuiUpdates(QString(), None, mLookUpRdfTripleInformation);
     }
+
+    return pDirectAddition?QString():ontologicalTerm;
 }
 
 //==============================================================================
