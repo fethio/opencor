@@ -75,7 +75,6 @@ namespace CellMLAnnotationView {
 //==============================================================================
 
 class CellmlAnnotationViewEditingWidget;
-class CellmlAnnotationViewMetadataWebEngineViewWidget;
 class CellmlAnnotationViewWidget;
 
 //==============================================================================
