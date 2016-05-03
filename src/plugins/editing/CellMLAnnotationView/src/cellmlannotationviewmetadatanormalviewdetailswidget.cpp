@@ -295,6 +295,7 @@ static const auto CaScheme = QStringLiteral("ca");
 static const auto LookUpQualifierAction = QStringLiteral("lookUpQualifier");
 static const auto LookUpResourceAction = QStringLiteral("lookUpResource");
 static const auto LookUpIdAction = QStringLiteral("lookUpId");
+static const auto RemoveTermAction = QStringLiteral("removeTerm");
 
 //==============================================================================
 
@@ -323,16 +324,16 @@ QString CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellML
 
     QString ontologicalTerm = "<tr id=\"item_"+rdfTripleInformationSha1+"\">\n"
                               "    <td id=\"qualifier_"+rdfTripleInformationSha1+"\">\n"
-                              "        <a href=\""+rdfTripleInformation+"\">"+qualifier+"</a>\n"
+                              "        <a href=\""+CaScheme+"://"+LookUpQualifierAction+"/"+rdfTripleInformation+"\">"+qualifier+"</a>\n"
                               "    </td>\n"
                               "    <td id=\"resource_"+rdfTripleInformationSha1+"\">\n"
-                              "        <a href=\""+rdfTripleInformation+"\">"+pRdfTriple->resource()+"</a>\n"
+                              "        <a href=\""+CaScheme+"://"+LookUpResourceAction+"/"+rdfTripleInformation+"\">"+pRdfTriple->resource()+"</a>\n"
                               "    </td>\n"
                               "    <td id=\"id_"+rdfTripleInformationSha1+"\">\n"
-                              "        <a href=\""+rdfTripleInformation+"\">"+pRdfTriple->id()+"</a>\n"
+                              "        <a href=\""+CaScheme+"://"+LookUpIdAction+"/"+rdfTripleInformation+"\">"+pRdfTriple->id()+"</a>\n"
                               "    </td>\n"
                               "    <td id=\"button_"+rdfTripleInformationSha1+"\">\n"
-                              "        <a class=\"noHover\" href=\""+rdfTripleInformationSha1+"\"><img class=\"button\"/></a>\n"
+                              "        <a class=\"noHover\" href=\""+CaScheme+"://"+RemoveTermAction+"/"+rdfTripleInformationSha1+"\"><img class=\"button\"/></a>\n"
                               "    </td>\n"
                               "    <td id=\"disabledButton_"+rdfTripleInformationSha1+"\" style=\"display: none;\">\n"
                               "        <img class=\"disabledButton\"/>\n"
@@ -634,7 +635,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkHovered(const QStr
         QString urlHost = url.host();
 
         if (!urlHost.compare(LookUpQualifierAction, Qt::CaseInsensitive)) {
-            mResourceOrIdUrl = Core::urlArguments(url);
+            mResourceOrIdUrl = Core::urlArguments(url).split("|")[0];
 
             linkToolTip = tr("Look Up Qualifier");
         } else if (!urlHost.compare(LookUpResourceAction, Qt::CaseInsensitive)) {
