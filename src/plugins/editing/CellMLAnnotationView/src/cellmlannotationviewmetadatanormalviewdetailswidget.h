@@ -115,6 +115,8 @@ private:
     QString mOutputOntologicalTermsTemplate;
     WebViewer::WebViewerWidget *mOutputOntologicalTerms;
 
+    bool mInitialized;
+
     ObjRef<iface::cellml_api::CellMLElement> mElement;
 
     QString mRdfTripleInformation;

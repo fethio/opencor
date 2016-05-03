@@ -297,6 +297,18 @@
         <translation>Terme :</translation>
     </message>
     <message>
+        <source>Name</source>
+        <translation>Nom</translation>
+    </message>
+    <message>
+        <source>Resource</source>
+        <translation>Ressource</translation>
+    </message>
+    <message>
+        <source>Id</source>
+        <translation></translation>
+    </message>
+    <message>
         <source>Add the term</source>
         <translation>Ajouter le terme</translation>
     </message>
@@ -321,6 +333,14 @@
         <translation>Le terme &lt;strong&gt;%1&lt;/strong&gt; a déjà été ajouté avec le qualificatif ci-dessus...</translation>
     </message>
     <message>
+        <source>(1 term)</source>
+        <translation>(1 terme)</translation>
+    </message>
+    <message>
+        <source>(%1 terms)</source>
+        <translation>(%1 termes)</translation>
+    </message>
+    <message>
         <source>Look Up Resource</source>
         <translation>Vérifier Ressource</translation>
     </message>
@@ -336,9 +356,16 @@
         <source>The term &lt;strong&gt;%1&lt;/strong&gt; cannot be added using the above qualifier...</source>
         <translation>Le terme &lt;strong&gt;%1&lt;/strong&gt; ne peut pas être ajouté avec le qualificatif ci-dessus...</translation>
     </message>
+</context>
+<context>
+    <name>OpenCOR::CellMLAnnotationView::CellmlAnnotationViewMetadataNormalViewDetailsWidget</name>
     <message>
-        <source>Name</source>
-        <translation>Nom</translation>
+        <source>There is no metadata associated with the current CellML element...</source>
+        <translation>Il n&apos;y a pas de métadonnées associées à l&apos;élément CellML actuel...</translation>
+    </message>
+    <message>
+        <source>Qualifier</source>
+        <translation>Qualificatif</translation>
     </message>
     <message>
         <source>Resource</source>
@@ -355,13 +382,6 @@
     <message>
         <source>(%1 terms)</source>
         <translation>(%1 termes)</translation>
-    </message>
-</context>
-<context>
-    <name>OpenCOR::CellMLAnnotationView::CellmlAnnotationViewMetadataNormalViewDetailsWidget</name>
-    <message>
-        <source>There is no metadata associated with the current CellML element...</source>
-        <translation>Il n&apos;y a pas de métadonnées associées à l&apos;élément CellML actuel...</translation>
     </message>
 </context>
 <context>

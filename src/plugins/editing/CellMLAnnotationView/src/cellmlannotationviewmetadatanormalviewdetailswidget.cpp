@@ -59,6 +59,7 @@ CellmlAnnotationViewMetadataNormalViewDetailsWidget::CellmlAnnotationViewMetadat
     mCellmlFile(pCellmlFile),
     mGui(new Ui::CellmlAnnotationViewMetadataNormalViewDetailsWidget),
     mItemsCount(0),
+    mInitialized(false),
     mElement(0),
     mRdfTripleInformation(QString()),
     mInformationType(None),
@@ -167,22 +168,16 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::retranslateUi()
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateOutputHeaders()
 {
-/*---ISSUE908---
-    // Update our output headers
+    // Update our output headers, if we have been initialised
 
-    QWebElement documentElement = mOutputOntologicalTerms->page()->mainFrame()->documentElement();
-
-    documentElement.findFirst("th[id=nameOrQualifier]").setInnerXml(tr("Qualifier"));
-    documentElement.findFirst("th[id=resource]").setInnerXml(tr("Resource"));
-    documentElement.findFirst("th[id=id]").setInnerXml(tr("Id"));
-
-    QWebElement countElement = documentElement.findFirst("th[id=count]");
-
-    if (mItemsCount == 1)
-        countElement.setInnerXml(tr("(1 term)"));
-    else
-        countElement.setInnerXml(tr("(%1 terms)").arg(QLocale().toString(mItemsCount)));
-*/
+    if (mInitialized) {
+        mOutputOntologicalTerms->page()->runJavaScript(QString("setHeaders(\"%1\", \"%2\", \"%3\", \"%4\");").arg(tr("Qualifier"),
+                                                                                                                  tr("Resource"),
+                                                                                                                  tr("Id"),
+                                                                                                                  (mItemsCount == 1)?
+                                                                                                                      tr("(1 term)"):
+                                                                                                                      tr("(%1 terms)").arg(QLocale().toString(mItemsCount))));
+    }
 }
 
 //==============================================================================
@@ -261,6 +256,8 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
     mFirstRdfTripleInformation = QString();
     mLastRdfTripleInformation = QString();
 
+    mInitialized = false;
+
     // Populate our web view, but only if there is at least one RDF triple
 
     CellMLSupport::CellmlFileRdfTriples rdfTriples = mCellmlFile->rdfTriples(pElement);
@@ -270,6 +267,8 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
 
         foreach (CellMLSupport::CellmlFileRdfTriple *rdfTriple, rdfTriples)
             addRdfTriple(rdfTriple, false);
+
+        mInitialized = true;
     } else {
         mOutputOntologicalTerms->setHtml(QString());
     }
