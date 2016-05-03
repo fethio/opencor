@@ -126,7 +126,11 @@ private:
 
     QMap<QString, CellMLSupport::CellmlFileRdfTriple *> mRdfTriplesMapping;
 
-    QMap<QString, QString> mUrls;
+    QMap<QString, QString> mResourceUrls;
+    QMap<QString, QString> mIdUrls;
+
+    QString mResourceOrIdUrl;
+
     QStringList mRdfTripleInformationSha1s;
     QString mRdfTripleInformationSha1;
 

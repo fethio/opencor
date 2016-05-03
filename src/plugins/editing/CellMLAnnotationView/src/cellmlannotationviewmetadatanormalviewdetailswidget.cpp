@@ -65,7 +65,9 @@ CellmlAnnotationViewMetadataNormalViewDetailsWidget::CellmlAnnotationViewMetadat
     mInformationType(None),
     mLookUpRdfTripleInformation(First),
     mRdfTriplesMapping(QMap<QString, CellMLSupport::CellmlFileRdfTriple *>()),
-    mUrls(QMap<QString, QString>()),
+    mResourceUrls(QMap<QString, QString>()),
+    mIdUrls(QMap<QString, QString>()),
+    mResourceOrIdUrl(QString()),
     mRdfTripleInformationSha1s(QStringList()),
     mRdfTripleInformationSha1(QString()),
     mFirstRdfTripleInformation(QString()),
@@ -244,7 +246,9 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
     // Note: we might only do that before adding new items, but then again there
     //       is no need to waste memory...
 
-    mUrls.clear();
+    mResourceUrls.clear();
+    mIdUrls.clear();
+
     mRdfTripleInformationSha1s.clear();
 
     mRdfTripleInformationSha1 = QString();
@@ -278,6 +282,13 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
     additionalGuiUpdates(pRdfTripleInformation, pInformationType,
                          pLookUpRdfTripleInformation);
 }
+
+//==============================================================================
+
+static const auto CaScheme = QStringLiteral("ca");
+static const auto LookUpQualifierAction = QStringLiteral("lookUpQualifier");
+static const auto LookUpResourceAction = QStringLiteral("lookUpResource");
+static const auto LookUpIdAction = QStringLiteral("lookUpId");
 
 //==============================================================================
 
@@ -334,10 +345,8 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellMLSup
     QString resourceUrl = "http://identifiers.org/"+pRdfTriple->resource()+"/?redirect=true";
     QString idUrl = "http://identifiers.org/"+pRdfTriple->resource()+"/"+pRdfTriple->id()+"/?profile=most_reliable&redirect=true";
 
-    if (!mUrls.contains(pRdfTriple->resource()))
-        mUrls.insert(pRdfTriple->resource(), resourceUrl);
-
-    mUrls.insert(rdfTripleInformation, idUrl);
+    mResourceUrls.insert(rdfTripleInformation, resourceUrl);
+    mIdUrls.insert(rdfTripleInformation, idUrl);
 
     mRdfTripleInformationSha1s << rdfTripleInformationSha1;
 
@@ -517,7 +526,8 @@ Q_UNUSED(pLink);
                                 rdfTriple->bioQualifierAsString();
         QString rdfTripleInformation = qualifier+"|"+rdfTriple->resource()+"|"+rdfTriple->id();
 
-        mUrls.remove(rdfTripleInformation);
+        mResourceUrls.remove(rdfTripleInformation);
+        mIdUrls.remove(rdfTripleInformation);
 
         mRdfTripleInformationSha1s.removeOne(mLink);
 
@@ -606,55 +616,50 @@ Q_UNUSED(pLink);
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::linkHovered(const QString &pLink)
 {
-Q_UNUSED(pLink);
-/*---ISSUE908---
-    // Retrieve some information about the link
+    // Update mResourceOrIdUrl and our tool tip based on whether we are hovering
+    // a text or button link
 
-    QString link;
-    QString textContent;
+    QString linkToolTip;
+    QUrl url = pLink;
 
-    mOutputOntologicalTerms->retrieveLinkInformation(link, textContent);
+    if (!url.scheme().compare(CaScheme)) {
+        QString urlHost = url.host();
 
-    // Update our tool tip based on whether we are hovering a text or button
-    // link
-    // Note: this follows the approach used in linkClicked()...
+        if (!urlHost.compare(LookUpQualifierAction, Qt::CaseInsensitive)) {
+            mResourceOrIdUrl = Core::urlArguments(url);
 
-    QString linkToolTip = QString();
+            linkToolTip = tr("Look Up Qualifier");
+        } else if (!urlHost.compare(LookUpResourceAction, Qt::CaseInsensitive)) {
+            mResourceOrIdUrl = mResourceUrls.value(Core::urlArguments(url));
 
-    if (!link.isEmpty()) {
-        if (textContent.isEmpty()) {
-            linkToolTip = tr("Remove Term");
+            linkToolTip = tr("Look Up Resource");
+        } else if (!urlHost.compare(LookUpIdAction, Qt::CaseInsensitive)) {
+            mResourceOrIdUrl = mIdUrls.value(Core::urlArguments(url));
+
+            linkToolTip = tr("Look Up Id");
         } else {
-            QStringList rdfTripleInformation = link.split("|");
+            mResourceOrIdUrl = QString();
 
-            linkToolTip = (!rdfTripleInformation[0].compare(textContent))?
-                              tr("Look Up Qualifier"):
-                              !rdfTripleInformation[1].compare(textContent)?
-                                  tr("Look Up Resource"):
-                                  tr("Look Up Id");
+            linkToolTip = tr("Remove Term");
         }
+    } else {
+        mResourceOrIdUrl = QString();
+
+        linkToolTip = QString();
     }
 
     mOutputOntologicalTerms->setLinkToolTip(linkToolTip);
-*/
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataNormalViewDetailsWidget::showCustomContextMenu()
 {
-/*---ISSUE908---
-    // Retrieve some information about the link
-
-    mOutputOntologicalTerms->retrieveLinkInformation(mLink, mTextContent);
-
     // Show our context menu to allow the copying of the URL of the resource or
-    // id, but only if we are over a link, i.e. if both mLink and mTextContent
-    // are not empty
+    // id, but only if we are over a link
 
-    if (!mLink.isEmpty() && !mTextContent.isEmpty())
+    if (!mResourceOrIdUrl.isEmpty())
         mContextMenu->exec(QCursor::pos());
-*/
 }
 
 //==============================================================================
@@ -663,14 +668,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::on_actionCopy_triggere
 {
     // Copy the qualifier or the URL of the resource or id to the clipboard
 
-    QStringList rdfTripleInformation = mLink.split("|");
-
-    if (!rdfTripleInformation[0].compare(mTextContent))
-        QApplication::clipboard()->setText(mTextContent);
-    else if (!rdfTripleInformation[1].compare(mTextContent))
-        QApplication::clipboard()->setText(mUrls.value(mTextContent));
-    else
-        QApplication::clipboard()->setText(mUrls.value(mLink));
+    QApplication::clipboard()->setText(mResourceOrIdUrl);
 }
 
 //==============================================================================
