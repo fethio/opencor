@@ -321,6 +321,18 @@
         <translation>Le terme &lt;strong&gt;%1&lt;/strong&gt; a déjà été ajouté avec le qualificatif ci-dessus...</translation>
     </message>
     <message>
+        <source>Look Up Resource</source>
+        <translation>Vérifier Ressource</translation>
+    </message>
+    <message>
+        <source>Look Up Id</source>
+        <translation>Vérifier Id</translation>
+    </message>
+    <message>
+        <source>Add Term</source>
+        <translation>Ajouter Terme</translation>
+    </message>
+    <message>
         <source>The term &lt;strong&gt;%1&lt;/strong&gt; cannot be added using the above qualifier...</source>
         <translation>Le terme &lt;strong&gt;%1&lt;/strong&gt; ne peut pas être ajouté avec le qualificatif ci-dessus...</translation>
     </message>
