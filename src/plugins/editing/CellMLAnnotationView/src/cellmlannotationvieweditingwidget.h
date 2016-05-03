@@ -37,7 +37,6 @@ class QComboBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
-class QWebEngineView;
 
 //==============================================================================
 
@@ -48,6 +47,12 @@ namespace OpenCOR {
 namespace CellMLSupport {
     class CellmlFile;
 }   // namespace CellMLSupport
+
+//==============================================================================
+
+namespace WebViewer {
+    class WebViewerWidget;
+}   // namespace Core
 
 //==============================================================================
 
@@ -99,13 +104,13 @@ Q_SIGNALS:
 private Q_SLOTS:
     void emitSplitterMoved();
 
-    void updateWebEngineViewerWithQualifierDetails(QWebEngineView *pWebEngineView,
-                                                   const QString &pQualifier);
-    void updateWebEngineViewerWithResourceDetails(QWebEngineView *pWebEngineView,
-                                                  const QString &pResource);
-    void updateWebEngineViewerWithIdDetails(QWebEngineView *pWebEngineView,
-                                            const QString &pResource,
-                                            const QString &pId);
+    void updateWebViewererWithQualifierDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                               const QString &pQualifier);
+    void updateWebViewererWithResourceDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                              const QString &pResource);
+    void updateWebViewererWithIdDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                        const QString &pResource,
+                                        const QString &pId);
 };
 
 //==============================================================================

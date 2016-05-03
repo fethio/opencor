@@ -30,6 +30,7 @@ specific language governing permissions and limitations under the License.
 #include "cellmlfilemanager.h"
 #include "corecliutils.h"
 #include "treeviewwidget.h"
+#include "webviewerwidget.h"
 
 //==============================================================================
 
@@ -37,7 +38,6 @@ specific language governing permissions and limitations under the License.
 #include <QIODevice>
 #include <QLineEdit>
 #include <QPushButton>
-#include <QWebEngineView>
 
 //==============================================================================
 
@@ -109,12 +109,12 @@ CellmlAnnotationViewEditingWidget::CellmlAnnotationViewEditingWidget(CellMLAnnot
 
     // Some connections to keep track of what our details widget wants
 
-    connect(mMetadataDetails, SIGNAL(qualifierDetailsRequested(QWebEngineView *, const QString &)),
-            this, SLOT(updateWebEngineViewerWithQualifierDetails(QWebEngineView *, const QString &)));
-    connect(mMetadataDetails, SIGNAL(resourceDetailsRequested(QWebEngineView *, const QString &)),
-            this, SLOT(updateWebEngineViewerWithResourceDetails(QWebEngineView *, const QString &)));
-    connect(mMetadataDetails, SIGNAL(idDetailsRequested(QWebEngineView *, const QString &, const QString &)),
-            this, SLOT(updateWebEngineViewerWithIdDetails(QWebEngineView *, const QString &, const QString &)));
+    connect(mMetadataDetails, SIGNAL(qualifierDetailsRequested(WebViewer::WebViewerWidget *, const QString &)),
+            this, SLOT(updateWebViewererWithQualifierDetails(WebViewer::WebViewerWidget *, const QString &)));
+    connect(mMetadataDetails, SIGNAL(resourceDetailsRequested(WebViewer::WebViewerWidget *, const QString &)),
+            this, SLOT(updateWebViewererWithResourceDetails(WebViewer::WebViewerWidget *, const QString &)));
+    connect(mMetadataDetails, SIGNAL(idDetailsRequested(WebViewer::WebViewerWidget *, const QString &, const QString &)),
+            this, SLOT(updateWebViewererWithIdDetails(WebViewer::WebViewerWidget *, const QString &, const QString &)));
 
     // Make our CellML list widget our focus proxy
 
@@ -176,8 +176,8 @@ CellmlAnnotationViewMetadataDetailsWidget * CellmlAnnotationViewEditingWidget::m
 
 //==============================================================================
 
-void CellmlAnnotationViewEditingWidget::updateWebEngineViewerWithQualifierDetails(QWebEngineView *pWebEngineView,
-                                                                                  const QString &pQualifier)
+void CellmlAnnotationViewEditingWidget::updateWebViewererWithQualifierDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                                                              const QString &pQualifier)
 {
     // The user requested a qualifier to be looked up, so generate a web page
     // containing some information about the qualifier
@@ -295,33 +295,33 @@ void CellmlAnnotationViewEditingWidget::updateWebEngineViewerWithQualifierDetail
 
     // Show the information
 
-    pWebEngineView->setHtml(mQualifierInformationTemplate.arg(pQualifier,
-                                                              qualifierSvg,
-                                                              shortDescription,
-                                                              longDescription));
+    pWebViewer->setHtml(mQualifierInformationTemplate.arg(pQualifier,
+                                                          qualifierSvg,
+                                                          shortDescription,
+                                                          longDescription));
 }
 
 //==============================================================================
 
-void CellmlAnnotationViewEditingWidget::updateWebEngineViewerWithResourceDetails(QWebEngineView *pWebEngineView,
-                                                                                 const QString &pResource)
+void CellmlAnnotationViewEditingWidget::updateWebViewererWithResourceDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                                                             const QString &pResource)
 {
     // The user requested a resource to be looked up, so retrieve it using
     // identifiers.org
 
-    pWebEngineView->setUrl("http://identifiers.org/"+pResource+"/?redirect=true");
+    pWebViewer->setUrl("http://identifiers.org/"+pResource+"/?redirect=true");
 }
 
 //==============================================================================
 
-void CellmlAnnotationViewEditingWidget::updateWebEngineViewerWithIdDetails(QWebEngineView *pWebEngineView,
-                                                                           const QString &pResource,
-                                                                           const QString &pId)
+void CellmlAnnotationViewEditingWidget::updateWebViewererWithIdDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                                                       const QString &pResource,
+                                                                       const QString &pId)
 {
     // The user requested a resource id to be looked up, so retrieve it using
     // identifiers.org
 
-    pWebEngineView->setUrl("http://identifiers.org/"+pResource+"/"+pId+"?profile=most_reliable&redirect=true");
+    pWebViewer->setUrl("http://identifiers.org/"+pResource+"/"+pId+"?profile=most_reliable&redirect=true");
 }
 
 //==============================================================================

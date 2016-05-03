@@ -28,6 +28,7 @@ specific language governing permissions and limitations under the License.
 #include "cellmlannotationviewplugin.h"
 #include "filemanager.h"
 #include "usermessagewidget.h"
+#include "webviewerwidget.h"
 
 //==============================================================================
 
@@ -36,7 +37,6 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 #include <QVBoxLayout>
-#include <QWebEngineView>
 
 //==============================================================================
 
@@ -88,16 +88,16 @@ CellmlAnnotationViewMetadataDetailsWidget::CellmlAnnotationViewMetadataDetailsWi
 
     mMetadataEditDetails = new CellmlAnnotationViewMetadataEditDetailsWidget(pViewWidget, pViewEditingWidget, pCellmlFile, this);
     mMetadataViewDetails = new CellmlAnnotationViewMetadataViewDetailsWidget(pCellmlFile, this);
-    mWebEngineView       = new QWebEngineView(this);
+    mWebViewer           = new WebViewer::WebViewerWidget(this);
 
-    mWebEngineView->setContextMenuPolicy(Qt::NoContextMenu);
+    mWebViewer->setContextMenuPolicy(Qt::NoContextMenu);
 
     mBorderedMetadataEditDetails = new Core::BorderedWidget(mMetadataEditDetails,
                                                             false, true, true, false);
     mBorderedMetadataViewDetails = new Core::BorderedWidget(mMetadataViewDetails,
                                                             true, true, true, false);
-    mBorderedWebEngineView = new Core::BorderedWidget(mWebEngineView,
-                                                      true, true, false, false);
+    mBorderedWebViewer = new Core::BorderedWidget(mWebViewer,
+                                                  true, true, false, false);
 
     // Some connections to handle the looking up of a qualifier from our
     // metadata edit details view, as well as the disabling of information look
@@ -164,7 +164,7 @@ CellmlAnnotationViewMetadataDetailsWidget::CellmlAnnotationViewMetadataDetailsWi
 
     mSplitter->addWidget(mBorderedMetadataEditDetails);
     mSplitter->addWidget(mBorderedMetadataViewDetails);
-    mSplitter->addWidget(mBorderedWebEngineView);
+    mSplitter->addWidget(mBorderedWebViewer);
 
     // Keep track of our splitter being moved
 
@@ -236,11 +236,11 @@ void CellmlAnnotationViewMetadataDetailsWidget::updateGui(iface::cellml_api::Cel
 
     mBorderedUnsupportedMetadataMessage->setVisible(pElement && isUnknownMetadata);
 
-    // Show/hide our metadata edit details and web engine viewer, depending on
-    // whether the type of the metadata is known
+    // Show/hide our metadata edit details and web viewer, depending on whether
+    // the type of the metadata is known
 
     mBorderedMetadataEditDetails->setVisible(pElement && !isUnknownMetadata);
-    mBorderedWebEngineView->setVisible(pElement && !isUnknownMetadata);
+    mBorderedWebViewer->setVisible(pElement && !isUnknownMetadata);
 
     mBorderedMetadataViewDetails->setTopBorderVisible(pElement && !isUnknownMetadata);
     mBorderedMetadataViewDetails->setBottomBorderVisible(pElement && !isUnknownMetadata);
@@ -294,20 +294,20 @@ CellmlAnnotationViewMetadataViewDetailsWidget * CellmlAnnotationViewMetadataDeta
 
 void CellmlAnnotationViewMetadataDetailsWidget::lookUpQualifier(const QString &pQualifier)
 {
-    // Let people know that we want our web engine viewer to be updated with
-    // some details about the given qualifier
+    // Let people know that we want our web viewer to be updated with some
+    // details about the given qualifier
 
-    emit qualifierDetailsRequested(mWebEngineView, pQualifier);
+    emit qualifierDetailsRequested(mWebViewer, pQualifier);
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataDetailsWidget::lookUpResource(const QString &pResource)
 {
-    // Let people know that we want our web engine viewer to be updated with
-    // some details about the given resource
+    // Let people know that we want our web viewer to be updated with some
+    // details about the given resource
 
-    emit resourceDetailsRequested(mWebEngineView, pResource);
+    emit resourceDetailsRequested(mWebViewer, pResource);
 }
 
 //==============================================================================
@@ -315,19 +315,19 @@ void CellmlAnnotationViewMetadataDetailsWidget::lookUpResource(const QString &pR
 void CellmlAnnotationViewMetadataDetailsWidget::lookUpId(const QString &pResource,
                                                          const QString &pId)
 {
-    // Let people know that we want our web engine viewer to be updated with
-    // some details about the given id
+    // Let people know that we want our web viewer to be updated with some
+    // details about the given id
 
-    emit idDetailsRequested(mWebEngineView, pResource, pId);
+    emit idDetailsRequested(mWebViewer, pResource, pId);
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataDetailsWidget::lookUpNothing()
 {
-    // We are 'asked' to look nothing up, so 'clean up' our web engine viewer
+    // We are 'asked' to look nothing up, so 'clean up' our web viewer
 
-    mWebEngineView->setUrl(QUrl());
+    mWebViewer->setUrl(QUrl());
 }
 
 //==============================================================================

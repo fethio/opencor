@@ -30,7 +30,6 @@ specific language governing permissions and limitations under the License.
 //==============================================================================
 
 class QSplitter;
-class QWebEngineView;
 
 //==============================================================================
 
@@ -41,6 +40,12 @@ namespace OpenCOR {
 namespace Core {
     class BorderedWidget;
     class UserMessageWidget;
+}   // namespace Core
+
+//==============================================================================
+
+namespace WebViewer {
+    class WebViewerWidget;
 }   // namespace Core
 
 //==============================================================================
@@ -90,11 +95,11 @@ private:
 
     Core::BorderedWidget *mBorderedMetadataEditDetails;
     Core::BorderedWidget *mBorderedMetadataViewDetails;
-    Core::BorderedWidget *mBorderedWebEngineView;
+    Core::BorderedWidget *mBorderedWebViewer;
 
     CellmlAnnotationViewMetadataEditDetailsWidget *mMetadataEditDetails;
     CellmlAnnotationViewMetadataViewDetailsWidget *mMetadataViewDetails;
-    QWebEngineView *mWebEngineView;
+    WebViewer::WebViewerWidget *mWebViewer;
 
     CellMLSupport::CellmlFile *mCellmlFile;
 
@@ -106,11 +111,11 @@ Q_SIGNALS:
     void splitterMoved(const QIntList &pSizes);
 
 
-    void qualifierDetailsRequested(QWebEngineView *pWebEngineView,
+    void qualifierDetailsRequested(WebViewer::WebViewerWidget *pWebViewer,
                                    const QString &pQualifier);
-    void resourceDetailsRequested(QWebEngineView *pWebEngineView,
+    void resourceDetailsRequested(WebViewer::WebViewerWidget *pWebViewer,
                                   const QString &pResource);
-    void idDetailsRequested(QWebEngineView *pWebEngineView,
+    void idDetailsRequested(WebViewer::WebViewerWidget *pWebViewer,
                             const QString &pResource, const QString &pId);
 
 public Q_SLOTS:

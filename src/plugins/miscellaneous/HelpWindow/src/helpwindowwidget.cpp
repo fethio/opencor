@@ -349,7 +349,7 @@ void HelpWindowWidget::mouseReleaseEvent(QMouseEvent *pEvent)
     } else {
         // Something else, so use the default handling of the event
 
-        QWebEngineView::mouseReleaseEvent(pEvent);
+        WebViewer::WebViewerWidget::mouseReleaseEvent(pEvent);
     }
 }
 
@@ -373,7 +373,7 @@ void HelpWindowWidget::wheelEvent(QWheelEvent *pEvent)
         // Not the modifier we were expecting, so call the default handling of
         // the event
 
-        QWebEngineView::wheelEvent(pEvent);
+        WebViewer::WebViewerWidget::wheelEvent(pEvent);
     }
 }
 
