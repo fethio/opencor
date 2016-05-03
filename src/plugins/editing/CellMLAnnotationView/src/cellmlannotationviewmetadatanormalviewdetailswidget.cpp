@@ -274,8 +274,8 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
         foreach (CellMLSupport::CellmlFileRdfTriple *rdfTriple, rdfTriples)
             ontologicalTerms += addRdfTriple(rdfTriple, false);
 
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
-                                                                                          Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16),
+                                                                                          Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled),
                                                                                           ontologicalTerms));
 
         mInitialized = true;
