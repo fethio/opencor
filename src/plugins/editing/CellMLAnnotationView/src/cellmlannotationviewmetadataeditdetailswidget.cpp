@@ -172,8 +172,6 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
     mUrls(QMap<QString, QString>()),
     mItemInformationSha1s(QStringList()),
     mItemInformationSha1(QString()),
-    mLink(QString()),
-    mTextContent(QString()),
     mNetworkReply(0)
 {
     // Set up the GUI
@@ -693,74 +691,24 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::genericLookUp(const QString 
     QString resource = (pItemInformation.isEmpty() || (pInformationType == Qualifier))?QString():itemInformation[0];
     QString id = (pItemInformation.isEmpty() || (pInformationType == Qualifier))?QString():itemInformation[1];
 
-    // Toggle the look up button, if needed
-    // Note: we don't want nested generic look ups, hence we temporarily disable
-    //       the handling of toggled() on mLookUpQualifierButton. If we don't do
-    //       that then to toggle mLookUpQualifierButton may result in mLink and
-    //       mTextContent being reset (see below), which may not be what we want
-    //       (e.g. if we came here after clicking on a resource/id link)...
-//---ISSUE908--- TO CLICK ON THE Look Up BUTTON WILL, AS EXPECTED, SHOW SOME
-//               INFORMATION ON THE QUALIFIER, BUT THEN THE Look Up BUTTON WILL
-//               LOSE ITS CHECKED STATE THROUGH THE CODE BELOW, WHICH IS
-//               PROBABLY DUE TO THE FACT THAT WE ARE NOT YET DONE WITH PORTING
-//               THIS VIEW...
-
-    if ((pInformationType != Qualifier) && mLookUpQualifierButton->isChecked()) {
-        disconnect(mLookUpQualifierButton, SIGNAL(toggled(bool)),
-                   this, SLOT(lookUpQualifier()));
-
-        mLookUpQualifierButton->toggle();
-
-        connect(mLookUpQualifierButton, SIGNAL(toggled(bool)),
-                this, SLOT(lookUpQualifier()));
-    }
-
-    // Reset some internal properties, if needed
-
-    if ((pInformationType != Resource) && (pInformationType != Id)) {
-        mLink = QString();
-        mTextContent = QString();
-    }
-
     // (Un)highlight/(un)select our various items
 
-/*---ISSUE908---
-    static const QString Highlighted = "highlighted";
-    static const QString Selected = "selected";
+    bool resourceOrIdInformationType = (pInformationType == Resource) || (pInformationType == Id);
+    QString itemInformationSha1 = pItemInformation.isEmpty()?QString():Core::sha1(pItemInformation.toUtf8());
 
-    QWebElement documentElement = mOutputOntologicalTerms->page()->mainFrame()->documentElement();
-    QString itemInformationSha1 = mLink.isEmpty()?QString():Core::sha1(mLink.toUtf8());
-
-    if (itemInformationSha1.compare(mItemInformationSha1)) {
-        if (!mItemInformationSha1.isEmpty()) {
-            documentElement.findFirst(QString("tr[id=item_%1]").arg(mItemInformationSha1)).removeClass(Highlighted);
-
-            if (mInformationType == Resource)
-                documentElement.findFirst(QString("td[id=resource_%1]").arg(mItemInformationSha1)).removeClass(Selected);
-            else if (mInformationType == Id)
-                documentElement.findFirst(QString("td[id=id_%1]").arg(mItemInformationSha1)).removeClass(Selected);
-        }
-
-        if (!itemInformationSha1.isEmpty()) {
-            documentElement.findFirst(QString("tr[id=item_%1]").arg(itemInformationSha1)).addClass(Highlighted);
-
-            if (pInformationType == Resource)
-                documentElement.findFirst(QString("td[id=resource_%1]").arg(itemInformationSha1)).addClass(Selected);
-            else if (pInformationType == Id)
-                documentElement.findFirst(QString("td[id=id_%1]").arg(itemInformationSha1)).addClass(Selected);
-        }
+    if (   !resourceOrIdInformationType
+        ||  itemInformationSha1.compare(mItemInformationSha1)) {
+        if (!mItemInformationSha1.isEmpty())
+            mOutputOntologicalTerms->page()->runJavaScript(QString("updateEntry(\"%1\", 0, 0, 0);").arg(mItemInformationSha1));
 
         mItemInformationSha1 = itemInformationSha1;
-    } else if (!itemInformationSha1.isEmpty()) {
-        if (pInformationType == Resource) {
-            documentElement.findFirst(QString("td[id=resource_%1]").arg(itemInformationSha1)).addClass(Selected);
-            documentElement.findFirst(QString("td[id=id_%1]").arg(itemInformationSha1)).removeClass(Selected);
-        } else if (pInformationType == Id) {
-            documentElement.findFirst(QString("td[id=resource_%1]").arg(itemInformationSha1)).removeClass(Selected);
-            documentElement.findFirst(QString("td[id=id_%1]").arg(itemInformationSha1)).addClass(Selected);
-        }
     }
-*/
+
+    if (resourceOrIdInformationType && !itemInformationSha1.isEmpty()) {
+        mOutputOntologicalTerms->page()->runJavaScript(QString("updateEntry(\"%1\", 1, %2, %3);").arg(itemInformationSha1)
+                                                                                                 .arg(pInformationType == Resource)
+                                                                                                 .arg(pInformationType == Id));
+    }
 
     mInformationType = pInformationType;
 
@@ -1152,12 +1100,14 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::showCustomContextMenu()
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::on_actionCopy_triggered()
 {
+/*---ISSUE908---
     // Copy the URL of the resource or id to the clipboard
 
     if (mUrls.contains(mTextContent))
         QApplication::clipboard()->setText(mUrls.value(mTextContent));
     else
         QApplication::clipboard()->setText(mUrls.value(mLink));
+*/
 }
 
 //==============================================================================

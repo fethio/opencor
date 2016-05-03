@@ -117,6 +117,13 @@
                 countElement.innerHTML = count;
             }
 
+            function updateEntry(id, highlighted, selectedResource, selectedId) {
+                document.getElementById("item_"+id).className = highlighted?"highlighted":"";
+
+                document.getElementById("resource_"+id).className = selectedResource?"selected":"";
+                document.getElementById("id_"+id).className = selectedId?"selected":"";
+            }
+
             function enableButton(id, enabled) {
                 document.getElementById("button_"+id).style.display = enabled?"table-cell":"none";
                 document.getElementById("disabledButton_"+id).style.display = !enabled?"table-cell":"none";

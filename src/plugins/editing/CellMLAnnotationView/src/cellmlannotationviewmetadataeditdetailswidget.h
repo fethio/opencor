@@ -177,9 +177,6 @@ private:
     QStringList mItemInformationSha1s;
     QString mItemInformationSha1;
 
-    QString mLink;
-    QString mTextContent;
-
     QMenu *mContextMenu;
 
     QNetworkReply *mNetworkReply;
