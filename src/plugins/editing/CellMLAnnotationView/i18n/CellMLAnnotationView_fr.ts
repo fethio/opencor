@@ -383,6 +383,22 @@
         <source>There is no metadata associated with the current CellML element...</source>
         <translation>Il n&apos;y a pas de métadonnées associées à l&apos;élément CellML actuel...</translation>
     </message>
+    <message>
+        <source>Look Up Qualifier</source>
+        <translation>Vérifier Qualificatif</translation>
+    </message>
+    <message>
+        <source>Look Up Resource</source>
+        <translation>Vérifier Ressource</translation>
+    </message>
+    <message>
+        <source>Look Up Id</source>
+        <translation>Vérifier Id</translation>
+    </message>
+    <message>
+        <source>Remove Term</source>
+        <translation>Supprimer Terme</translation>
+    </message>
 </context>
 <context>
     <name>OpenCOR::CellMLAnnotationView::CellmlAnnotationViewMetadataRawViewDetailsWidget</name>
