@@ -172,7 +172,11 @@ private:
 
     ObjRef<iface::cellml_api::CellMLElement> mElement;
 
-    QMap<QString, QString> mUrls;
+    QMap<QString, QString> mResourceUrls;
+    QMap<QString, QString> mIdUrls;
+
+    QString mResourceOrIdUrl;
+
     QStringList mItemInformationSha1s;
     QString mItemInformationSha1;
 

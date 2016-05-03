@@ -169,7 +169,9 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
     mEnabledItems(QMap<QString, bool>()),
     mCellmlFile(pCellmlFile),
     mElement(0),
-    mUrls(QMap<QString, QString>()),
+    mResourceUrls(QMap<QString, QString>()),
+    mIdUrls(QMap<QString, QString>()),
+    mResourceOrIdUrl(QString()),
     mItemInformationSha1s(QStringList()),
     mItemInformationSha1(QString()),
     mNetworkReply(0)
@@ -582,7 +584,9 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
     // Note: we might only do that before adding new items, but then again there
     //       is no need to waste memory...
 
-    mUrls.clear();
+    mResourceUrls.clear();
+    mIdUrls.clear();
+
     mItemInformationSha1s.clear();
 
     mItemsMapping.clear();
@@ -597,7 +601,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
     bool showBusyWidget = false;
 
     if (pItems.count()) {
-        // Initialise our web view by add the items to it and updating
+        // Initialise our web view by adding the items to it and updating
         // (initialising) its headers
 
         QString ontologicalTerms = QString();
@@ -610,10 +614,8 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
             QString resourceUrl = "http://identifiers.org/"+item.resource()+"/?redirect=true";
             QString idUrl = "http://identifiers.org/"+item.resource()+"/"+item.id()+"/?profile=most_reliable&redirect=true";
 
-            if (!mUrls.contains(item.resource()))
-                mUrls.insert(item.resource(), resourceUrl);
-
-            mUrls.insert(itemInformation, idUrl);
+            mResourceUrls.insert(itemInformation, resourceUrl);
+            mIdUrls.insert(itemInformation, idUrl);
 
             mItemInformationSha1s << itemInformationSha1;
 
@@ -853,8 +855,8 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked(const QString &p
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered(const QString &pLink)
 {
-    // Update our tool tip based on whether we are hovering a text or a button
-    // link
+    // Update mResourceOrId and our tool tip based on whether we are hovering a
+    // text or a button link
 
     QString linkToolTip;
     QUrl url = pLink;
@@ -862,13 +864,22 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::linkHovered(const QString &p
     if (!url.scheme().compare(CaScheme)) {
         QString urlHost = url.host();
 
-        if (!urlHost.compare(LookUpResourceAction, Qt::CaseInsensitive))
+        if (!urlHost.compare(LookUpResourceAction, Qt::CaseInsensitive)) {
+            mResourceOrIdUrl = mResourceUrls.value(Core::urlArguments(url));
+
             linkToolTip = tr("Look Up Resource");
-        else if (!urlHost.compare(LookUpIdAction, Qt::CaseInsensitive))
+        } else if (!urlHost.compare(LookUpIdAction, Qt::CaseInsensitive)) {
+            mResourceOrIdUrl = mIdUrls.value(Core::urlArguments(url));
+
             linkToolTip = tr("Look Up Id");
-        else
+        } else {
+            mResourceOrIdUrl = QString();
+
             linkToolTip = tr("Add Term");
+        }
     } else {
+        mResourceOrIdUrl = QString();
+
         linkToolTip = QString();
     }
 
@@ -1082,32 +1093,20 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::addTerm()
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::showCustomContextMenu()
 {
-/*---ISSUE908---
-    // Retrieve some information about the link, if any
-
-    mOutputOntologicalTerms->retrieveLinkInformation(mLink, mTextContent);
-
     // Show our context menu to allow the copying of the URL of the resource or
-    // id, but only if we are over a link, i.e. if both mLink and mTextContent
-    // are not empty
+    // id, but only if we are over a link
 
-    if (!mLink.isEmpty() && !mTextContent.isEmpty())
+    if (!mResourceOrIdUrl.isEmpty())
         mContextMenu->exec(QCursor::pos());
-*/
 }
 
 //==============================================================================
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::on_actionCopy_triggered()
 {
-/*---ISSUE908---
     // Copy the URL of the resource or id to the clipboard
 
-    if (mUrls.contains(mTextContent))
-        QApplication::clipboard()->setText(mUrls.value(mTextContent));
-    else
-        QApplication::clipboard()->setText(mUrls.value(mLink));
-*/
+    QApplication::clipboard()->setText(mResourceOrIdUrl);
 }
 
 //==============================================================================
