@@ -308,8 +308,12 @@ QString CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellML
     // Initialise our web view, if needed
 
     if (pDirectAddition && !mItemsCount) {
+qDebug(">>> About to initialise...");
         mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16),
-                                                                                          Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled)));
+                                                                                          Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled),
+                                                                                          QString()));
+
+        mInitialized = true;
     }
 
     // Add the item
