@@ -343,10 +343,9 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
 
     Core::readFileContentsFromFile(":/ontologicalTerms.html", fileContents);
 
-    mOutputOntologicalTermsTemplate = fileContents;
-
-    mEnabledAddButton = Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16);
-    mDisabledAddButton = Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled);
+    mOutputOntologicalTermsTemplate = QString(fileContents).arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
+                                                                Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
+                                                                "%1");
 
     mOutputOntologicalTerms = new WebViewer::WebViewerWidget(mOutput);
 
@@ -646,7 +645,7 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
                                 "</tr>\n";
         }
 
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(mEnabledAddButton, mDisabledAddButton, ontologicalTerms));
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(ontologicalTerms));
 
         mInitialized = true;
 

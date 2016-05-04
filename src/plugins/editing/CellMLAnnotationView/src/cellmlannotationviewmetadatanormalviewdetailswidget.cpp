@@ -115,10 +115,9 @@ CellmlAnnotationViewMetadataNormalViewDetailsWidget::CellmlAnnotationViewMetadat
 
     Core::readFileContentsFromFile(":/ontologicalTerms.html", fileContents);
 
-    mOutputOntologicalTermsTemplate = fileContents;
-
-    mEnabledRemoveButton = Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16);
-    mDisabledRemoveButton = Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled);
+    mOutputOntologicalTermsTemplate = QString(fileContents).arg(Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16),
+                                                                Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled),
+                                                                "%1");
 
     mOutputOntologicalTerms = new WebViewer::WebViewerWidget(mOutput);
 
@@ -277,7 +276,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
         foreach (CellMLSupport::CellmlFileRdfTriple *rdfTriple, rdfTriples)
             ontologicalTerms += addRdfTriple(rdfTriple, false);
 
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(mEnabledRemoveButton, mDisabledRemoveButton, ontologicalTerms));
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(ontologicalTerms));
 
         mInitialized = true;
     } else {
@@ -336,17 +335,19 @@ QString CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellML
 
     // Initialise our web view, if needed, or update it
 
-    if (pDirectAddition && (mItemsCount == 1)) {
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(mEnabledRemoveButton, mDisabledRemoveButton, ontologicalTerm));
+    if (pDirectAddition) {
+        if (mItemsCount == 1) {
+            mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(ontologicalTerm));
 
-        mInitialized = true;
-    } else {
+            mInitialized = true;
+        } else {
 /*---ISSUE908---
-        if (mItemsCount == 1)
-            mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst("tbody").appendInside(ontologicalTerm);
-        else
-            mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst(QString("tr[id=item_%1]").arg(mRdfTripleInformationSha1s.last())).appendOutside(ontologicalTerm);
+            if (mItemsCount == 1)
+                mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst("tbody").appendInside(ontologicalTerm);
+            else
+                mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst(QString("tr[id=item_%1]").arg(mRdfTripleInformationSha1s.last())).appendOutside(ontologicalTerm);
 */
+        }
     }
 
     // Keep track of some information

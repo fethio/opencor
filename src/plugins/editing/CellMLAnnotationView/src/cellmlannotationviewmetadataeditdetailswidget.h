@@ -157,8 +157,6 @@ private:
     Core::UserMessageWidget *mOutputMessage;
 
     QString mOutputOntologicalTermsTemplate;
-    QString mEnabledAddButton;
-    QString mDisabledAddButton;
     WebViewer::WebViewerWidget *mOutputOntologicalTerms;
 
     bool mInitialized;

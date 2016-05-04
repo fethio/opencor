@@ -113,8 +113,6 @@ private:
     Core::UserMessageWidget *mOutputMessage;
 
     QString mOutputOntologicalTermsTemplate;
-    QString mEnabledRemoveButton;
-    QString mDisabledRemoveButton;
     WebViewer::WebViewerWidget *mOutputOntologicalTerms;
 
     bool mInitialized;
