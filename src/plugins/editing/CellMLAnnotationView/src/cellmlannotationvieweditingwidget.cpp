@@ -309,7 +309,7 @@ void CellmlAnnotationViewEditingWidget::updateWebViewererWithResourceDetails(Web
     // The user requested a resource to be looked up, so retrieve it using
     // identifiers.org
 
-    pWebViewer->setUrl("http://identifiers.org/"+pResource+"/?redirect=true");
+    pWebViewer->setUrl(CellmlAnnotationViewWidget::resourceUrl(pResource));
 }
 
 //==============================================================================
@@ -321,7 +321,7 @@ void CellmlAnnotationViewEditingWidget::updateWebViewererWithIdDetails(WebViewer
     // The user requested a resource id to be looked up, so retrieve it using
     // identifiers.org
 
-    pWebViewer->setUrl("http://identifiers.org/"+pResource+"/"+pId+"?profile=most_reliable&redirect=true");
+    pWebViewer->setUrl(CellmlAnnotationViewWidget::idUrl(pResource, pId));
 }
 
 //==============================================================================
