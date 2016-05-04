@@ -162,7 +162,6 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
     mLookUpTerm(false),
     mErrorMessage(QString()),
     mInternetConnectionAvailable(true),
-    mInitialized(false),
     mInformationType(None),
     mLookUpInformation(false),
     mItemsMapping(QMap<QString, CellmlAnnotationViewMetadataEditDetailsItem>()),
@@ -348,6 +347,9 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
     mOutputOntologicalTerms = new WebViewer::WebViewerWidget(mOutput);
 
     mOutputOntologicalTerms->setContextMenuPolicy(Qt::CustomContextMenu);
+    mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
+                                                                                      Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
+                                                                                      QString()));
 
     connect(mOutputOntologicalTerms, SIGNAL(customContextMenuRequested(const QPoint &)),
             this, SLOT(showCustomContextMenu()));
@@ -550,14 +552,12 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateOutputHeaders()
 {
     // Update our output headers, if we have been initialised
 
-    if (mInitialized) {
-        mOutputOntologicalTerms->page()->runJavaScript(QString("setHeaders(\"%1\", \"%2\", \"%3\", \"%4\");").arg(tr("Name"),
-                                                                                                                  tr("Resource"),
-                                                                                                                  tr("Id"),
-                                                                                                                  (mItemsCount == 1)?
-                                                                                                                      tr("(1 term)"):
-                                                                                                                      tr("(%1 terms)").arg(QLocale().toString(mItemsCount))));
-    }
+    mOutputOntologicalTerms->page()->runJavaScript(QString("setHeaders(\"%1\", \"%2\", \"%3\", \"%4\");").arg(tr("Name"),
+                                                                                                              tr("Resource"),
+                                                                                                              tr("Id"),
+                                                                                                              (mItemsCount == 1)?
+                                                                                                                  tr("(1 term)"):
+                                                                                                                  tr("(%1 terms)").arg(QLocale().toString(mItemsCount))));
 }
 
 //==============================================================================
@@ -593,8 +593,6 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
     mEnabledItems.clear();
 
     mOutputOntologicalTerms->setHtmlSynchronously(QString());
-
-    mInitialized = false;
 
     // Populate our web view, but only if there is at least one item
 
@@ -646,8 +644,6 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::updateItemsGui(const CellmlA
         mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
                                                                                           Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
                                                                                           ontologicalTerms));
-
-        mInitialized = true;
 
         updateOutputHeaders();
     } else {
