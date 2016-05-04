@@ -117,6 +117,9 @@ CellmlAnnotationViewMetadataNormalViewDetailsWidget::CellmlAnnotationViewMetadat
 
     mOutputOntologicalTermsTemplate = fileContents;
 
+    mEnabledRemoveButton = Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16);
+    mDisabledRemoveButton = Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled);
+
     mOutputOntologicalTerms = new WebViewer::WebViewerWidget(mOutput);
 
     mOutputOntologicalTerms->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -274,9 +277,7 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
         foreach (CellMLSupport::CellmlFileRdfTriple *rdfTriple, rdfTriples)
             ontologicalTerms += addRdfTriple(rdfTriple, false);
 
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16),
-                                                                                          Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled),
-                                                                                          ontologicalTerms));
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(mEnabledRemoveButton, mDisabledRemoveButton, ontologicalTerms));
 
         mInitialized = true;
     } else {
@@ -309,9 +310,7 @@ QString CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellML
 
     if (pDirectAddition && !mItemsCount) {
 qDebug(">>> About to initialise...");
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16),
-                                                                                          Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled),
-                                                                                          QString()));
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(mEnabledRemoveButton, mDisabledRemoveButton, QString()));
 
         mInitialized = true;
     }
