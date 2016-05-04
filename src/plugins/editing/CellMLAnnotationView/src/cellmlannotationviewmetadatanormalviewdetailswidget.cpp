@@ -262,6 +262,8 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
     mFirstRdfTripleInformation = QString();
     mLastRdfTripleInformation = QString();
 
+    mOutputOntologicalTerms->setHtmlSynchronously(QString());
+
     mInitialized = false;
 
     // Populate our web view, but only if there is at least one RDF triple
@@ -279,8 +281,6 @@ void CellmlAnnotationViewMetadataNormalViewDetailsWidget::updateGui(iface::cellm
         mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(ontologicalTerms));
 
         mInitialized = true;
-    } else {
-        mOutputOntologicalTerms->setHtmlSynchronously(QString());
     }
 
     // Do additional GUI updates
