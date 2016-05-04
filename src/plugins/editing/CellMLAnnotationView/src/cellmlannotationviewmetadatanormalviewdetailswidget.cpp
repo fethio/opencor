@@ -306,15 +306,6 @@ QString CellmlAnnotationViewMetadataNormalViewDetailsWidget::addRdfTriple(CellML
     if (!pRdfTriple)
         return QString();
 
-    // Initialise our web view, if needed
-
-    if (pDirectAddition && !mItemsCount) {
-qDebug(">>> About to initialise...");
-        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(mEnabledRemoveButton, mDisabledRemoveButton, QString()));
-
-        mInitialized = true;
-    }
-
     // Add the item
 
     ++mItemsCount;
@@ -343,12 +334,20 @@ qDebug(">>> About to initialise...");
                               "    </td>\n"
                               "</tr>\n";
 
+    // Initialise our web view, if needed, or update it
+
+    if (pDirectAddition && (mItemsCount == 1)) {
+        mOutputOntologicalTerms->setHtmlSynchronously(mOutputOntologicalTermsTemplate.arg(mEnabledRemoveButton, mDisabledRemoveButton, ontologicalTerm));
+
+        mInitialized = true;
+    } else {
 /*---ISSUE908---
-    if (mItemsCount == 1)
-        mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst("tbody").appendInside(ontologicalTerm);
-    else
-        mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst(QString("tr[id=item_%1]").arg(mRdfTripleInformationSha1s.last())).appendOutside(ontologicalTerm);
+        if (mItemsCount == 1)
+            mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst("tbody").appendInside(ontologicalTerm);
+        else
+            mOutputOntologicalTerms->page()->mainFrame()->documentElement().findFirst(QString("tr[id=item_%1]").arg(mRdfTripleInformationSha1s.last())).appendOutside(ontologicalTerm);
 */
+    }
 
     // Keep track of some information
 
