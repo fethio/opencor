@@ -902,15 +902,9 @@ bool CellmlAnnotationViewMetadataEditDetailsWidget::isDirectTerm(const QString &
 
 void CellmlAnnotationViewMetadataEditDetailsWidget::termChanged(const QString &pTerm)
 {
-    // Update our GUI (incl. its enabled state) and make sure that we get the
-    // focus back (otherwise we will only be able to type one character at a
-    // time, if the busy widget is not visible)
+    // Update our GUI (incl. its enabled state)
 
     updateGui(mElement, true);
-
-    mTermValue->setFocus();
-//---ISSUE908--- ONCE WE ARE ALL DONE WITH THIS ISSUE, CHECK WHETHER WE STILL
-//               NEED TO ENSURE THAT mTermValue HAS THE FOCUS...
 
     // Retrieve some ontological terms based on the given term, but only if the
     // term cannot be added directly and if it is not empty
