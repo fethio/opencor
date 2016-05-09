@@ -813,6 +813,8 @@ void CellmlAnnotationViewMetadataEditDetailsWidget::linkClicked(const QString &p
         CellmlAnnotationViewMetadataEditDetailsItem item = mItemsMapping.value(itemInformationSha1);
 
         // Add the ontological term to our CellML element as an RDF triple
+//---ISSUE908---- TO ADD AN ONTOLOGICAL TERM CURRENTLY RESULTS IN OpenCOR
+//                HANGING UP...
 
         CellMLSupport::CellmlFileRdfTriple *rdfTriple;
 
