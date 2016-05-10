@@ -309,19 +309,6 @@ void PmrWindowWidget::showExposureFiles(const QString &pUrl, const bool &pShow)
 
 //==============================================================================
 
-void PmrWindowWidget::resetShowExposureFilesButton(const QString &pUrl)
-{
-    // Remove the fact that we have some exposure files for the given URL
-
-    mHaveExposureFiles.remove(pUrl);
-
-    // Reset the button for showing our exposure files
-
-    page()->runJavaScript(QString("updateShowExposureFilesButton(%1, true);").arg(mExposureUrlId.value(pUrl)));
-}
-
-//==============================================================================
-
 void PmrWindowWidget::on_actionCopy_triggered()
 {
     // Copy the URL of the exposure or exposure file to the clipboard
