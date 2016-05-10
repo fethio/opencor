@@ -22,6 +22,7 @@ ADD_PLUGIN(PMRWindow
     PLUGINS
         Core
         ${LIBGIT2_PLUGIN}
+        PMRSupport
         WebViewer
         ${ZLIB_PLUGIN}
     PLUGIN_BINARIES

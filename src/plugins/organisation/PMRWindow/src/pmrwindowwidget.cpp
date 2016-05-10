@@ -42,43 +42,6 @@ namespace PMRWindow {
 
 //==============================================================================
 
-PmrWindowExposure::PmrWindowExposure(const QString &pUrl,
-                                     const QString &pName) :
-    mUrl(pUrl),
-    mName(pName)
-{
-}
-
-//==============================================================================
-
-bool PmrWindowExposure::operator<(const PmrWindowExposure &pExposure) const
-{
-    // Return whether the current exposure is lower than the given one (without
-    // worrying about casing)
-
-    return mName.compare(pExposure.name(), Qt::CaseInsensitive) < 0;
-}
-
-//==============================================================================
-
-QString PmrWindowExposure::url() const
-{
-    // Return our URL
-
-    return mUrl;
-}
-
-//==============================================================================
-
-QString PmrWindowExposure::name() const
-{
-    // Return our name
-
-    return mName;
-}
-
-//==============================================================================
-
 PmrWindowWidget::PmrWindowWidget(QWidget *pParent) :
     WebViewer::WebViewerWidget(pParent),
     Core::CommonWidget(),
@@ -200,7 +163,7 @@ static const auto ShowExposureFilesAction = QStringLiteral("showExposureFiles");
 
 //==============================================================================
 
-void PmrWindowWidget::initialize(const PmrWindowExposures &pExposures,
+void PmrWindowWidget::initialize(const PMRSupport::PmrExposures &pExposures,
                                  const QString &pErrorMessage,
                                  const QString &pFilter,
                                  const bool &pInternetConnectionAvailable)
@@ -227,8 +190,8 @@ void PmrWindowWidget::initialize(const PmrWindowExposures &pExposures,
     mNumberOfFilteredExposures = 0;
 
     for (int i = 0, iMax = pExposures.count(); i < iMax; ++i) {
-        QString exposureUrl = pExposures[i].url();
-        QString exposureName = pExposures[i].name();
+        QString exposureUrl = pExposures[i]->url();
+        QString exposureName = pExposures[i]->name();
         bool exposureDisplayed = exposureName.contains(filterRegEx);
 
         exposures += "<tr style=\"display: "+QString(exposureDisplayed?"table-row":"none")+";\">\n"

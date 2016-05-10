@@ -16,98 +16,97 @@ specific language governing permissions and limitations under the License.
 *******************************************************************************/
 
 //==============================================================================
-// PMR widget
+// PMR web service
 //==============================================================================
 
 #pragma once
 
 //==============================================================================
 
-#include "commonwidget.h"
-#include "corecliutils.h"
 #include "pmrexposure.h"
-#include "webviewerwidget.h"
+#include "pmrsupportglobal.h"
 
 //==============================================================================
 
-namespace Ui {
-    class PmrWindowWidget;
-}
+#include <QList>
+#include <QSslError>
 
 //==============================================================================
 
-class QMenu;
+class QNetworkAccessManager;
+class QNetworkReply;
 
 //==============================================================================
 
 namespace OpenCOR {
-namespace PMRWindow {
+namespace PMRSupport {
 
 //==============================================================================
 
-class PmrWindowWidget : public WebViewer::WebViewerWidget,
-                        public Core::CommonWidget
+class PMRSUPPORT_EXPORT PmrWebService : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit PmrWindowWidget(QWidget *pParent);
-    ~PmrWindowWidget();
+    explicit PmrWebService();
+    ~PmrWebService();
 
-    virtual void retranslateUi();
-
-    void initialize(const PMRSupport::PmrExposures &pExposures,
-                    const QString &pErrorMessage, const QString &pFilter,
-                    const bool &pInternetConnectionAvailable);
-
-    void filter(const QString &pFilter);
-
-protected:
-    virtual QSize sizeHint() const;
+    void cloneWorkspace(const QString &pUrl, const QString &pDirName);
+    void requestExposuresList(void);
+    void requestExposureFiles(const QString &pUrl);
 
 private:
-    Ui::PmrWindowWidget *mGui;
+    enum PmrRequest {
+        ExposuresList,
+        ExposureInformation,
+        WorkspaceInformation,
+        ExposureFileInformation
+    };
 
-    QMenu *mContextMenu;
+    enum Action {
+        None,
+        CloneWorkspace,
+        ShowExposureFiles
+    };
 
-    QStringList mExposureNames;
-    QBoolList mExposureDisplayed;
-    QMap<QString, int> mExposureUrlId;
+    QNetworkAccessManager *mNetworkAccessManager;
 
-    bool mInitialized;
+    int mNumberOfExposureFileUrlsLeft;
 
-    QString mTemplate;
-    QString mErrorMessage;
-    bool mInternetConnectionAvailable;
+    QMap<QString, QString> mWorkspaces;
+    QMap<QString, QString> mExposureUrls;
+    QMap<QString, QString> mExposureNames;
+    QMap<QString, QString> mExposureFileNames;
 
-    int mNumberOfFilteredExposures;
+    QString informationNoteMessage() const;
 
-    QStringList mExposureUrls;
-    QMap<QString, bool> mHaveExposureFiles;
-    QMap<QString, bool> mHideExposureFiles;
+    void doCloneWorkspace(const QString &pWorkspace, const QString &pDirName);
+    void doShowExposureFiles(const QString &pExposureUrl);
 
-    QString mExposureOrExposureFileUrl;
-
-    QString message() const;
+    void sendPmrRequest(const PmrRequest &pPmrRequest,
+                        const QString &pUrl = QString(),
+                        const Action pAction = None,
+                        const QString &pName = QString());
 
 Q_SIGNALS:
-    void cloneWorkspaceRequested(const QString &pUrl);
-    void showExposureFilesRequested(const QString &pUrl);
+    void busy(const bool &pBusy);
 
-    void openExposureFileRequested(const QString &pUrl);
+    void warning(const QString &pMessage);
+    void information(const QString &pMessage);
 
-public Q_SLOTS:
+    void exposuresList(const PMRSupport::PmrExposures &pExposures,
+                       const QString &pErrorMessage,
+                       const bool &pInternetConnectionAvailable);
+
     void addExposureFiles(const QString &pUrl,
                           const QStringList &pExposureFiles);
-    void showExposureFiles(const QString &pUrl, const bool &pShow = true);
+    void showExposureFiles(const QString &pUrl);
 
 private Q_SLOTS:
-    void on_actionCopy_triggered();
+    void finished(QNetworkReply *pNetworkReply = 0);
+    void sslErrors(QNetworkReply *pNetworkReply,
+                   const QList<QSslError> &pSslErrors);
 
-    void linkClicked(const QString &pLink);
-    void linkHovered(const QString &pLink);
-
-    void showCustomContextMenu();
 };
 
 //==============================================================================
