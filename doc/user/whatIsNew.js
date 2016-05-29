@@ -1,9 +1,10 @@
 var jsonData = { "versions": [
-                   { "anchor": "latest", "description": "Latest snapshot", "day": 31, "month": 3, "year": 2016,
+                   { "anchor": "latest", "description": "Latest snapshot", "day": 30, "month": 5, "year": 2016,
                      "categories": [
                        { "name": "General",
                          "entries": [
                            { "type": "Added", "description": "Support for <a href=\"https://en.wikipedia.org/wiki/Windows_10\">Windows 10</a>." },
+                           { "type": "Added", "description": "Support for <a href=\"https://en.wikipedia.org/wiki/List_of_Ubuntu_releases#Ubuntu_16.04_LTS_.28Xenial_Xerus.29\">Ubuntu 16.04 LTS (Xenial Xerus)</a>." },
                            { "type": "Added", "description": "Support for <a href=\"https://en.wikipedia.org/wiki/OS_X_El_Capitan\">OS X 10.11</a> (El Capitan)." },
                            { "type": "Added", "description": "Resetting all your settings from the <a href=\"https://en.wikipedia.org/wiki/Command-line_interface\">CLI</a>." },
                            { "type": "Added", "description": "Detection of changes to one or several file dependencies." },
@@ -92,12 +93,12 @@ var jsonData = { "versions": [
                        },
                        { "name": "Solver",
                          "entries": [
-                           { "type": "subCategory", "name": "<a href=\"https://computation.llnl.gov/casc/sundials/description/description.html#descr_cvode\">CVODE</a> solver",
+                           { "type": "subCategory", "name": "<a href=\"http://computation.llnl.gov/projects/sundials-suite-nonlinear-differential-algebraic-equation-solvers/sundials-software\">CVODE</a> solver",
                              "entries": [
                                { "type": "Improved", "description": "Parametrisation of the solver." }
                              ]
                            },
-                           { "type": "subCategory", "name": "<a href=\"https://computation.llnl.gov/casc/sundials/description/description.html#descr_ida\">IDA</a> solver",
+                           { "type": "subCategory", "name": "<a href=\"http://computation.llnl.gov/projects/sundials-suite-nonlinear-differential-algebraic-equation-solvers/sundials-software\">IDA</a> solver",
                              "entries": [
                                { "type": "Improved", "description": "Parametrisation of the solver." }
                              ]
@@ -351,12 +352,12 @@ var jsonData = { "versions": [
                        },
                        { "name": "Solver",
                          "entries": [
-                           { "type": "subCategory", "name": "<a href=\"https://computation.llnl.gov/casc/sundials/description/description.html#descr_cvode\">CVODE</a> solver",
+                           { "type": "subCategory", "name": "<a href=\"http://computation.llnl.gov/projects/sundials-suite-nonlinear-differential-algebraic-equation-solvers/sundials-software\">CVODE</a> solver",
                              "entries": [
                                { "type": "Added", "description": "Choice to interpolate the solution." }
                              ]
                            },
-                           { "type": "subCategory", "name": "<a href=\"https://computation.llnl.gov/casc/sundials/description/description.html#descr_ida\">IDA</a> solver",
+                           { "type": "subCategory", "name": "<a href=\"http://computation.llnl.gov/projects/sundials-suite-nonlinear-differential-algebraic-equation-solvers/sundials-software\">IDA</a> solver",
                              "entries": [
                                { "type": "Added", "description": "Choice to interpolate the solution." }
                              ]
