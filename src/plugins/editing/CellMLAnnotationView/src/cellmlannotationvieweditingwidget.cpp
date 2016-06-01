@@ -111,11 +111,11 @@ CellmlAnnotationViewEditingWidget::CellmlAnnotationViewEditingWidget(CellMLAnnot
     // Some connections to keep track of what our details widget wants
 
     connect(mMetadataDetails, SIGNAL(qualifierDetailsRequested(WebViewer::WebViewerWidget *, const QString &)),
-            this, SLOT(updateWebViewererWithQualifierDetails(WebViewer::WebViewerWidget *, const QString &)));
+            this, SLOT(updateWebViewerWithQualifierDetails(WebViewer::WebViewerWidget *, const QString &)));
     connect(mMetadataDetails, SIGNAL(resourceDetailsRequested(WebViewer::WebViewerWidget *, const QString &)),
-            this, SLOT(updateWebViewererWithResourceDetails(WebViewer::WebViewerWidget *, const QString &)));
+            this, SLOT(updateWebViewerWithResourceDetails(WebViewer::WebViewerWidget *, const QString &)));
     connect(mMetadataDetails, SIGNAL(idDetailsRequested(WebViewer::WebViewerWidget *, const QString &, const QString &)),
-            this, SLOT(updateWebViewererWithIdDetails(WebViewer::WebViewerWidget *, const QString &, const QString &)));
+            this, SLOT(updateWebViewerWithIdDetails(WebViewer::WebViewerWidget *, const QString &, const QString &)));
 
     // Make our CellML list widget our focus proxy
 
@@ -177,8 +177,8 @@ CellmlAnnotationViewMetadataDetailsWidget * CellmlAnnotationViewEditingWidget::m
 
 //==============================================================================
 
-void CellmlAnnotationViewEditingWidget::updateWebViewererWithQualifierDetails(WebViewer::WebViewerWidget *pWebViewer,
-                                                                              const QString &pQualifier)
+void CellmlAnnotationViewEditingWidget::updateWebViewerWithQualifierDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                                                            const QString &pQualifier)
 {
     // The user requested a qualifier to be looked up, so generate a web page
     // containing some information about the qualifier
@@ -304,8 +304,8 @@ void CellmlAnnotationViewEditingWidget::updateWebViewererWithQualifierDetails(We
 
 //==============================================================================
 
-void CellmlAnnotationViewEditingWidget::updateWebViewererWithResourceDetails(WebViewer::WebViewerWidget *pWebViewer,
-                                                                             const QString &pResource)
+void CellmlAnnotationViewEditingWidget::updateWebViewerWithResourceDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                                                           const QString &pResource)
 {
     // The user requested a resource to be looked up, so retrieve it using
     // identifiers.org
@@ -315,9 +315,9 @@ void CellmlAnnotationViewEditingWidget::updateWebViewererWithResourceDetails(Web
 
 //==============================================================================
 
-void CellmlAnnotationViewEditingWidget::updateWebViewererWithIdDetails(WebViewer::WebViewerWidget *pWebViewer,
-                                                                       const QString &pResource,
-                                                                       const QString &pId)
+void CellmlAnnotationViewEditingWidget::updateWebViewerWithIdDetails(WebViewer::WebViewerWidget *pWebViewer,
+                                                                     const QString &pResource,
+                                                                     const QString &pId)
 {
     // The user requested a resource id to be looked up, so retrieve it using
     // identifiers.org

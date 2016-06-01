@@ -57,7 +57,7 @@ namespace Core {
 
 namespace WebViewer {
     class WebViewerWidget;
-}   // namespace Core
+}   // namespace WebViewer
 
 //==============================================================================
 

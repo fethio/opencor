@@ -48,8 +48,7 @@ namespace HelpWindow {
 //==============================================================================
 
 HelpWindowReply::HelpWindowReply(const QByteArray &pData) :
-    mData(pData),
-    mLength(pData.length())
+    mData(pData)
 {
     setOpenMode(QIODevice::ReadOnly);
 
@@ -163,10 +162,6 @@ HelpWindowWidget::HelpWindowWidget(QHelpEngine *pHelpEngine,
     setSupportedUrlSchemes(QStringList() << "qthelp");
 
     page()->profile()->installUrlSchemeHandler("qthelp", new HelpWindowUrlSchemeHandler(pHelpEngine, this));
-
-    // Prevent the widget from taking over the scrolling of other widgets
-
-    setFocusPolicy(Qt::NoFocus);
 
     // Set our initial zoom level to the default value
     // Note: to set mZoomLevel directly is not good enough since one of the
