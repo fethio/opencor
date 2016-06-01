@@ -914,6 +914,20 @@ MACRO(ADD_PLUGIN_BINARY PLUGIN_NAME)
         INSTALL(FILES ${PLUGIN_BINARY_DIR}/${PLUGIN_FILENAME}
                 DESTINATION plugins/${CMAKE_PROJECT_NAME})
     ENDIF()
+
+    # On OS X, and in case we are on Travis CI, make sure that the plugin binary
+    # refers to the system version of the Qt libraries since we don't embed the
+    # Qt libraries in that case (see the main CMakeLists.txt file)
+
+    IF(APPLE AND ENABLE_TRAVIS_CI)
+        FOREACH(QT_LIBRARY ${OS_X_QT_LIBRARIES})
+            SET(QT_LIBRARY_FILENAME ${QT_LIBRARY}.framework/Versions/${QT_VERSION_MAJOR}/${QT_LIBRARY})
+
+            EXECUTE_PROCESS(COMMAND install_name_tool -change @rpath/${QT_LIBRARY_FILENAME}
+                                                              ${QT_LIBRARY_DIR}/${QT_LIBRARY_FILENAME}
+                                                              ${DEST_PLUGINS_DIR}/${PLUGIN_FILENAME})
+        ENDFOREACH()
+    ENDIF()
 ENDMACRO()
 
 #===============================================================================
@@ -984,49 +998,47 @@ ENDMACRO()
 
 #===============================================================================
 
-MACRO(WINDOWS_DEPLOY_QT_LIBRARIES)
-    FOREACH(LIBRARY ${ARGN})
-        # Copy the Qt library to both the build and build/bin folders, so we can
-        # test things both from within Qt Creator and without first having to
-        # deploy OpenCOR
+MACRO(WINDOWS_DEPLOY_QT_LIBRARY LIBRARY_NAME)
+    # Copy the Qt library to both the build and build/bin folders, so we can
+    # test things both from within Qt Creator and without first having to deploy
+    # OpenCOR
 
-        SET(LIBRARY_RELEASE_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${LIBRARY}${CMAKE_SHARED_LIBRARY_SUFFIX})
-        SET(LIBRARY_DEBUG_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${LIBRARY}d${CMAKE_SHARED_LIBRARY_SUFFIX})
+    SET(LIBRARY_RELEASE_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${LIBRARY_NAME}${CMAKE_SHARED_LIBRARY_SUFFIX})
+    SET(LIBRARY_DEBUG_FILENAME ${CMAKE_SHARED_LIBRARY_PREFIX}${LIBRARY_NAME}d${CMAKE_SHARED_LIBRARY_SUFFIX})
 
-        IF(NOT EXISTS ${QT_BINARY_DIR}/${LIBRARY_DEBUG_FILENAME})
-            # No debug version of the Qt library exists, so use its release
-            # version instead
+    IF(NOT EXISTS ${QT_BINARY_DIR}/${LIBRARY_DEBUG_FILENAME})
+        # No debug version of the Qt library exists, so use its release version
+        # instead
 
-            SET(LIBRARY_DEBUG_FILENAME ${LIBRARY_RELEASE_FILENAME})
-        ENDIF()
+        SET(LIBRARY_DEBUG_FILENAME ${LIBRARY_RELEASE_FILENAME})
+    ENDIF()
 
-        IF(RELEASE_MODE)
-            SET(LIBRARY_FILENAME ${LIBRARY_RELEASE_FILENAME})
-        ELSE()
-            SET(LIBRARY_FILENAME ${LIBRARY_DEBUG_FILENAME})
-        ENDIF()
+    IF(RELEASE_MODE)
+        SET(LIBRARY_FILENAME ${LIBRARY_RELEASE_FILENAME})
+    ELSE()
+        SET(LIBRARY_FILENAME ${LIBRARY_DEBUG_FILENAME})
+    ENDIF()
 
-        IF("${LIBRARY}" STREQUAL "Qt5Core")
-            COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${LIBRARY_FILENAME})
+    IF("${LIBRARY_NAME}" STREQUAL "Qt5Core")
+        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${QT_BINARY_DIR} . ${LIBRARY_FILENAME})
 
-            STRING(REPLACE "/" "\\\\"
-                   PATCHQTCORELIBRARY_ARGUMENT "${PROJECT_BUILD_DIR}/${LIBRARY_FILENAME}")
+        STRING(REPLACE "/" "\\\\"
+               PATCHQTCORELIBRARY_ARGUMENT "${PROJECT_BUILD_DIR}/${LIBRARY_FILENAME}")
 
-            PATCH_QT_CORE_LIBRARY(${PATCHQTCORELIBRARY_ARGUMENT})
+        PATCH_QT_CORE_LIBRARY(${PATCHQTCORELIBRARY_ARGUMENT})
 
-            SET(LIBRARY_DIRNAME ${PROJECT_BUILD_DIR})
-        ELSE()
-            SET(LIBRARY_DIRNAME ${QT_BINARY_DIR})
-        ENDIF()
+        SET(LIBRARY_DIRNAME ${PROJECT_BUILD_DIR})
+    ELSE()
+        SET(LIBRARY_DIRNAME ${QT_BINARY_DIR})
+    ENDIF()
 
-        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${LIBRARY_DIRNAME} . ${LIBRARY_FILENAME})
-        COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${LIBRARY_DIRNAME} bin ${LIBRARY_FILENAME})
+    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${LIBRARY_DIRNAME} . ${LIBRARY_FILENAME})
+    COPY_FILE_TO_BUILD_DIR(DIRECT_COPY ${LIBRARY_DIRNAME} bin ${LIBRARY_FILENAME})
 
-        # Deploy the Qt library
+    # Deploy the Qt library
 
-        INSTALL(FILES ${LIBRARY_DIRNAME}/${LIBRARY_FILENAME}
-                DESTINATION bin)
-    ENDFOREACH()
+    INSTALL(FILES ${LIBRARY_DIRNAME}/${LIBRARY_FILENAME}
+            DESTINATION bin)
 ENDMACRO()
 
 #===============================================================================
@@ -1176,6 +1188,21 @@ MACRO(OS_X_CLEAN_UP_FILE_WITH_QT_LIBRARIES PROJECT_TARGET DIRNAME FILENAME)
     ADD_CUSTOM_COMMAND(TARGET ${PROJECT_TARGET} POST_BUILD
                        COMMAND install_name_tool -id ${FILENAME}
                                                      ${FULL_FILENAME})
+
+    # Make sure that the file refers to our embedded copy of the Qt libraries,
+    # but only if we are not on Travis CI (since we don't embed the Qt libraries
+    # in that case; see the main CMakeLists.txt file)
+
+    IF(NOT ENABLE_TRAVIS_CI)
+        FOREACH(QT_LIBRARY ${OS_X_QT_LIBRARIES})
+            SET(QT_LIBRARY_FILENAME ${QT_LIBRARY}.framework/Versions/${QT_VERSION_MAJOR}/${QT_LIBRARY})
+
+            ADD_CUSTOM_COMMAND(TARGET ${PROJECT_TARGET} POST_BUILD
+                               COMMAND install_name_tool -change ${QT_LIBRARY_DIR}/${QT_LIBRARY_FILENAME}
+                                                                 @rpath/${QT_LIBRARY_FILENAME}
+                                                                 ${FULL_FILENAME})
+        ENDFOREACH()
+    ENDIF()
 ENDMACRO()
 
 #===============================================================================
@@ -1194,16 +1221,14 @@ ENDMACRO()
 
 #===============================================================================
 
-MACRO(OS_X_DEPLOY_QT_LIBRARIES)
-    FOREACH(LIBRARY_NAME ${ARGN})
-        # Deploy the Qt library
+MACRO(OS_X_DEPLOY_QT_LIBRARY LIBRARY_NAME)
+    # Deploy the Qt library
 
-        SET(QT_FRAMEWORK_DIR ${LIBRARY_NAME}.framework/Versions/${QT_VERSION_MAJOR})
+    SET(QT_FRAMEWORK_DIR ${LIBRARY_NAME}.framework/Versions/${QT_VERSION_MAJOR})
 
-        OS_X_DEPLOY_QT_FILE(${QT_LIBRARY_DIR}/${QT_FRAMEWORK_DIR}
-                            ${PROJECT_BUILD_DIR}/${CMAKE_PROJECT_NAME}.app/Contents/Frameworks/${QT_FRAMEWORK_DIR}
-                            ${LIBRARY_NAME})
-    ENDFOREACH()
+    OS_X_DEPLOY_QT_FILE(${QT_LIBRARY_DIR}/${QT_FRAMEWORK_DIR}
+                        ${PROJECT_BUILD_DIR}/${CMAKE_PROJECT_NAME}.app/Contents/Frameworks/${QT_FRAMEWORK_DIR}
+                        ${LIBRARY_NAME})
 ENDMACRO()
 
 #===============================================================================

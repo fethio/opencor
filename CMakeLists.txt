@@ -482,15 +482,18 @@ IF(APPLE)
     # Note: the Qt Brew formula that we use on Travis CI misses QtDBus, which
     #       results in some of our tests generating messages about two
     #       frameworks being available and that one of them will be used, but
-    #       that we don't know which one. So, to avoid those messages, we don't
-    #       deploy the Qt frameworks...
+    #       that we don't know which one. So, to avoid those messages, we simply
+    #       don't deploy the Qt frameworks...
 
     IF(NOT ENABLE_TRAVIS_CI)
-        OS_X_DEPLOY_QT_LIBRARIES(${OS_X_QT_LIBRARIES})
+        FOREACH(QT_LIBRARY ${OS_X_QT_LIBRARIES})
+            OS_X_DEPLOY_QT_LIBRARY(${QT_LIBRARY})
+        ENDFOREACH()
     ENDIF()
 
     # Deploy some plugins
 
+    OS_X_DEPLOY_QT_PLUGIN(bearer qgenericbearer)
     OS_X_DEPLOY_QT_PLUGIN(imageformats qjpeg)
     OS_X_DEPLOY_QT_PLUGIN(platforms qcocoa)
     OS_X_DEPLOY_QT_PLUGIN(printsupport cocoaprintersupport)
@@ -615,19 +618,25 @@ IF(WIN32)
 
     # Qt libraries required by OpenCOR
 
+    IF(ENABLE_TESTS)
+        SET(TEST Test)
+    ELSE()
+        SET(TEST)
+    ENDIF()
+
+    FOREACH(QT_LIBRARY CLucene Core Gui Help Multimedia MultimediaWidgets Network OpenGL Positioning PrintSupport Qml Quick Sensors Sql Svg ${TEST} WebChannel WebEngineCore WebEngineWidgets Widgets Xml XmlPatterns)
+        WINDOWS_DEPLOY_QT_LIBRARY(Qt5${QT_LIBRARY})
+    ENDFOREACH()
+
     MATH(EXPR ICU_MINOR_VERSION "${Qt5Widgets_VERSION_MINOR}-2")
 
-    SET(ICU_VERSION "${Qt5Widgets_VERSION_MAJOR}${ICU_MINOR_VERSION}")
-
-    WINDOWS_DEPLOY_QT_LIBRARIES(Qt5CLucene Qt5Core Qt5Gui Qt5Help Qt5Multimedia Qt5MultimediaWidgets Qt5Network Qt5OpenGL Qt5Positioning Qt5PrintSupport Qt5Qml Qt5Quick Qt5Sensors Qt5Sql Qt5Svg Qt5WebChannel Qt5WebEngineCore Qt5WebEngineWidgets Qt5Widgets Qt5Xml Qt5XmlPatterns)
-    WINDOWS_DEPLOY_QT_LIBRARIES(icudt${ICU_VERSION} icuin${ICU_VERSION} icuuc${ICU_VERSION})
-
-    IF(ENABLE_TESTS)
-        WINDOWS_DEPLOY_QT_LIBRARIES(Qt5Test)
-    ENDIF()
+    FOREACH(QT_LIBRARY icudt icuin icuuc)
+        WINDOWS_DEPLOY_QT_LIBRARY(${QT_LIBRARY}${Qt5Widgets_VERSION_MAJOR}${ICU_MINOR_VERSION})
+    ENDFOREACH()
 
     # Qt plugins required by OpenCOR
 
+    WINDOWS_DEPLOY_QT_PLUGIN(bearer qgenericbearer)
     WINDOWS_DEPLOY_QT_PLUGIN(imageformats qjpeg)
     WINDOWS_DEPLOY_QT_PLUGIN(platforms qwindows)
     WINDOWS_DEPLOY_QT_PLUGIN(printsupport windowsprintersupport)
@@ -765,6 +774,7 @@ ELSE()
 
     # Qt plugins required by OpenCOR
 
+    LINUX_DEPLOY_QT_PLUGIN(bearer qgenericbearer)
     LINUX_DEPLOY_QT_PLUGIN(imageformats qjpeg)
     LINUX_DEPLOY_QT_PLUGIN(platforms qxcb)
     LINUX_DEPLOY_QT_PLUGIN(printsupport cupsprintersupport)
