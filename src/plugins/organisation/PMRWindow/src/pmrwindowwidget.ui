@@ -10,9 +10,26 @@
     <height>240</height>
    </rect>
   </property>
+  <layout class="QVBoxLayout" name="layout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+  </layout>
   <action name="actionCopy">
    <property name="icon">
-    <iconset resource="../res/PMRWindow_ui.qrc">
+    <iconset resource="../../../../../res/ui.qrc">
      <normaloff>:/oxygen/actions/edit-copy.png</normaloff>:/oxygen/actions/edit-copy.png</iconset>
    </property>
    <property name="text">
@@ -24,7 +41,7 @@
   </action>
  </widget>
  <resources>
-  <include location="../res/PMRWindow_ui.qrc"/>
+  <include location="../../../../../res/ui.qrc"/>
  </resources>
  <connections/>
 </ui>
