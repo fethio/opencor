@@ -192,10 +192,7 @@ public:
     double maxY() const;
 
     bool setAxes(double pMinX, double pMaxX, double pMinY, double pMaxY,
-                 const bool &pCanReplot = true);
-    bool setAxes(const QRectF &pAxesRect, const bool &pCanReplot = true);
-
-    bool resetAxes(const bool &pCanReplot = true);
+                 const bool &pCanReplot = true, const bool &pEmitSignal = true);
 
     void drawGraphFrom(SingleCellViewGraphPanelPlotGraph *pGraph,
                        const qulonglong &pFrom);
@@ -278,6 +275,8 @@ private:
     QRectF optimisedRect(const QRectF &pAxes) const;
 
     void setAxis(const int &pAxis, double pMin, double pMax);
+
+    bool resetAxes();
 
     bool scaleAxis(const double &pScalingFactor,
                    const bool &pCanZoomIn, const bool &pCanZoomOut,

@@ -2849,7 +2849,7 @@ bool SingleCellViewSimulationWidget::updatePlot(SingleCellViewGraphPanelPlotWidg
 
     // Set our axes' values and replot our plot, if needed
 
-    if (pPlot->setAxes(minX, maxX, minY, maxY)) {
+    if (pPlot->setAxes(minX, maxX, minY, maxY, true, false)) {
         return true;
     } else if (pForceReplot) {
         pPlot->replotNow();
@@ -3106,13 +3106,13 @@ QIcon SingleCellViewSimulationWidget::parameterIcon(const CellMLSupport::CellmlF
 {
     // Return an icon that illustrates the type of a parameter
 
-    static const QIcon VoiIcon              = QIcon(":/voi.png");
-    static const QIcon ConstantIcon         = QIcon(":/constant.png");
-    static const QIcon ComputedConstantIcon = QIcon(":/computedConstant.png");
-    static const QIcon RateIcon             = QIcon(":/rate.png");
-    static const QIcon StateIcon            = QIcon(":/state.png");
-    static const QIcon AlgebraicIcon        = QIcon(":/algebraic.png");
-    static const QIcon ErrorNodeIcon        = QIcon(":CellMLSupport_errorNode");
+    static const QIcon VoiIcon              = QIcon(":/SingleCellView/voi.png");
+    static const QIcon ConstantIcon         = QIcon(":/SingleCellView/constant.png");
+    static const QIcon ComputedConstantIcon = QIcon(":/SingleCellView/computedConstant.png");
+    static const QIcon RateIcon             = QIcon(":/SingleCellView/rate.png");
+    static const QIcon StateIcon            = QIcon(":/SingleCellView/state.png");
+    static const QIcon AlgebraicIcon        = QIcon(":/SingleCellView/algebraic.png");
+    static const QIcon ErrorNodeIcon        = QIcon(":/oxygen/emblems/emblem-important.png");
 
     switch (pParameterType) {
     case CellMLSupport::CellmlFileRuntimeParameter::Voi:

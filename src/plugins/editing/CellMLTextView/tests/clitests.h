@@ -17,7 +17,7 @@ limitations under the License.
 *******************************************************************************/
 
 //==============================================================================
-// CellML tools tests
+// CellML Text view CLI tests
 //==============================================================================
 
 #pragma once
@@ -28,12 +28,13 @@ limitations under the License.
 
 //==============================================================================
 
-class Tests : public QObject
+class CliTests : public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
     void helpTests();
+    void importTests();
     void exportTests();
 };
 

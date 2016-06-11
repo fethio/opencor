@@ -510,7 +510,7 @@ SingleCellViewGraphPanelPlotWidget::SingleCellViewGraphPanelPlotWidget(const Sin
     // Note: we are not all initialised yet, so we don't want setAxes() to
     //       replot ourselves...
 
-    setAxes(DefMinAxis, DefMaxAxis, DefMinAxis, DefMaxAxis, false);
+    setAxes(DefMinAxis, DefMaxAxis, DefMinAxis, DefMaxAxis, false, false);
 
     // Attach a grid to ourselves
 
@@ -904,8 +904,9 @@ void SingleCellViewGraphPanelPlotWidget::setAxis(const int &pAxis,
 //==============================================================================
 
 bool SingleCellViewGraphPanelPlotWidget::setAxes(double pMinX, double pMaxX,
-                                                 double pMinY,double pMaxY,
-                                                 const bool &pCanReplot)
+                                                 double pMinY, double pMaxY,
+                                                 const bool &pCanReplot,
+                                                 const bool &pEmitSignal)
 {
     // Keep track of our axes' old values
 
@@ -945,7 +946,8 @@ bool SingleCellViewGraphPanelPlotWidget::setAxes(double pMinX, double pMaxX,
 
         alignWithNeighbors(pCanReplot);
 
-        emit axesChanged(pMinX, pMaxX, pMinY, pMaxY);
+        if (pEmitSignal)
+            emit axesChanged(pMinX, pMaxX, pMinY, pMaxY);
 
         return pCanReplot;
     } else {
@@ -955,32 +957,18 @@ bool SingleCellViewGraphPanelPlotWidget::setAxes(double pMinX, double pMaxX,
 
 //==============================================================================
 
-bool SingleCellViewGraphPanelPlotWidget::setAxes(const QRectF &pAxesRect,
-                                                 const bool &pCanReplot)
-{
-    // Set our axes' values
-
-    return setAxes(pAxesRect.left(), pAxesRect.left()+pAxesRect.width(),
-                   pAxesRect.top(), pAxesRect.top()+pAxesRect.height(),
-                   pCanReplot);
-}
-
-//==============================================================================
-
-bool SingleCellViewGraphPanelPlotWidget::resetAxes(const bool &pCanReplot)
+bool SingleCellViewGraphPanelPlotWidget::resetAxes()
 {
     // Reset our axes by setting their values to either default ones or to some
     // that allow to see all the graphs
 
-    QRectF dRect = dataRect();
+    QRectF axesRect = dataRect().isNull()?
+                          QRectF(DefMinAxis, DefMinAxis,
+                                 DefMaxAxis-DefMinAxis, DefMaxAxis-DefMinAxis):
+                          optimisedRect(dataRect());
 
-    if (dRect == QRectF()) {
-        return setAxes(QRectF(DefMinAxis, DefMinAxis,
-                              DefMaxAxis-DefMinAxis, DefMaxAxis-DefMinAxis),
-                       pCanReplot);
-    } else {
-        return setAxes(optimisedRect(dRect), pCanReplot);
-    }
+    return setAxes(axesRect.left(), axesRect.left()+axesRect.width(),
+                   axesRect.top(), axesRect.top()+axesRect.height());
 }
 
 //==============================================================================

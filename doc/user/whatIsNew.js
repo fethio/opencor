@@ -1,15 +1,15 @@
 var jsonData = { "versions": [
-                   { "anchor": "latest", "description": "Latest snapshot", "day": 30, "month": 5, "year": 2016,
+                   { "anchor": "latest", "description": "Latest snapshot", "day": 9, "month": 6, "year": 2016,
                      "categories": [
                        { "name": "General",
                          "entries": [
                            { "type": "Added", "description": "Support for <a href=\"https://en.wikipedia.org/wiki/Windows_10\">Windows 10</a>." },
-                           { "type": "Added", "description": "Support for <a href=\"https://en.wikipedia.org/wiki/List_of_Ubuntu_releases#Ubuntu_16.04_LTS_.28Xenial_Xerus.29\">Ubuntu 16.04 LTS (Xenial Xerus)</a>." },
+                           { "type": "Added", "description": "Support for <a href=\"https://en.wikipedia.org/wiki/List_of_Ubuntu_releases#Ubuntu_16.04_LTS_.28Xenial_Xerus.29\">Ubuntu 16.04 LTS</a> (Xenial Xerus)." },
                            { "type": "Added", "description": "Support for <a href=\"https://en.wikipedia.org/wiki/OS_X_El_Capitan\">OS X 10.11</a> (El Capitan)." },
                            { "type": "Added", "description": "Resetting all your settings from the <a href=\"https://en.wikipedia.org/wiki/Command-line_interface\">CLI</a>." },
                            { "type": "Added", "description": "Detection of changes to one or several file dependencies." },
-                           { "type": "Added", "description": "Use of a default to view to open a particular type of file." },
                            { "type": "Added", "description": "Support for an OpenCOR-specific URL scheme." },
+                           { "type": "Added", "description": "Default view to open a particular type of file." },
                            { "type": "Added", "description": "Reference to the <a href=\"http://tutorial-on-cellml-opencor-and-pmr.readthedocs.org/en/latest/index.html\">official OpenCOR tutorial</a>." },
                            { "type": "Added", "description": "Use of a user's proxy settings." },
                            { "type": "Improved", "description": "File handling." },
@@ -60,7 +60,9 @@ var jsonData = { "versions": [
                                { "type": "Improved", "description": "Syntax highlighting." },
                                { "type": "Improved", "description": "cmeta:id's support by allowing hyphens and periods." },
                                { "type": "Improved", "description": "Comments support by allowing comments before a model definition." },
-                               { "type": "Fixed", "description": "Serialisation of a mathematical equation with a <code>cmeta:id</code> value." }
+                               { "type": "Fixed", "description": "Serialisation of a mathematical equation with a <code>cmeta:id</code> value." },
+                               { "type": "Fixed", "description": "Serialisation of numbers that have an exponent." },
+                               { "type": "Fixed", "description": "Not all the metadata being serialised back." }
                              ]
                            },
                            { "type": "Added", "description": "<a href=\"plugins/editing/RawSEDMLView.html\">Raw SED-ML view</a>." }

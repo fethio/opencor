@@ -342,7 +342,7 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
 
     QByteArray fileContents;
 
-    Core::readFileContentsFromFile(":/ontologicalTerms.html", fileContents);
+    Core::readFileContentsFromFile(":/CellMLAnnotationView/ontologicalTerms.html", fileContents);
 
     mOutputOntologicalTermsTemplate = QString(fileContents).arg(Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16),
                                                                 Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
