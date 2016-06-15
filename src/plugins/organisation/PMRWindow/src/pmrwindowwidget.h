@@ -31,12 +31,6 @@ limitations under the License.
 
 //==============================================================================
 
-namespace Ui {
-    class PmrWindowWidget;
-}
-
-//==============================================================================
-
 class QMenu;
 
 //==============================================================================
@@ -53,7 +47,6 @@ class PmrWindowWidget : public WebViewer::WebViewerWidget,
 
 public:
     explicit PmrWindowWidget(QWidget *pParent);
-    ~PmrWindowWidget();
 
     virtual void retranslateUi();
 
@@ -67,9 +60,9 @@ protected:
     virtual QSize sizeHint() const;
 
 private:
-    Ui::PmrWindowWidget *mGui;
-
     QMenu *mContextMenu;
+
+    QAction *mCopyAction;
 
     QStringList mExposureNames;
     QBoolList mExposureDisplayed;
@@ -103,7 +96,7 @@ public Q_SLOTS:
     void showExposureFiles(const QString &pUrl, const bool &pShow = true);
 
 private Q_SLOTS:
-    void on_actionCopy_triggered();
+    void copy();
 
     void linkClicked(const QString &pLink);
     void linkHovered(const QString &pLink);

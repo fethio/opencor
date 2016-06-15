@@ -20,10 +20,13 @@ limitations under the License.
 // Single cell view graph panel plot widget
 //==============================================================================
 
+#include "coreguiutils.h"
+#include "i18ninterface.h"
 #include "singlecellviewgraphpanelplotwidget.h"
 
 //==============================================================================
 
+#include <QApplication>
 #include <QClipboard>
 #include <QDesktopWidget>
 #include <QMenu>
@@ -42,10 +45,6 @@ limitations under the License.
 #include "qwt_plot_layout.h"
 #include "qwt_scale_engine.h"
 #include "qwt_scale_widget.h"
-
-//==============================================================================
-
-#include "ui_singlecellviewgraphpanelplotwidget.h"
 
 //==============================================================================
 
@@ -463,7 +462,6 @@ static const double MinAxisRange = 1.0e-5;
 SingleCellViewGraphPanelPlotWidget::SingleCellViewGraphPanelPlotWidget(const SingleCellViewGraphPanelPlotWidgets &pNeighbors, QWidget *pParent) :
     QwtPlot(pParent),
     Core::CommonWidget(),
-    mGui(new Ui::SingleCellViewGraphPanelPlotWidget),
     mGraphs(SingleCellViewGraphPanelPlotGraphs()),
     mAction(None),
     mOriginPoint(QPoint()),
@@ -476,10 +474,6 @@ SingleCellViewGraphPanelPlotWidget::SingleCellViewGraphPanelPlotWidget(const Sin
     mNeedContextMenu(false),
     mNeighbors(pNeighbors)
 {
-    // Set up the GUI
-
-    mGui->setupUi(this);
-
     // Get ourselves a direct painter
 
     mDirectPainter = new QwtPlotDirectPainter(this);
@@ -506,12 +500,6 @@ SingleCellViewGraphPanelPlotWidget::SingleCellViewGraphPanelPlotWidget(const Sin
 
     qobject_cast<QwtPlotCanvas *>(canvas())->setFrameShape(QFrame::NoFrame);
 
-    // Set our axes' values
-    // Note: we are not all initialised yet, so we don't want setAxes() to
-    //       replot ourselves...
-
-    setAxes(DefMinAxis, DefMaxAxis, DefMinAxis, DefMaxAxis, false, false);
-
     // Attach a grid to ourselves
 
     QwtPlotGrid *grid = new QwtPlotGrid();
@@ -528,12 +516,37 @@ SingleCellViewGraphPanelPlotWidget::SingleCellViewGraphPanelPlotWidget(const Sin
 
     mContextMenu = new QMenu(this);
 
-    mContextMenu->addAction(mGui->actionCopyToClipboard);
+    mCopyToClipboardAction = Core::newAction(this);
+    mZoomInAction = Core::newAction(this);
+    mZoomOutAction = Core::newAction(this);
+    mResetZoomAction = Core::newAction(this);
+
+    connect(mCopyToClipboardAction, SIGNAL(triggered(bool)),
+            this, SLOT(copyToClipboard()));
+    connect(mZoomInAction, SIGNAL(triggered(bool)),
+            this, SLOT(zoomIn()));
+    connect(mZoomOutAction, SIGNAL(triggered(bool)),
+            this, SLOT(zoomOut()));
+    connect(mResetZoomAction, SIGNAL(triggered(bool)),
+            this, SLOT(resetZoom()));
+
+    mContextMenu->addAction(mCopyToClipboardAction);
     mContextMenu->addSeparator();
-    mContextMenu->addAction(mGui->actionZoomIn);
-    mContextMenu->addAction(mGui->actionZoomOut);
+    mContextMenu->addAction(mZoomInAction);
+    mContextMenu->addAction(mZoomOutAction);
     mContextMenu->addSeparator();
-    mContextMenu->addAction(mGui->actionResetZoom);
+    mContextMenu->addAction(mResetZoomAction);
+
+    // Set our axes' values
+    // Note: we are not all initialised yet, so we don't want setAxes() to
+    //       replot ourselves...
+
+    setAxes(DefMinAxis, DefMaxAxis, DefMinAxis, DefMaxAxis, false, false);
+
+    // Some further initialisations that are done as part of retranslating the
+    // GUI (so that they can be updated when changing languages)
+
+    retranslateUi();
 }
 
 //==============================================================================
@@ -546,19 +559,22 @@ SingleCellViewGraphPanelPlotWidget::~SingleCellViewGraphPanelPlotWidget()
 
     foreach (SingleCellViewGraphPanelPlotGraph *graph, mGraphs)
         delete graph;
-
-    // Delete the GUI
-
-    delete mGui;
 }
 
 //==============================================================================
 
 void SingleCellViewGraphPanelPlotWidget::retranslateUi()
 {
-    // Retranslate our GUI
+    // Retranslate our actions
 
-    mGui->retranslateUi(this);
+    I18nInterface::retranslateAction(mCopyToClipboardAction, tr("Copy"),
+                                     tr("Copy the contents of the graph panel to the clipboard"));
+    I18nInterface::retranslateAction(mZoomInAction, tr("Zoom In"),
+                                     tr("Zoom in the graph panel"));
+    I18nInterface::retranslateAction(mZoomOutAction, tr("Zoom Out"),
+                                     tr("Zoom out the graph panel"));
+    I18nInterface::retranslateAction(mResetZoomAction, tr("Reset Zoom"),
+                                     tr("Reset the zoom level of the graph panel"));
 
     // Replot ourselves
     // Note: we do this because we want to display numbers using digit grouping,
@@ -621,8 +637,8 @@ void SingleCellViewGraphPanelPlotWidget::updateActions()
 
     // Update the enabled status of our actions
 
-    mGui->actionZoomIn->setEnabled(mCanZoomInX || mCanZoomInY);
-    mGui->actionZoomOut->setEnabled(mCanZoomOutX || mCanZoomOutY);
+    mZoomInAction->setEnabled(mCanZoomInX || mCanZoomInY);
+    mZoomOutAction->setEnabled(mCanZoomOutX || mCanZoomOutY);
 
     QRectF dRect = dataRect();
 
@@ -633,10 +649,10 @@ void SingleCellViewGraphPanelPlotWidget::updateActions()
         dRect = optimisedRect(dRect);
     }
 
-    mGui->actionResetZoom->setEnabled(   (crtMinX != dRect.left())
-                                      || (crtMaxX != dRect.left()+dRect.width())
-                                      || (crtMinY != dRect.top())
-                                      || (crtMaxY != dRect.top()+dRect.height()));
+    mResetZoomAction->setEnabled(   (crtMinX != dRect.left())
+                                 || (crtMaxX != dRect.left()+dRect.width())
+                                 || (crtMinY != dRect.top())
+                                 || (crtMaxY != dRect.top()+dRect.height()));
 }
 
 //==============================================================================
@@ -1465,7 +1481,7 @@ void SingleCellViewGraphPanelPlotWidget::forceAlignWithNeighbors()
 
 //==============================================================================
 
-void SingleCellViewGraphPanelPlotWidget::on_actionCopyToClipboard_triggered()
+void SingleCellViewGraphPanelPlotWidget::copyToClipboard()
 {
     // Copy our contents to the clipboard
 
@@ -1474,7 +1490,7 @@ void SingleCellViewGraphPanelPlotWidget::on_actionCopyToClipboard_triggered()
 
 //==============================================================================
 
-void SingleCellViewGraphPanelPlotWidget::on_actionZoomIn_triggered()
+void SingleCellViewGraphPanelPlotWidget::zoomIn()
 {
     // Zoom in by scaling our two axes around the point where the context menu
     // was shown
@@ -1484,7 +1500,7 @@ void SingleCellViewGraphPanelPlotWidget::on_actionZoomIn_triggered()
 
 //==============================================================================
 
-void SingleCellViewGraphPanelPlotWidget::on_actionZoomOut_triggered()
+void SingleCellViewGraphPanelPlotWidget::zoomOut()
 {
     // Zoom out by scaling our two axes around the point where the context menu
     // was shown
@@ -1494,7 +1510,7 @@ void SingleCellViewGraphPanelPlotWidget::on_actionZoomOut_triggered()
 
 //==============================================================================
 
-void SingleCellViewGraphPanelPlotWidget::on_actionResetZoom_triggered()
+void SingleCellViewGraphPanelPlotWidget::resetZoom()
 {
     // Reset the zoom level by resetting our axes
 

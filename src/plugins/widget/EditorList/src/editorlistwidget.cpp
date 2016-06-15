@@ -21,6 +21,7 @@ limitations under the License.
 //==============================================================================
 
 #include "corecliutils.h"
+#include "coreguiutils.h"
 #include "editorlistwidget.h"
 #include "i18ninterface.h"
 
@@ -57,8 +58,8 @@ EditorListWidget::EditorListWidget(QWidget *pParent) :
 
     mContextMenu = new QMenu(this);
 
-    mClearAction = new QAction(this);
-    mCopyToClipboardAction = new QAction(this);
+    mClearAction = Core::newAction(this);
+    mCopyToClipboardAction = Core::newAction(this);
 
     connect(mClearAction, SIGNAL(triggered(bool)),
             this, SLOT(clear()));

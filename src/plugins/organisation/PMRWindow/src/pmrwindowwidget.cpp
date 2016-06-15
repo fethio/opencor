@@ -21,14 +21,12 @@ limitations under the License.
 //==============================================================================
 
 #include "coreguiutils.h"
+#include "i18ninterface.h"
 #include "pmrwindowwidget.h"
 
 //==============================================================================
 
-#include "ui_pmrwindowwidget.h"
-
-//==============================================================================
-
+#include <QApplication>
 #include <QClipboard>
 #include <QDesktopServices>
 #include <QIODevice>
@@ -46,7 +44,6 @@ namespace PMRWindow {
 PmrWindowWidget::PmrWindowWidget(QWidget *pParent) :
     WebViewer::WebViewerWidget(pParent),
     Core::CommonWidget(),
-    mGui(new Ui::PmrWindowWidget),
     mExposureNames(QStringList()),
     mExposureDisplayed(QBoolList()),
     mExposureUrlId(QMap<QString, int>()),
@@ -59,20 +56,17 @@ PmrWindowWidget::PmrWindowWidget(QWidget *pParent) :
     mHideExposureFiles(QMap<QString, bool>()),
     mExposureOrExposureFileUrl(QString())
 {
-    // Set up the GUI
-
-    mGui->setupUi(this);
-
-    // Customise our layout
-
-    layout()->setMargin(0);
-    layout()->setSpacing(0);
-
     // Create and populate our context menu
 
     mContextMenu = new QMenu(this);
 
-    mContextMenu->addAction(mGui->actionCopy);
+    mCopyAction = Core::newAction(QIcon(":/oxygen/actions/edit-copy.png"),
+                                  this);
+
+    connect(mCopyAction, SIGNAL(triggered(bool)),
+            this, SLOT(copy()));
+
+    mContextMenu->addAction(mCopyAction);
 
     // We want our own context menu
 
@@ -101,17 +95,13 @@ PmrWindowWidget::PmrWindowWidget(QWidget *pParent) :
 
 //==============================================================================
 
-PmrWindowWidget::~PmrWindowWidget()
-{
-    // Delete the GUI
-
-    delete mGui;
-}
-
-//==============================================================================
-
 void PmrWindowWidget::retranslateUi()
 {
+    // Retranslate our action
+
+    I18nInterface::retranslateAction(mCopyAction, tr("Copy"),
+                                     tr("Copy the URL to the clipboard"));
+
     // Retranslate our message, if we have been initialised
 
     if (mInitialized)
@@ -310,7 +300,7 @@ void PmrWindowWidget::showExposureFiles(const QString &pUrl, const bool &pShow)
 
 //==============================================================================
 
-void PmrWindowWidget::on_actionCopy_triggered()
+void PmrWindowWidget::copy()
 {
     // Copy the URL of the exposure or exposure file to the clipboard
 

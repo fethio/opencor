@@ -47,10 +47,6 @@ ADD_PLUGIN(SingleCellView
         src/singlecellviewsimulationworker.h
         src/singlecellviewsimulationwidget.h
         src/singlecellviewwidget.h
-    UIS
-        src/singlecellviewgraphpanelplotwidget.ui
-        src/singlecellviewinformationgraphswidget.ui
-        src/singlecellviewsimulationwidget.ui
     INCLUDE_DIRS
         src
     DEFINITIONS
