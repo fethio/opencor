@@ -60,7 +60,7 @@ Q_SIGNALS:
 
 //==============================================================================
 
-class WEBVIEWER_EXPORT WebViewerWidget : public QWebEngineView
+class WEBVIEWERWIDGET_EXPORT WebViewerWidget : public QWebEngineView
 {
     Q_OBJECT
 
