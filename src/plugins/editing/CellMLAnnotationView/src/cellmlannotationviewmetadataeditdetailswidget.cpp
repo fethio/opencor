@@ -17,7 +17,7 @@ limitations under the License.
 *******************************************************************************/
 
 //==============================================================================
-// CellML annotation view metadata edit details widget
+// CellML Annotation view metadata edit details widget
 //==============================================================================
 
 #include "cellmlannotationviewcellmllistwidget.h"
@@ -344,7 +344,7 @@ CellmlAnnotationViewMetadataEditDetailsWidget::CellmlAnnotationViewMetadataEditD
                                                                 Core::iconDataUri(":/oxygen/actions/list-add.png", 16, 16, QIcon::Disabled),
                                                                 "%1");
 
-    mOutputOntologicalTerms = new WebViewer::WebViewerWidget(mOutput);
+    mOutputOntologicalTerms = new WebViewerWidget::WebViewerWidget(mOutput);
 
     mOutputOntologicalTerms->setContextMenuPolicy(Qt::CustomContextMenu);
 

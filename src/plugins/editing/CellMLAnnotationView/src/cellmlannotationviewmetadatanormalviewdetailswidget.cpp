@@ -17,7 +17,7 @@ limitations under the License.
 *******************************************************************************/
 
 //==============================================================================
-// CellML annotation view metadata normal view details widget
+// CellML Annotation view metadata normal view details widget
 //==============================================================================
 
 #include "cellmlannotationviewwidget.h"
@@ -116,7 +116,7 @@ CellmlAnnotationViewMetadataNormalViewDetailsWidget::CellmlAnnotationViewMetadat
                                                                 Core::iconDataUri(":/oxygen/actions/list-remove.png", 16, 16, QIcon::Disabled),
                                                                 "%1");
 
-    mOutputOntologicalTerms = new WebViewer::WebViewerWidget(mOutput);
+    mOutputOntologicalTerms = new WebViewerWidget::WebViewerWidget(mOutput);
 
     mOutputOntologicalTerms->setContextMenuPolicy(Qt::CustomContextMenu);
 
