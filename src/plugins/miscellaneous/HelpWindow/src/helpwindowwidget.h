@@ -80,7 +80,7 @@ private:
 
 //==============================================================================
 
-class HelpWindowWidget : public WebViewer::WebViewerWidget,
+class HelpWindowWidget : public WebViewerWidget::WebViewerWidget,
                          public Core::CommonWidget
 {
     Q_OBJECT
