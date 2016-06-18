@@ -17,20 +17,20 @@ limitations under the License.
 *******************************************************************************/
 
 //==============================================================================
-// Single Cell view graph panel widget
+// Graph Panel widget custom axes window
 //==============================================================================
 
 #pragma once
 
 //==============================================================================
 
-#include "graphpanelplotwidget.h"
-#include "graphpanelwidgetglobal.h"
-#include "widget.h"
+#include <QDialog>
 
 //==============================================================================
 
-#include <QList>
+namespace Ui {
+    class GraphPanelWidgetCustomAxesWindow;
+}
 
 //==============================================================================
 
@@ -39,56 +39,29 @@ namespace GraphPanelWidget {
 
 //==============================================================================
 
-class GraphPanelWidget;
-
-//==============================================================================
-
-typedef QList<GraphPanelWidget *> GraphPanelWidgets;
-
-//==============================================================================
-
-class GRAPHPANELWIDGET_EXPORT GraphPanelWidget : public Core::Widget
+class GraphPanelWidgetCustomAxesWindow : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit GraphPanelWidget(const GraphPanelWidgets &pNeighbors,
-                              QWidget *pParent);
-    ~GraphPanelWidget();
+    explicit GraphPanelWidgetCustomAxesWindow(const double &pMinX,
+                                              const double &pMaxX,
+                                              const double &pMinY,
+                                              const double &pMaxY,
+                                              QWidget *pParent);
+    ~GraphPanelWidgetCustomAxesWindow();
 
-    virtual void retranslateUi();
-
-    bool isActive() const;
-    void setActive(const bool &pActive);
-
-    GraphPanelPlotWidget * plot() const;
-
-    GraphPanelPlotGraphs graphs() const;
-
-    void addGraph(GraphPanelPlotGraph *pGraph);
-    void removeGraphs(const GraphPanelPlotGraphs &pGraphs);
-    void removeAllGraphs();
-
-protected:
-    virtual void changeEvent(QEvent *pEvent);
-    virtual void mousePressEvent(QMouseEvent *pEvent);
+    double minX() const;
+    double maxX() const;
+    double minY() const;
+    double maxY() const;
 
 private:
-    QFrame *mMarker;
-    GraphPanelPlotWidget *mPlot;
+    Ui::GraphPanelWidgetCustomAxesWindow *mGui;
 
-    bool mActive;
-
-    void updateMarkerColor();
-
-Q_SIGNALS:
-    void activated(OpenCOR::GraphPanelWidget::GraphPanelWidget *pGraphPanel);
-    void inactivated(OpenCOR::GraphPanelWidget::GraphPanelWidget *pGraphPanel);
-
-    void graphAdded(OpenCOR::GraphPanelWidget::GraphPanelWidget *pGraphPanel,
-                    OpenCOR::GraphPanelWidget::GraphPanelPlotGraph *pGraph);
-    void graphsRemoved(OpenCOR::GraphPanelWidget::GraphPanelWidget *pGraphPanel,
-                       const OpenCOR::GraphPanelWidget::GraphPanelPlotGraphs &pGraphs);
+private Q_SLOTS:
+    void on_buttonBox_accepted();
+    void on_buttonBox_rejected();
 };
 
 //==============================================================================

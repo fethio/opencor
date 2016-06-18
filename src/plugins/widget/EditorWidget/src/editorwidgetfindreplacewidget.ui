@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EditorFindReplaceWidget</class>
- <widget class="QWidget" name="EditorWidgetEditorFindReplaceWidget">
+ <class>EditorWidgetFindReplaceWidget</class>
+ <widget class="QWidget" name="EditorWidgetFindReplaceWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>240</height>
+    <height>58</height>
    </rect>
   </property>
   <property name="styleSheet">
